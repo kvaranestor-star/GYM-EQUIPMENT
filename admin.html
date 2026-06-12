@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>CREAGYM · Адмін-панель заявок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#09090B;--bg-2:#0F1013;--card:#141519;--panel:#1A1C21;--line:#26282E;--line-2:#33353C;
+    --ink:#F3F4F6;--ink-2:#A4A6AC;--ink-3:#65676D;--blue:#3D74F4;--blue-2:#6A95FF;--glow:rgba(61,116,244,.4);
+    --green:#2FBF71;--amber:#E6A23C;--red:#E5484D;--r:3px;--ease:cubic-bezier(.22,.68,.18,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em}
+  h1,h2,h3{font-weight:900;letter-spacing:-.02em}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 26px}
+
+  /* GATE */
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .gate-card{width:100%;max-width:380px;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(160deg,var(--card),var(--bg-2));padding:38px 34px;position:relative;overflow:hidden}
+  .gate-card .glow{position:absolute;top:-40%;right:-30%;width:80%;height:90%;background:radial-gradient(circle,var(--glow),transparent 65%);opacity:.5;filter:blur(24px)}
+  .gate-card .logo{font-weight:900;font-size:22px;letter-spacing:-.02em;position:relative}
+  .gate-card .logo .d{color:var(--blue)}
+  .gate-card .lbl{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-2);margin:18px 0 22px;position:relative}
+  .gate-card input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;color:var(--ink);font-size:15px;font-family:'Inter';transition:border-color .2s}
+  .gate-card input:focus{outline:none;border-color:var(--blue)}
+  .gate-card button{width:100%;margin-top:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:14px;font-family:'IBM Plex Mono';font-size:13px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:background .25s}
+  .gate-card button:hover{background:var(--blue-2)}
+  .gate-err{color:var(--red);font-size:13px;margin-top:12px;min-height:18px;font-family:'IBM Plex Mono'}
+
+  /* APP */
+  .app{display:none}
+  .app.show{display:block}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(9,9,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-in{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .topbar .logo{font-weight:900;font-size:19px;letter-spacing:-.02em;display:flex;align-items:center;gap:12px}
+  .topbar .logo .d{color:var(--blue)}
+  .topbar .logo .tag{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line-2);padding:4px 9px;border-radius:2px}
+  .topbar .actions{display:flex;gap:10px;align-items:center}
+  .ibtn{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--line-2);border-radius:var(--r);color:var(--ink-2);background:transparent;cursor:pointer;transition:all .2s}
+  .ibtn:hover{border-color:var(--blue);color:var(--blue-2)}
+  .ibtn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
+  .ibtn.blue:hover{background:var(--blue-2)}
+
+  .source{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:7px}
+  .source .dot{width:7px;height:7px;border-radius:50%;background:var(--amber)}
+  .source.on .dot{background:var(--green)}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0}
+  .stat{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--card)}
+  .stat .n{font-weight:900;font-size:34px;letter-spacing:-.03em}
+  .stat .l{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-top:8px}
+  .stat.new .n{color:var(--blue-2)}.stat.prog .n{color:var(--amber)}.stat.done .n{color:var(--green)}
+
+  .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  .controls input,.controls select{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;color:var(--ink);font-size:14px;font-family:'Inter'}
+  .controls input{flex:1;min-width:200px}
+  .controls input:focus,.controls select:focus{outline:none;border-color:var(--blue)}
+  .controls select{appearance:none;cursor:pointer;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%233D74F4' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
+
+  table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  thead th{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:14px 16px;background:var(--bg-2);border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td{padding:15px 16px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--bg-2)}
+  td .nm{font-weight:600}
+  td .ph a{color:var(--blue-2);font-family:'IBM Plex Mono';font-size:13px}
+  td .meta{font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+  td .cmt{color:var(--ink-2);font-size:13px;max-width:260px}
+  .badge{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:2px;display:inline-block}
+  .badge.b1{background:rgba(61,116,244,.16);color:var(--blue-2)}
+  .badge.b2{background:rgba(230,162,60,.16);color:var(--amber)}
+  .badge.b3{background:rgba(47,191,113,.16);color:var(--green)}
+  td select.st{background:var(--bg-2);border:1px solid var(--line);border-radius:2px;color:var(--ink);font-size:12px;padding:6px 8px;cursor:pointer;font-family:'IBM Plex Mono'}
+  td select.st:focus{outline:none;border-color:var(--blue)}
+  .del{background:none;border:1px solid var(--line-2);border-radius:2px;color:var(--ink-3);width:30px;height:30px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1}
+  .del:hover{border-color:var(--red);color:var(--red)}
+
+  .empty{text-align:center;padding:70px 20px;border:1px dashed var(--line-2);border-radius:var(--r);color:var(--ink-3)}
+  .empty .mono{font-size:13px;color:var(--ink-2)}
+  .demo-hint{margin-top:14px;font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-3);letter-spacing:.03em}
+  .demo-hint b{color:var(--amber)}
+
+  /* mobile cards */
+  .cards{display:none;flex-direction:column;gap:12px}
+  .lcard{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px}
+  .lcard .row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .lcard .nm{font-weight:700;font-size:16px}
+  .lcard dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin-top:12px;font-size:13px}
+  .lcard dt{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .lcard dd{color:var(--ink)}
+  .lcard .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
+
+  @media(max-width:860px){
+    .stats{grid-template-columns:1fr 1fr}
+    table{display:none}
+    .cards{display:flex}
+  }
+  :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="glow"></div>
+    <div class="logo">CREAGYM<span class="d">.</span></div>
+    <div class="lbl">Адмін-панель заявок</div>
+    <input id="pass" type="password" placeholder="Пароль" autocomplete="current-password">
+    <button id="enter">Увійти</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="wrap topbar-in">
+      <div class="logo">CREAGYM<span class="d">.</span> <span class="tag">Заявки</span></div>
+      <div class="actions">
+        <span class="source" id="source"><span class="dot"></span><span id="sourceTxt">Демо</span></span>
+        <button class="ibtn" id="refresh">Оновити</button>
+        <button class="ibtn" id="csv">Експорт CSV</button>
+        <button class="ibtn" id="logout">Вийти</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="n" id="cTotal">0</div><div class="l">Усього заявок</div></div>
+      <div class="stat new"><div class="n" id="cNew">0</div><div class="l">Нові</div></div>
+      <div class="stat prog"><div class="n" id="cProg">0</div><div class="l">В роботі</div></div>
+      <div class="stat done"><div class="n" id="cDone">0</div><div class="l">Закриті</div></div>
+    </div>
+
+    <div class="controls">
+      <input id="search" type="text" placeholder="Пошук: ім'я, телефон, коментар…">
+      <select id="fStatus">
+        <option value="all">Усі статуси</option>
+        <option value="new">Нові</option>
+        <option value="in_progress">В роботі</option>
+        <option value="closed">Закриті</option>
+      </select>
+    </div>
+
+    <div id="list"></div>
+    <div style="height:60px"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+  const $ = s => document.querySelector(s);
+  const CFG = window.CREAGYM_CFG, API = window.CREAGYM_API;
+  const ST = { new:["Нова","b1"], in_progress:["В роботі","b2"], closed:["Закрита","b3"] };
+  let DATA = [];
+
+  /* ---- gate ---- */
+  function unlock(){ $("#gate").style.display="none"; $("#app").classList.add("show"); load(); }
+  (function(){ try{ if(sessionStorage.getItem("creagym_admin")==="1") return unlock(); }catch(e){} })();
+  $("#enter").addEventListener("click", tryLogin);
+  $("#pass").addEventListener("keydown", e=>{ if(e.key==="Enter") tryLogin(); });
+  function tryLogin(){
+    if($("#pass").value === CFG.ADMIN_PASS){
+      try{ sessionStorage.setItem("creagym_admin","1"); }catch(e){}
+      unlock();
+    } else { $("#gateErr").textContent="Невірний пароль"; }
+  }
+  $("#logout").addEventListener("click", ()=>{ try{ sessionStorage.removeItem("creagym_admin"); }catch(e){} location.reload(); });
+
+  /* ---- source indicator ---- */
+  (function(){
+    const on = API.isOnline();
+    $("#source").classList.toggle("on", on);
+    $("#sourceTxt").textContent = on ? "Supabase" : "Демо (локально)";
+  })();
+
+  /* ---- load + render ---- */
+  async function load(){
+    try{ DATA = await API.leadList(); }
+    catch(e){ DATA = []; alert("Помилка завантаження з Supabase: "+e.message); }
+    render();
+  }
+  $("#refresh").addEventListener("click", load);
+  $("#search").addEventListener("input", render);
+  $("#fStatus").addEventListener("change", render);
+
+  function counts(){
+    const c={total:DATA.length,new:0,in_progress:0,closed:0};
+    DATA.forEach(l=>{ if(c[l.status]!=null) c[l.status]++; });
+    $("#cTotal").textContent=c.total; $("#cNew").textContent=c.new;
+    $("#cProg").textContent=c.in_progress; $("#cDone").textContent=c.closed;
+  }
+
+  function filtered(){
+    const q=$("#search").value.trim().toLowerCase(), s=$("#fStatus").value;
+    return DATA.filter(l=>{
+      if(s!=="all" && l.status!==s) return false;
+      if(!q) return true;
+      return [l.name,l.phone,l.comment,l.interest,l.budget,l.area].join(" ").toLowerCase().includes(q);
+    });
+  }
+
+  function fmtDate(iso){
+    const d=new Date(iso); if(isNaN(d)) return "—";
+    return d.toLocaleString("uk-UA",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
+  }
+  const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  function statusSelect(l){
+    return `<select class="st" data-id="${esc(l.id)}">`+
+      Object.keys(ST).map(k=>`<option value="${k}" ${l.status===k?"selected":""}>${ST[k][0]}</option>`).join("")+
+      `</select>`;
+  }
+
+  function render(){
+    counts();
+    const rows = filtered();
+    const list = $("#list");
+    if(!rows.length){
+      list.innerHTML = `<div class="empty"><div class="mono">Заявок поки немає</div>`+
+        (!API.isOnline()?`<div class="demo-hint">Працює <b>демо-режим</b>. Впиши ключі Supabase у <b>config.js</b>, щоб бачити реальні заявки.</div>`:``)+
+        `</div>`;
+      return;
+    }
+    // table
+    let t = `<table><thead><tr>
+      <th>Дата</th><th>Клієнт</th><th>Цікавить</th><th>Площа</th><th>Бюджет</th><th>Коментар</th><th>Статус</th><th></th>
+    </tr></thead><tbody>`;
+    rows.forEach(l=>{
+      t += `<tr>
+        <td class="meta">${fmtDate(l.created_at)}</td>
+        <td><div class="nm">${esc(l.name)||"—"}</div><div class="ph"><a href="tel:${esc(l.phone)}">${esc(l.phone)||"—"}</a></div></td>
+        <td>${esc(l.interest)||"—"}</td>
+        <td>${esc(l.area)||"—"}</td>
+        <td>${esc(l.budget)||"—"}</td>
+        <td class="cmt">${esc(l.comment)||"—"}</td>
+        <td>${statusSelect(l)}</td>
+        <td><button class="del" data-id="${esc(l.id)}" title="Видалити">✕</button></td>
+      </tr>`;
+    });
+    t += `</tbody></table>`;
+
+    // cards (mobile)
+    let c = `<div class="cards">`;
+    rows.forEach(l=>{
+      const b=ST[l.status]||ST.new;
+      c += `<div class="lcard">
+        <div class="row"><div class="nm">${esc(l.name)||"—"}</div><span class="badge ${b[1]}">${b[0]}</span></div>
+        <div class="ph" style="margin-top:4px"><a href="tel:${esc(l.phone)}" style="color:var(--blue-2);font-family:'IBM Plex Mono';font-size:13px">${esc(l.phone)||"—"}</a></div>
+        <dl>
+          <dt>Цікавить</dt><dd>${esc(l.interest)||"—"}</dd>
+          <dt>Площа</dt><dd>${esc(l.area)||"—"} м²</dd>
+          <dt>Бюджет</dt><dd>${esc(l.budget)||"—"}</dd>
+          <dt>Коментар</dt><dd>${esc(l.comment)||"—"}</dd>
+          <dt>Дата</dt><dd class="meta">${fmtDate(l.created_at)}</dd>
+        </dl>
+        <div class="foot">${statusSelect(l)}<button class="del" data-id="${esc(l.id)}" title="Видалити">✕ Видалити</button></div>
+      </div>`;
+    });
+    c += `</div>`;
+
+    list.innerHTML = t + c;
+
+    list.querySelectorAll("select.st").forEach(sel=>{
+      sel.addEventListener("change", async ()=>{
+        await API.leadUpdate(sel.dataset.id, { status: sel.value });
+        const l = DATA.find(x=>String(x.id)===String(sel.dataset.id)); if(l) l.status=sel.value;
+        counts();
+      });
+    });
+    list.querySelectorAll(".del").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        if(!confirm("Видалити заявку?")) return;
+        await API.leadDelete(btn.dataset.id);
+        DATA = DATA.filter(x=>String(x.id)!==String(btn.dataset.id));
+        render();
+      });
+    });
+  }
+
+  /* ---- CSV ---- */
+  $("#csv").addEventListener("click", ()=>{
+    const rows = filtered();
+    const head = ["Дата","Ім'я","Телефон","Цікавить","Площа","Бюджет","Коментар","Статус"];
+    const q = s => `"${String(s==null?"":s).replace(/"/g,'""')}"`;
+    const body = rows.map(l=>[fmtDate(l.created_at),l.name,l.phone,l.interest,l.area,l.budget,l.comment,(ST[l.status]||["",""])[0]].map(q).join(","));
+    const csv = "\uFEFF"+[head.map(q).join(","),...body].join("\n");
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+    a.download="creagym-leads-"+new Date().toISOString().slice(0,10)+".csv";
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+</script>
+</body>
+</html>

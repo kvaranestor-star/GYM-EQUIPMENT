@@ -1,658 +1,685 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CREAGYM Equipment · SHUA × YR Fitness</title>
+<meta name="description" content="Імпорт комерційного фітнес-обладнання SHUA і YR Fitness. Постачання, проєкт розстановки, монтаж і сервіс під ключ.">
+<meta property="og:title" content="CREAGYM Equipment · SHUA × YR Fitness">
+<meta property="og:description" content="Професійні тренажери SHUA і YR Fitness. Зал під ключ — постачання, проєкт, монтаж, сервіс.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --canvas:#0A0A0C;--paper:#17181B;--ink:#ECEDEE;--ink-2:#9A9B9E;--ink-3:#6C6D70;
-    --orange:#3D74F4;--line:#2A2B2F;--panel:#202126;--panel-2:#26272C;
+    --bg:#09090B;--bg-2:#0F1013;--card:#141519;--card-2:#1A1C21;--panel:#1E2026;
+    --line:#26282E;--line-2:#33353C;--ink:#F3F4F6;--ink-2:#A4A6AC;--ink-3:#65676D;
+    --blue:#3D74F4;--blue-2:#6A95FF;--glow:rgba(61,116,244,.4);--r:3px;--ease:cubic-bezier(.22,.68,.18,1);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-  body{background:var(--canvas);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
-  ::selection{background:var(--orange);color:#fff}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--blue);color:#fff}
   a{color:inherit;text-decoration:none}
   svg{display:block}
-  h1,h2,h3{font-weight:900;line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
-  .cn{font-family:'Noto Sans SC',sans-serif;font-weight:400;letter-spacing:.02em}
+  h1,h2,h3{font-weight:900;line-height:.96;letter-spacing:-.03em;text-transform:uppercase}
   .mono{font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 30px}
+  .grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .eyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue-2);display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--blue)}
 
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(14,14,16,.9);backdrop-filter:blur(10px);border-bottom:1px solid #232325}
-  .topbar-in{max-width:1240px;margin:0 auto;padding:0 22px;height:58px;display:flex;align-items:center;justify-content:space-between;color:#fff}
-  .logo{display:flex;align-items:baseline;gap:8px;font-weight:900;font-size:19px;letter-spacing:-.02em}
-  .logo .o{color:var(--orange)}
-  .logo .cn{font-size:10px;color:#8a8a8c;font-weight:300}
-  .topnav{display:flex;gap:26px;align-items:center}
-  .topnav a{font-size:13px;color:#b9b9bb;transition:color .2s}
-  .topnav a:hover{color:#fff}
-  .pill{font-family:'IBM Plex Mono';font-size:12px;text-transform:uppercase;letter-spacing:.06em;background:var(--orange);color:#fff;padding:9px 16px;font-weight:500;transition:background .25s}
-  .pill:hover{background:#2B5AD0}
+  header{position:fixed;top:0;left:0;right:0;z-index:300;transition:all .4s var(--ease)}
+  header.s{background:rgba(9,9,11,.78);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:74px;transition:height .4s var(--ease)}
+  header.s .nav{height:60px}
+  .logo{display:flex;align-items:baseline;gap:2px;font-weight:900;font-size:21px;letter-spacing:-.02em}
+  .logo .d{color:var(--blue)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-size:13.5px;color:var(--ink-2);transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .navright{display:flex;align-items:center;gap:14px}
+  .lang{display:flex;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden}
+  .lang b{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;padding:8px 11px;color:var(--ink-3);cursor:pointer;font-weight:500;transition:all .2s}
+  .lang b:hover{color:var(--ink)}
+  .lang b.on{background:var(--blue);color:#fff}
+  .btn{font-family:'IBM Plex Mono';font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;padding:13px 22px;font-weight:500;cursor:pointer;transition:all .3s var(--ease);display:inline-flex;align-items:center;gap:9px;border:1px solid transparent;border-radius:var(--r)}
+  .btn-b{background:var(--blue);color:#fff;box-shadow:0 8px 30px -8px var(--glow)}
+  .btn-b:hover{background:var(--blue-2);transform:translateY(-2px);box-shadow:0 14px 40px -8px var(--glow)}
+  .btn-o{border-color:var(--line-2);color:var(--ink)}
+  .btn-o:hover{border-color:var(--blue);color:var(--blue-2)}
+  .btn .ar{transition:transform .3s var(--ease)}
+  .btn:hover .ar{transform:translate(3px,-3px)}
 
-  .deck{max-width:1240px;margin:0 auto;padding:58px 22px 60px}
-  .slide{background:var(--paper);border:1px solid #2a2a2c;margin-bottom:22px;position:relative;overflow:hidden}
-  .slide-pad{padding:46px 48px}
-  .slabel{position:absolute;top:0;left:0;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:14px 16px}
-  .slabel-r{left:auto;right:0;text-align:right;color:var(--ink-2)}
-  .rule{height:1px;background:var(--line);width:100%}
+  .ph{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 50% 12%,#1c1f26 0%,#101116 55%,#0c0d11 100%)}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;transition:transform .9s var(--ease),opacity .4s}
+  .ph .bp{position:absolute;inset:0;margin:auto;width:62%;height:62%;z-index:1;filter:drop-shadow(0 0 18px var(--glow))}
+  .ph .bp [stroke]{stroke:var(--blue-2);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:.85}
+  .ph .bp .dim[stroke]{stroke:var(--ink-3);opacity:.5}
+  .ph::after{content:"";position:absolute;inset:0;z-index:3;background:linear-gradient(180deg,transparent 55%,rgba(9,9,11,.55) 100%);pointer-events:none}
+  .ph .floor{position:absolute;left:8%;right:8%;bottom:11%;height:1px;z-index:1;background:linear-gradient(90deg,transparent,var(--line-2),transparent)}
 
-  .eyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);display:inline-flex;align-items:center;gap:9px}
-  .eyebrow::before{content:"";width:22px;height:2px;background:var(--orange)}
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 0 60px;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;z-index:0}
+  .hero-bg .g1{position:absolute;top:-12%;right:-8%;width:62vw;height:62vw;background:radial-gradient(circle,var(--glow),transparent 62%);filter:blur(20px)}
+  .hero-bg .g2{position:absolute;bottom:-20%;left:-10%;width:46vw;height:46vw;background:radial-gradient(circle,rgba(61,116,244,.16),transparent 65%);filter:blur(30px)}
+  .hero-bg .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:70px 70px;mask-image:radial-gradient(ellipse 75% 65% at 60% 40%,#000,transparent 82%)}
+  .hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;width:100%}
+  .hero-h{font-size:clamp(44px,8vw,104px);font-weight:900;letter-spacing:-.045em}
+  .hero-h .b{color:var(--blue)}
+  .hero-h .line{display:block;overflow:hidden}
+  .hero-h .line span{display:block;transform:translateY(108%);transition:transform .95s var(--ease)}
+  .hero.go .hero-h .line:nth-child(1) span{transition-delay:.06s}
+  .hero.go .hero-h .line:nth-child(2) span{transition-delay:.16s}
+  .hero.go .hero-h .line:nth-child(3) span{transition-delay:.26s}
+  .hero.go .hero-h .line span{transform:translateY(0)}
+  .hero-eyebrow{margin-bottom:26px;opacity:0;transform:translateY(14px);transition:all .8s var(--ease) .35s}
+  .hero.go .hero-eyebrow{opacity:1;transform:none}
+  .hero-sub{margin-top:26px;max-width:46ch;color:var(--ink-2);font-size:16px;opacity:0;transform:translateY(16px);transition:all .8s var(--ease) .5s}
+  .hero.go .hero-sub{opacity:1;transform:none}
+  .hero-sub b{color:var(--ink);font-weight:600}
+  .hero-cta{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;opacity:0;transform:translateY(16px);transition:all .8s var(--ease) .62s}
+  .hero.go .hero-cta{opacity:1;transform:none}
+  .hero-photo{position:relative;aspect-ratio:1/1.04;border:1px solid var(--line);border-radius:var(--r);opacity:0;transform:translateY(26px) scale(.98);transition:all 1s var(--ease) .35s}
+  .hero.go .hero-photo{opacity:1;transform:none}
+  .hero-photo .tag{position:absolute;z-index:4;font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);background:rgba(12,13,17,.7);backdrop-filter:blur(6px);border:1px solid var(--line);padding:6px 10px;border-radius:2px}
+  .hero-photo .tag.t1{top:16px;left:16px;color:var(--blue-2)}
+  .hero-photo .tag.t2{bottom:16px;right:16px}
+  .hero-stats{position:absolute;left:16px;bottom:16px;z-index:4;display:flex;gap:18px}
+  .hero-stats .hs .n{font-weight:900;font-size:22px;letter-spacing:-.03em;color:#fff}
+  .hero-stats .hs .l{font-family:'IBM Plex Mono';font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
 
-  .hero{padding:0}
-  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;padding:26px 36px 0;position:relative;z-index:3}
-  .hero-top .l{font-weight:900;font-size:18px}
-  .hero-top .r{text-align:right;font-size:12px;color:var(--ink-2);line-height:1.5;max-width:280px}
-  .hero-top .r .cn{display:block;color:var(--ink);font-size:15px;margin-top:6px;letter-spacing:.06em}
-  .hero-body{position:relative;min-height:480px;padding:8px 36px 40px}
-  .ghost{position:absolute;left:0;right:0;bottom:34px;z-index:0;font-weight:900;font-size:clamp(80px,19vw,260px);letter-spacing:-.05em;line-height:.8;color:#1E2024;text-transform:uppercase;white-space:nowrap;overflow:hidden;pointer-events:none;text-align:center}
-  .hero-grid-2{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .55fr;gap:24px;align-items:center;padding-top:26px}
-  .hero-h{font-size:clamp(40px,7vw,88px);font-weight:900;letter-spacing:-.04em}
-  .hero-h .o{color:var(--orange)}
-  .hero-sub{margin-top:22px;max-width:42ch;color:var(--ink-2);font-size:15.5px}
-  .hero-sub b{color:var(--ink);font-weight:700}
-  .hero-cta{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap}
-  .btn{font-family:'IBM Plex Mono';font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding:13px 20px;font-weight:500;border:1px solid var(--ink);transition:all .25s;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
-  .btn-o{background:var(--orange);border-color:var(--orange);color:#fff}
-  .btn-o:hover{background:#2B5AD0;border-color:#2B5AD0}
-  .btn-g{background:transparent;color:var(--ink)}
-  .btn-g:hover{background:var(--ink);color:var(--canvas)}
-  .hero-machine{position:relative}
-  .hero-machine svg{width:100%;height:auto}
-  .hero-machine svg [stroke]{stroke:var(--ink);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
-  .hero-machine svg .o[stroke]{stroke:var(--orange);stroke-width:2}
-  .hero-tags{position:absolute;top:14px;right:0;z-index:3;display:flex;flex-direction:column;gap:4px;text-align:right}
-  .hero-tags .t{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-  .hero-tags .t b{color:var(--ink);font-weight:600}
-  .hero-foot{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--line);padding:18px 36px;position:relative;z-index:2;flex-wrap:wrap}
-  .hero-foot .mono{font-size:11px;color:var(--ink-2)}
-  .hero-foot .mono b{color:var(--orange)}
+  .marq{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:16px 0;background:var(--bg-2)}
+  .marq-t{display:inline-flex;animation:scroll 36s linear infinite}
+  .marq-t .it{font-family:'IBM Plex Mono';font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);display:inline-flex;align-items:center}
+  .marq-t .it b{color:var(--ink)}
+  .marq-t .sep{color:var(--blue);margin:0 26px}
+  @keyframes scroll{to{transform:translateX(-50%)}}
 
-  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:start;margin-top:26px}
-  .about-h{font-size:clamp(54px,11vw,150px);font-weight:900;letter-spacing:-.05em;line-height:.82}
-  .about-h .o{color:var(--orange)}
-  .about-txt{margin-top:22px;color:var(--ink-2);font-size:14.5px;max-width:48ch}
-  .about-txt b{color:var(--ink);font-weight:700}
-  .stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}
-  .stat{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 20px}
-  .stat .n{font-weight:900;font-size:clamp(34px,5vw,52px);letter-spacing:-.04em;line-height:1}
-  .stat .n em{color:var(--orange);font-style:normal}
-  .stat .l{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:8px}
+  .sec{padding:120px 0}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:56px}
+  .sec-head h2{font-size:clamp(32px,5.5vw,68px)}
+  .sec-head .r{text-align:right}
+  .sec-head .sub{color:var(--ink-2);max-width:38ch;font-size:15px}
 
-  .data-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:30px}
-  .data-head h2{font-size:clamp(26px,4vw,42px)}
-  .data-head .cn{font-size:18px;color:var(--ink-2)}
-  .charts{display:grid;grid-template-columns:repeat(4,1fr)}
-  .chart{padding:22px 22px 26px;border-left:1px solid var(--line)}
-  .chart:first-child{border-left:0}
-  .chart .cap{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);line-height:1.5;min-height:30px}
-  .chart svg{width:100%;height:54px;margin:14px 0}
-  .chart svg polyline{fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .chart svg .base{stroke:var(--line);stroke-width:1}
-  .chart svg circle{fill:var(--orange)}
-  .chart .big{font-weight:900;font-size:34px;letter-spacing:-.03em;display:flex;align-items:baseline;gap:6px}
-  .chart .big .ar{font-size:18px;color:var(--orange)}
-  .chart .sub{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-top:6px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .st{padding:38px 28px;border-right:1px solid var(--line);position:relative;overflow:hidden}
+  .st:last-child{border-right:0}
+  .st::before{content:"";position:absolute;left:0;top:0;width:0;height:2px;background:var(--blue);transition:width .8s var(--ease)}
+  .st.in::before{width:100%}
+  .st .n{font-weight:900;font-size:clamp(40px,6vw,66px);letter-spacing:-.04em;line-height:1}
+  .st .n .u{color:var(--blue)}
+  .st .l{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:14px}
 
-  .brands{display:grid;grid-template-columns:1fr 1fr;min-height:440px}
-  .brands-l{padding:42px 44px;display:flex;flex-direction:column}
-  .brand-tab{background:var(--orange);color:#fff;display:inline-flex;align-self:flex-start;font-weight:900;font-size:clamp(22px,3vw,34px);letter-spacing:-.02em;text-transform:uppercase;padding:6px 16px}
-  .brand-tab.alt{background:var(--ink);color:var(--canvas);margin-top:10px}
-  .brand-intro{margin:24px 0 8px;color:var(--ink-2);font-size:14.5px;max-width:42ch}
-  .speclist{margin-top:auto;border-top:1px solid var(--line)}
-  .specrow{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px}
-  .specrow .k{color:var(--ink)}
-  .specrow .v{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);text-align:right}
-  .brands-r{border-left:1px solid var(--line);background:var(--panel);position:relative;display:flex;align-items:center;justify-content:center;padding:30px}
-  .brands-r .bp-label{position:absolute;top:14px;left:16px;font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
-  .brands-r .bp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;opacity:.7}
-  .brands-r svg{position:relative;width:78%;height:auto;max-height:340px}
-  .brands-r svg [stroke]{stroke:#AEB0B5;fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
-  .brands-r svg .o[stroke]{stroke:var(--orange);stroke-width:1.6}
-  .brands-r svg text{font-family:'IBM Plex Mono';font-size:8px;fill:var(--ink-3);letter-spacing:.05em}
+  .look{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px;height:520px}
+  .look .tile{position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .look .tile:hover img{transform:scale(1.06)}
+  .look .tile .cap{position:absolute;left:18px;bottom:18px;z-index:4}
+  .look .tile .cap .k{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-2)}
+  .look .tile .cap h3{font-size:21px;margin-top:6px;text-transform:none;font-weight:800;letter-spacing:-.01em}
+  .look .stack{display:grid;grid-template-rows:1fr 1fr;gap:14px}
 
-  .filters{display:flex;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px;flex-wrap:wrap}
-  .filter{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding:13px 18px;border-right:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;transition:all .2s}
-  .filter:hover{color:var(--ink)}
-  .filter.active{background:var(--orange);color:#fff}
-  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
-  .pcard{border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);transition:background .25s;position:relative}
-  .pcard.hide{display:none}
-  .pcard:hover{background:#1C1D21}
-  .pcard:hover .pviz{background:var(--panel-2)}
-  .pviz{aspect-ratio:4/3;background:var(--panel);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:background .25s;border-bottom:1px solid var(--line)}
-  .pviz .brandtag{position:absolute;top:10px;left:10px;font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--canvas);padding:3px 7px}
-  .pviz .brandtag.yr{background:var(--orange);color:#fff}
-  .pviz .no{position:absolute;bottom:10px;right:12px;font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:.06em;color:var(--ink-3)}
-  .pviz svg{width:58%;height:58%;transition:transform .4s}
-  .pcard:hover .pviz svg{transform:scale(1.05)}
-  .pviz svg [stroke]{stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-  .pviz svg .o[stroke]{stroke:var(--orange);stroke-width:2}
-  .pbody{padding:16px 18px 20px}
-  .pcat{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
-  .pcard h3{font-size:17px;letter-spacing:-.01em;margin:8px 0 12px;text-transform:none;font-weight:800}
-  .pspec{display:flex;justify-content:space-between;font-family:'IBM Plex Mono';font-size:11px;padding:5px 0;border-top:1px solid var(--line)}
-  .pspec span{color:var(--ink-3)}
-  .pspec b{color:var(--ink);font-weight:500}
-  .products-title{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:24px;border-top:2px solid var(--ink)}
-  .products-title h2{font-size:clamp(28px,5vw,56px)}
-  .products-title .cn{font-size:18px;color:var(--ink-2)}
+  .brands{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .brandcard{border:1px solid var(--line);border-radius:var(--r);padding:38px;background:linear-gradient(170deg,var(--card),var(--bg-2));position:relative;overflow:hidden;transition:border-color .4s var(--ease),transform .4s var(--ease)}
+  .brandcard:hover{border-color:var(--line-2);transform:translateY(-4px)}
+  .brandcard .glow{position:absolute;top:-30%;right:-20%;width:60%;height:80%;background:radial-gradient(circle,var(--glow),transparent 65%);opacity:.5;filter:blur(20px)}
+  .brandcard .name{display:flex;align-items:baseline;gap:12px;position:relative}
+  .brandcard .name .en{font-weight:900;font-size:40px;letter-spacing:-.03em}
+  .brandcard.yr .name .en{color:var(--blue)}
+  .brandcard .role{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-2);margin:16px 0 14px}
+  .brandcard p{color:var(--ink-2);font-size:14.5px;max-width:42ch}
+  .brandcard .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);padding:7px 12px;border-radius:2px}
 
-  .turn-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);margin-top:24px}
-  .turn{padding:24px 18px;border-right:1px solid var(--line)}
-  .turn:last-child{border-right:0}
-  .turn .num{font-family:'IBM Plex Mono';font-size:12px;color:var(--orange);letter-spacing:.1em}
-  .turn h3{font-size:18px;text-transform:none;font-weight:800;margin:14px 0 8px;letter-spacing:-.01em}
-  .turn p{font-size:13px;color:var(--ink-2);line-height:1.5}
+  .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}
+  .filter{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding:10px 18px;border:1px solid var(--line);border-radius:var(--r);color:var(--ink-2);background:transparent;cursor:pointer;transition:all .25s var(--ease)}
+  .filter:hover{border-color:var(--line-2);color:var(--ink)}
+  .filter.active{background:var(--blue);border-color:var(--blue);color:#fff}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card);display:flex;flex-direction:column;transition:transform .5s var(--ease),border-color .5s var(--ease),box-shadow .5s var(--ease)}
+  .card.hide{display:none}
+  .card:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 24px 50px -24px rgba(0,0,0,.8)}
+  .card:hover .ph img{transform:scale(1.07)}
+  .card:hover .ph .bp{filter:drop-shadow(0 0 26px var(--glow))}
+  .card .ph{aspect-ratio:4/3;border-bottom:1px solid var(--line)}
+  .card .brandtag{position:absolute;top:12px;left:12px;z-index:5;font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:2px;background:rgba(243,244,246,.92);color:#0b0b0d}
+  .card .brandtag.yr{background:var(--blue);color:#fff}
+  .card .no{position:absolute;bottom:12px;right:13px;z-index:5;font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:.06em;color:var(--ink-2)}
+  .card .body{padding:20px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card .cat{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .card h3{font-size:19px;letter-spacing:-.01em;text-transform:none;font-weight:800;margin-bottom:4px}
+  .card .specs{margin-top:auto;display:grid;gap:0;padding-top:12px}
+  .card .sp{display:flex;justify-content:space-between;gap:12px;font-family:'IBM Plex Mono';font-size:11px;padding:7px 0;border-top:1px solid var(--line)}
+  .card .sp span{color:var(--ink-3)}
+  .card .sp b{color:var(--ink);font-weight:500}
+  .catnote{margin-top:36px;color:var(--ink-2);font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .catnote .b{color:var(--blue-2)}
 
-  .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
-  .cta-l{padding:44px 44px;border-right:1px solid var(--line)}
-  .cta-l h2{font-size:clamp(30px,5vw,56px);letter-spacing:-.04em}
-  .cta-l h2 .o{color:var(--orange)}
-  .cta-l p{margin-top:18px;color:var(--ink-2);max-width:38ch;font-size:15px}
-  .cta-contacts{margin-top:28px;display:flex;flex-direction:column;gap:12px}
-  .cta-contacts a{font-family:'IBM Plex Mono';font-size:13px;letter-spacing:.04em;color:var(--ink);display:flex;gap:11px;align-items:center;transition:color .2s}
-  .cta-contacts a:hover{color:var(--orange)}
-  .cta-contacts .ic{color:var(--orange)}
-  form{padding:40px 44px;display:grid;gap:15px}
-  .field{display:flex;flex-direction:column;gap:6px}
-  .field label{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
-  .field input,.field select,.field textarea{border:1px solid var(--line);padding:12px 13px;font-family:'Inter';font-size:15px;color:var(--ink);background:#1C1D21;transition:border-color .2s}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--orange)}
-  .field textarea{resize:vertical;min-height:70px}
-  .field select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%233D74F4' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
-  .frow{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-  form .btn-o{width:100%;justify-content:center;padding:15px;border:none}
+  .proc{border-top:1px solid var(--line)}
+  .step{display:grid;grid-template-columns:96px 1fr auto;gap:28px;align-items:center;padding:30px 6px;border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding-left .4s var(--ease)}
+  .step:hover{background:linear-gradient(90deg,rgba(61,116,244,.06),transparent);padding-left:22px}
+  .step .num{font-weight:900;font-size:30px;color:var(--blue)}
+  .step h3{font-size:clamp(20px,2.6vw,28px)}
+  .step p{color:var(--ink-2);font-size:14.5px;margin-top:5px;max-width:50ch}
+  .step .tag{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+
+  .cta{position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:linear-gradient(160deg,var(--card),var(--bg-2))}
+  .cta .glow{position:absolute;bottom:-40%;left:50%;transform:translateX(-50%);width:70%;height:90%;background:radial-gradient(circle,var(--glow),transparent 66%);opacity:.5;filter:blur(30px)}
+  .cta-in{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr}
+  .cta-l{padding:50px 48px;border-right:1px solid var(--line)}
+  .cta-l h2{font-size:clamp(32px,5vw,58px);letter-spacing:-.04em}
+  .cta-l h2 .b{color:var(--blue)}
+  .cta-l p{margin-top:20px;color:var(--ink-2);max-width:38ch}
+  .cta-contacts{margin-top:30px;display:flex;flex-direction:column;gap:13px}
+  .cta-contacts a{font-family:'IBM Plex Mono';font-size:13px;letter-spacing:.03em;display:flex;gap:12px;align-items:center;color:var(--ink-2);transition:color .2s}
+  .cta-contacts a:hover{color:var(--blue-2)}
+  .cta-contacts .ic{color:var(--blue)}
+  form{padding:46px 48px;display:grid;gap:16px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field label{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .field input,.field select,.field textarea{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;color:var(--ink);font-family:'Inter';font-size:15px;transition:border-color .25s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue)}
+  .field textarea{resize:vertical;min-height:74px}
+  .field select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%233D74F4' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  form .btn-b{width:100%;justify-content:center;padding:16px;border:none}
   .fnote{font-family:'IBM Plex Mono';font-size:10px;color:var(--ink-3);letter-spacing:.04em;text-align:center}
-  .fsuccess{display:none;text-align:center;padding:24px 6px}
-  .fsuccess.show{display:block}
-  .fsuccess .ok{width:50px;height:50px;border:2px solid var(--orange);margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
-  .fsuccess h3{font-size:22px;text-transform:none;margin-bottom:6px}
-  .fsuccess p{color:var(--ink-2);font-size:14px}
+  .ferr{color:#E5727A;font-size:13px;text-align:center;display:none}
+  .ferr.show{display:block}
+  .fok{display:none;text-align:center;padding:30px 8px}
+  .fok.show{display:block}
+  .fok .ic{width:54px;height:54px;border:1.5px solid var(--blue);border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center}
+  .fok h3{font-size:24px;text-transform:none;margin-bottom:8px}
+  .fok p{color:var(--ink-2);font-size:14px}
   .hidden{display:none}
 
-  .foot{color:#fff;max-width:1240px;margin:0 auto;padding:30px 22px 50px;display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
-  .foot .logo{color:#fff;font-size:22px}
-  .foot .meta{font-family:'IBM Plex Mono';font-size:11px;color:#8a8a8c;line-height:2;letter-spacing:.04em}
-  .foot a:hover{color:var(--orange)}
-  .foot-rule{max-width:1240px;margin:0 auto;height:1px;background:#232325}
-  .foot-bottom{max-width:1240px;margin:0 auto;padding:18px 22px 40px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono';font-size:10.5px;color:#5a5a5c;letter-spacing:.08em;text-transform:uppercase}
+  footer{border-top:1px solid var(--line);padding:56px 0 44px;background:var(--bg-2)}
+  .foot{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
+  .foot .logo{font-size:25px}
+  .foot p{color:var(--ink-2);font-size:13.5px;max-width:32ch;margin-top:14px}
+  .foot .meta{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink-3);line-height:2.1;letter-spacing:.04em}
+  .foot .meta a:hover{color:var(--blue-2)}
+  .foot-b{max-width:1280px;margin:40px auto 0;padding:24px 30px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono';font-size:10.5px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase}
 
-  .rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .rv{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
   .rv.in{opacity:1;transform:none}
+  .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
 
-  @media(max-width:920px){
-    .topnav{display:none}
-    .hero-grid-2{grid-template-columns:1fr}
-    .hero-machine{max-width:320px;margin:0 auto}
-    .about-grid{grid-template-columns:1fr;gap:26px}
-    .charts{grid-template-columns:1fr 1fr}
-    .chart:nth-child(3){border-left:0}
+  @media(max-width:980px){
+    .nav-links{display:none}
+    .hero-in{grid-template-columns:1fr;gap:36px}
+    .hero-photo{max-width:440px}
+    .stats{grid-template-columns:1fr 1fr}
+    .st:nth-child(2){border-right:0}.st:nth-child(1),.st:nth-child(2){border-bottom:1px solid var(--line)}
+    .look{grid-template-columns:1fr 1fr;height:auto}
+    .look .tile:first-child{grid-column:1/-1;height:280px}
+    .look .stack{grid-template-rows:none}
     .brands{grid-template-columns:1fr}
-    .brands-r{border-left:0;border-top:1px solid var(--line);min-height:300px}
-    .pgrid{grid-template-columns:1fr 1fr}
-    .turn-grid{grid-template-columns:1fr 1fr}
-    .cta-grid{grid-template-columns:1fr}
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .cta-in{grid-template-columns:1fr}
     .cta-l{border-right:0;border-bottom:1px solid var(--line)}
+    .step{grid-template-columns:60px 1fr}.step .tag{display:none}
   }
   @media(max-width:560px){
-    .deck{padding:58px 12px 40px}
-    .slide-pad{padding:30px 22px}
-    .hero-top{padding:22px 22px 0}.hero-body{padding:8px 22px 30px}.hero-foot{padding:16px 22px}
-    .pgrid{grid-template-columns:1fr}
-    .charts{grid-template-columns:1fr 1fr}
-    .turn-grid{grid-template-columns:1fr}
+    .wrap{padding:0 18px}
+    .grid{grid-template-columns:1fr}
+    .look{grid-template-columns:1fr}
+    .look .tile,.look .tile:first-child{height:240px}
     .frow{grid-template-columns:1fr}
-    .hero-tags{position:static;text-align:left;flex-direction:row;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+    .sec{padding:84px 0}
   }
-  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.001ms!important}.rv{opacity:1!important;transform:none!important}}
-  :focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+    .rv,.hero-h .line span,.hero-eyebrow,.hero-sub,.hero-cta,.hero-photo{opacity:1!important;transform:none!important}
+  }
+  :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 </style>
 </head>
 <body>
+<div class="grain"></div>
 
-<div class="topbar">
-  <div class="topbar-in">
-    <a href="#top" class="logo">CREAGYM<span class="o">.</span><span class="cn">健身器材</span></a>
-    <nav class="topnav">
-      <a href="#about">О компании</a>
-      <a href="#data">Цифры</a>
-      <a href="#brands">Бренды</a>
-      <a href="#products">Каталог</a>
-      <a href="#turnkey">Под ключ</a>
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#top" class="logo">CREAGYM<span class="d">.</span></a>
+    <nav class="nav-links">
+      <a href="#brands" data-i18n="nav_brands">Бренди</a>
+      <a href="#catalog" data-i18n="nav_catalog">Каталог</a>
+      <a href="#process" data-i18n="nav_process">Під ключ</a>
+      <a href="#showcase" data-i18n="nav_showcase">Зали</a>
     </nav>
-    <a href="#cta" class="pill">Запросить прайс</a>
+    <div class="navright">
+      <div class="lang"><b data-l="ua" class="on">UA</b><b data-l="en">EN</b></div>
+      <a href="#cta" class="btn btn-b"><span data-i18n="nav_cta">Запросити прайс</span> <span class="ar">↗</span></a>
+    </div>
   </div>
-</div>
+</header>
 
-<div class="deck" id="top">
-
-  <!-- HERO -->
-  <section class="slide hero">
-    <div class="hero-top">
-      <div class="l">CREAGYM<span style="color:var(--orange)">.</span></div>
-      <div class="r">
-        Официальный импорт коммерческого фитнес-оборудования из Китая
-        <span class="cn">健身器材产品介绍</span>
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"><div class="grid"></div><div class="g1" data-par="0.18"></div><div class="g2" data-par="-0.1"></div></div>
+  <div class="wrap hero-in">
+    <div>
+      <div class="hero-eyebrow eyebrow" data-i18n="hero_eyebrow">SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ</div>
+      <h1 class="hero-h">
+        <span class="line"><span data-i18n="hero_l1">Профі-</span></span>
+        <span class="line"><span data-i18n="hero_l2">обладнання</span></span>
+        <span class="line"><span data-i18n="hero_l3" data-i18n-html>для <span class="b">залів</span></span></span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero_sub" data-i18n-html>Постачаємо комерційні тренажери двох заводів — <b>SHUA</b> (постачальник 7 Олімпіад) та <b>YR&nbsp;Fitness</b> (28 років, CE/TÜV/ISO). Прямий імпорт, проєкт розстановки, монтаж і сервіс під ключ.</p>
+      <div class="hero-cta">
+        <a href="#catalog" class="btn btn-o" data-i18n="hero_cta1">Дивитись каталог</a>
+        <a href="#cta" class="btn btn-b"><span data-i18n="hero_cta2">Отримати розрахунок</span> <span class="ar">↗</span></a>
       </div>
     </div>
-    <div class="hero-body">
-      <div class="ghost">SHUA · YR</div>
-      <div class="hero-grid-2">
-        <div>
-          <div class="eyebrow">SHUA × YR FITNESS · ИМПОРТ · ПОД КЛЮЧ</div>
-          <h1 class="hero-h">Commercial<br>gym <span class="o">equipment</span></h1>
-          <p class="hero-sub">Поставляем профессиональные тренажёры двух заводов — <b>SHUA</b> (поставщик 7 Олимпиад) и <b>YR&nbsp;Fitness</b> (28 лет, CE/TÜV/ISO). Прямой импорт, проект расстановки и монтаж под ключ.</p>
-          <div class="hero-cta">
-            <a href="#products" class="btn btn-g">Смотреть каталог</a>
-            <a href="#cta" class="btn btn-o">Получить расчёт ↗</a>
-          </div>
-        </div>
-        <div class="hero-machine">
-          <div class="hero-tags">
-            <div class="t"><b>SHUA</b> · 舒华</div>
-            <div class="t"><b>YR</b> · 燕日</div>
-            <div class="t">CE / TÜV / ISO</div>
-          </div>
-          <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg" aria-label="Тренажёр">
-            <line stroke x1="40" y1="330" x2="280" y2="330"/>
-            <rect stroke x="60" y="40" width="34" height="290"/>
-            <line stroke x1="60" y1="70" x2="94" y2="70"/>
-            <rect stroke x="226" y="40" width="34" height="290"/>
-            <line stroke x1="226" y1="70" x2="260" y2="70"/>
-            <rect stroke x="60" y="40" width="200" height="18"/>
-            <circle class="o" stroke cx="77" cy="86" r="9"/>
-            <circle stroke cx="77" cy="86" r="2.5"/>
-            <circle class="o" stroke cx="243" cy="86" r="9"/>
-            <circle stroke cx="243" cy="86" r="2.5"/>
-            <circle stroke cx="160" cy="49" r="6"/>
-            <rect stroke x="66" y="120" width="22" height="170"/>
-            <line stroke x1="66" y1="150" x2="88" y2="150"/>
-            <line stroke x1="66" y1="170" x2="88" y2="170"/>
-            <line stroke x1="66" y1="190" x2="88" y2="190"/>
-            <line stroke x1="66" y1="210" x2="88" y2="210"/>
-            <line stroke x1="66" y1="230" x2="88" y2="230"/>
-            <line stroke x1="66" y1="250" x2="88" y2="250"/>
-            <rect stroke x="232" y="120" width="22" height="170"/>
-            <line stroke x1="232" y1="150" x2="254" y2="150"/>
-            <line stroke x1="232" y1="170" x2="254" y2="170"/>
-            <line stroke x1="232" y1="190" x2="254" y2="190"/>
-            <line stroke x1="232" y1="210" x2="254" y2="210"/>
-            <line stroke x1="232" y1="230" x2="254" y2="230"/>
-            <line stroke x1="232" y1="250" x2="254" y2="250"/>
-            <path class="o" stroke d="M77 95 L77 130 M77 95 Q110 110 140 150"/>
-            <path class="o" stroke d="M243 95 L243 130 M243 95 Q210 110 180 150"/>
-            <line class="o" stroke x1="138" y1="150" x2="146" y2="158"/>
-            <line class="o" stroke x1="174" y1="150" x2="182" y2="158"/>
-            <line stroke x1="60" y1="346" x2="260" y2="346" stroke-dasharray="2 4"/>
-            <line stroke x1="60" y1="342" x2="60" y2="350"/>
-            <line stroke x1="260" y1="342" x2="260" y2="350"/>
-          </svg>
-        </div>
+    <div class="hero-photo" data-par="0.06">
+      <div class="ph" style="position:absolute;inset:0;border-radius:var(--r)">
+        <img src="img/hero.jpg" alt="" loading="eager" onerror="this.style.display='none'">
+        <div class="floor"></div>
+        <svg class="bp" viewBox="0 0 320 360"><line stroke x1="40" y1="330" x2="280" y2="330"/><rect stroke x="60" y="40" width="34" height="290"/><rect stroke x="226" y="40" width="34" height="290"/><rect stroke x="60" y="40" width="200" height="18"/><circle stroke cx="77" cy="86" r="9"/><circle stroke cx="243" cy="86" r="9"/><circle stroke cx="160" cy="49" r="6"/><rect stroke x="66" y="120" width="22" height="170"/><line stroke x1="66" y1="150" x2="88" y2="150"/><line stroke x1="66" y1="175" x2="88" y2="175"/><line stroke x1="66" y1="200" x2="88" y2="200"/><line stroke x1="66" y1="225" x2="88" y2="225"/><line stroke x1="66" y1="250" x2="88" y2="250"/><rect stroke x="232" y="120" width="22" height="170"/><line stroke x1="232" y1="150" x2="254" y2="150"/><line stroke x1="232" y1="175" x2="254" y2="175"/><line stroke x1="232" y1="200" x2="254" y2="200"/><line stroke x1="232" y1="225" x2="254" y2="225"/><line stroke x1="232" y1="250" x2="254" y2="250"/><path stroke d="M77 95 Q110 110 140 150"/><path stroke d="M243 95 Q210 110 180 150"/><line class="dim" stroke x1="60" y1="348" x2="260" y2="348" stroke-dasharray="2 4"/></svg>
+      </div>
+      <span class="tag t1">FLAGSHIP</span>
+      <span class="tag t2">SHUA × YR</span>
+      <div class="hero-stats">
+        <div class="hs"><div class="n">02</div><div class="l" data-i18n="hero_s1">заводи</div></div>
+        <div class="hs"><div class="n">110+</div><div class="l" data-i18n="hero_s2">країн</div></div>
+        <div class="hs"><div class="n">CE</div><div class="l">TÜV·ISO</div></div>
       </div>
     </div>
-    <div class="hero-foot">
-      <span class="mono">02 завода · <b>прямой импорт</b></span>
-      <span class="mono">110+ стран поставки</span>
-      <span class="mono">проект · монтаж · <b>сервис</b></span>
-      <span class="mono">CREAGYM · ЖИТОМИР</span>
-    </div>
-    <div class="slabel slabel-r">科技 / 工业设计</div>
-  </section>
+  </div>
+</section>
 
-  <!-- ABOUT -->
-  <section class="slide" id="about">
-    <div class="slide-pad">
-      <div class="eyebrow">О компании · <span class="cn">关于我们</span></div>
-      <div class="about-grid">
-        <div class="rv">
-          <h2 class="about-h">О НАС<span class="o">.</span></h2>
-          <p class="about-txt">CREAGYM — это сеть собственных залов и поставщик коммерческого оборудования. Мы не перекупщики: работаем <b>напрямую с заводами SHUA и YR Fitness</b>, поэтому даём заводские цены и отвечаем за качество. Зная зал изнутри, мы собираем комплект, который реально работает в эксплуатации, а не только красиво смотрится в каталоге.</p>
-        </div>
-        <div class="stats rv">
-          <div class="stat"><div class="n">2</div><div class="l">завода-поставщика</div></div>
-          <div class="stat"><div class="n">28<em>+</em></div><div class="l">лет производства YR</div></div>
-          <div class="stat"><div class="n">7</div><div class="l">Олимпиад · SHUA</div></div>
-          <div class="stat"><div class="n">110<em>+</em></div><div class="l">стран поставки</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="slabel">01 — ABOUT</div>
-  </section>
+<div class="marq"><div class="marq-t" id="marq"></div></div>
 
-  <!-- DATA -->
-  <section class="slide" id="data">
-    <div class="slide-pad">
-      <div class="data-head">
-        <div>
-          <div class="eyebrow" style="margin-bottom:14px">Анализ · <span class="cn">数据分析</span></div>
-          <h2>Почему прямой импорт<br>выгоднее</h2>
-        </div>
-        <span class="cn">设备数据分析</span>
-      </div>
+<!-- STATS -->
+<section class="sec wrap" style="padding-bottom:0">
+  <div class="stats">
+    <div class="st rv"><div class="n"><span data-count="28">0</span><span class="u">+</span></div><div class="l" data-i18n="st1">років виробництва YR</div></div>
+    <div class="st rv"><div class="n"><span data-count="7">0</span></div><div class="l" data-i18n="st2">Олімпіад · SHUA</div></div>
+    <div class="st rv"><div class="n"><span data-count="6000">0</span><span class="u">+</span></div><div class="l" data-i18n="st3">залів у світі</div></div>
+    <div class="st rv"><div class="n"><span data-count="110">0</span><span class="u">+</span></div><div class="l" data-i18n="st4">країн постачання</div></div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section class="sec wrap" id="brands">
+  <div class="sec-head">
+    <div><div class="eyebrow" style="margin-bottom:18px" data-i18n="brands_eyebrow">Наші бренди</div>
+      <h2 data-i18n="brands_h" data-i18n-html>Два заводи —<br>один постачальник</h2></div>
+    <div class="r"><p class="sub" data-i18n="brands_sub">Лінійки, що доповнюють одна одну: інженерія та кардіо SHUA + силові серії YR за ціною нижче преміум-брендів.</p></div>
+  </div>
+  <div class="brands">
+    <div class="brandcard rv">
+      <div class="glow"></div>
+      <div class="name"><span class="en">SHUA</span></div>
+      <div class="role" data-i18n="shua_role">Кардіо · Smart Strength · Олімпійський рівень</div>
+      <p data-i18n="shua_p">Завод з 1996 року, лістинг A-share, ACSM. Офіційний постачальник 7 Олімпійських ігор. Розумні консолі, адаптивна амортизація, серія 98 Smart Strength.</p>
+      <div class="chips" data-i18n-chips="shua_chips"><span class="chip">Доріжки</span><span class="chip">Еліпси</span><span class="chip">Сайкли</span><span class="chip">Веслування</span><span class="chip">98 Series</span></div>
     </div>
-    <div class="rule"></div>
-    <div class="charts">
-      <div class="chart rv">
-        <div class="cap">Стоимость владения<br>vs Technogym / Matrix</div>
-        <svg viewBox="0 0 120 54" preserveAspectRatio="none"><line class="base" x1="0" y1="53" x2="120" y2="53"/><polyline points="4,10 26,16 50,24 74,34 98,42 116,46"/><circle cx="116" cy="46" r="3"/></svg>
-        <div class="big">−40%<span class="ar">↓</span></div>
-        <div class="sub">экономия бюджета</div>
+    <div class="brandcard yr rv d1">
+      <div class="glow"></div>
+      <div class="name"><span class="en">YR Fitness</span></div>
+      <div class="role" data-i18n="yr_role">Силові серії · Plate / Pin loaded · 28 років</div>
+      <p data-i18n="yr_p">Порівнюють з Technogym і Matrix за збиранням, але дешевше. Професійні кути руху, сталь Q235, ~80% перед-збирання. CE / TÜV / ISO, 110+ країн.</p>
+      <div class="chips" data-i18n-chips="yr_chips"><span class="chip">C4 Revival</span><span class="chip">61A Racing</span><span class="chip">73 Tough</span><span class="chip">Multi Jungle</span><span class="chip">Bench &amp; Rack</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="sec wrap" id="showcase">
+  <div class="sec-head">
+    <div><div class="eyebrow" style="margin-bottom:18px" data-i18n="showcase_eyebrow">Зали під ключ</div>
+      <h2 data-i18n="showcase_h" data-i18n-html>Як це<br>виглядає в залі</h2></div>
+  </div>
+  <div class="look">
+    <div class="tile rv">
+      <div class="ph" style="position:absolute;inset:0"><img src="img/look-1.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="20" y="22" width="60" height="56"/><line stroke x1="20" y1="40" x2="80" y2="40"/><line stroke x1="35" y1="40" x2="35" y2="78"/><line stroke x1="65" y1="40" x2="65" y2="78"/></svg></div>
+      <div class="cap"><div class="k" data-i18n="look1_k">01 / Силова зона</div><h3 data-i18n="look1_h">Грузоблочні станки YR</h3></div>
+    </div>
+    <div class="stack">
+      <div class="tile rv d1">
+        <div class="ph" style="position:absolute;inset:0"><img src="img/look-2.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          <svg class="bp" viewBox="0 0 100 100"><path stroke d="M22 70 L66 70 L74 42 L62 42"/><rect stroke x="56" y="26" width="20" height="14"/><circle stroke cx="26" cy="74" r="3"/><circle stroke cx="62" cy="74" r="3"/></svg></div>
+        <div class="cap"><div class="k" data-i18n="look2_k">02 / Кардіо</div><h3 data-i18n="look2_h">Доріжки SHUA</h3></div>
       </div>
-      <div class="chart rv">
-        <div class="cap">Готовность к запуску<br>предсборка на заводе</div>
-        <svg viewBox="0 0 120 54" preserveAspectRatio="none"><line class="base" x1="0" y1="53" x2="120" y2="53"/><polyline points="4,44 26,40 50,30 74,22 98,14 116,8"/><circle cx="116" cy="8" r="3"/></svg>
-        <div class="big">80%<span class="ar">↑</span></div>
-        <div class="sub">собрано из коробки</div>
-      </div>
-      <div class="chart rv">
-        <div class="cap">География поставок<br>заводов SHUA / YR</div>
-        <svg viewBox="0 0 120 54" preserveAspectRatio="none"><line class="base" x1="0" y1="53" x2="120" y2="53"/><polyline points="4,42 26,36 50,32 74,22 98,16 116,10"/><circle cx="116" cy="10" r="3"/></svg>
-        <div class="big">110<span class="ar">↑</span></div>
-        <div class="sub">стран · 6000+ залов</div>
-      </div>
-      <div class="chart rv">
-        <div class="cap">Сертификация<br>и гарантия завода</div>
-        <svg viewBox="0 0 120 54" preserveAspectRatio="none"><line class="base" x1="0" y1="53" x2="120" y2="53"/><polyline points="4,38 26,38 50,26 74,26 98,14 116,14"/><circle cx="116" cy="14" r="3"/></svg>
-        <div class="big">CE<span class="ar">✓</span></div>
-        <div class="sub">TÜV · ISO · ACSM</div>
+      <div class="tile rv d2">
+        <div class="ph" style="position:absolute;inset:0"><img src="img/look-3.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          <svg class="bp" viewBox="0 0 100 100"><rect stroke x="24" y="20" width="52" height="60"/><line stroke x1="24" y1="34" x2="76" y2="34"/><line stroke x1="50" y1="20" x2="50" y2="80"/><line stroke x1="24" y1="50" x2="76" y2="50"/></svg></div>
+        <div class="cap"><div class="k" data-i18n="look3_k">03 / Функціонал</div><h3 data-i18n="look3_h">Rig / Cross-зона</h3></div>
       </div>
     </div>
-    <div class="slabel">02 — DATA</div>
-  </section>
+  </div>
+</section>
 
-  <!-- BRANDS -->
-  <section class="slide" id="brands">
-    <div class="brands">
-      <div class="brands-l rv">
-        <div class="eyebrow" style="margin-bottom:18px">Наши бренды · <span class="cn">品牌</span></div>
-        <span class="brand-tab">SHUA 舒华</span>
-        <span class="brand-tab alt">YR Fitness 燕日</span>
-        <p class="brand-intro">Два дополняющих друг друга завода: SHUA — на инженерии, умных консолях и кардио олимпийского уровня; YR Fitness — на силовых сериях с профессиональными углами и плита-нагруженных станках по цене ниже премиум-брендов.</p>
-        <div class="speclist">
-          <div class="specrow"><span class="k">SHUA · кардио</span><span class="v">Дорожки · Эллипс · Сайкл · Гребля</span></div>
-          <div class="specrow"><span class="k">SHUA · силовые</span><span class="v">Серия 98 Smart · Pin / Plate</span></div>
-          <div class="specrow"><span class="k">YR · силовые серии</span><span class="v">C4 · C4D · 61A · 55A · 73</span></div>
-          <div class="specrow"><span class="k">YR · станции</span><span class="v">Multi Jungle · Bench &amp; Rack</span></div>
-          <div class="specrow"><span class="k">Тип нагрузки</span><span class="v">Pin-loaded / Plate-loaded</span></div>
-        </div>
-      </div>
-      <div class="brands-r">
-        <div class="bp-grid"></div>
-        <span class="bp-label">BLUEPRINT · 力量训练</span>
-        <svg viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
-          <line stroke x1="20" y1="240" x2="285" y2="240"/>
-          <path stroke d="M40 200 L40 150 L100 150 L100 200 Z"/>
-          <path stroke d="M40 150 L26 120 L90 120 L100 150"/>
-          <line class="o" stroke x1="100" y1="175" x2="240" y2="120"/>
-          <line class="o" stroke x1="100" y1="200" x2="240" y2="145"/>
-          <line stroke x1="100" y1="175" x2="100" y2="200"/>
-          <line stroke x1="240" y1="120" x2="240" y2="145"/>
-          <rect stroke x="208" y="78" width="14" height="64" transform="rotate(-20 215 110)"/>
-          <line stroke x1="222" y1="92" x2="248" y2="80"/>
-          <rect stroke x="248" y="150" width="28" height="90"/>
-          <line stroke x1="248" y1="168" x2="276" y2="168"/>
-          <line stroke x1="248" y1="186" x2="276" y2="186"/>
-          <line stroke x1="248" y1="204" x2="276" y2="204"/>
-          <line stroke x1="248" y1="222" x2="276" y2="222"/>
-          <line stroke x1="70" y1="200" x2="70" y2="240"/>
-          <line stroke x1="120" y1="190" x2="120" y2="240"/>
-          <line stroke x1="20" y1="258" x2="285" y2="258" stroke-dasharray="2 4"/>
-          <text x="125" y="270">LEG PRESS · 45°</text>
-        </svg>
-      </div>
-    </div>
-    <div class="slabel">03 — BRANDS</div>
-  </section>
+<!-- CATALOG -->
+<section class="sec wrap" id="catalog">
+  <div class="sec-head">
+    <div><div class="eyebrow" style="margin-bottom:18px" data-i18n="cat_eyebrow">Каталог</div>
+      <h2 data-i18n="cat_h">Обладнання</h2></div>
+    <div class="r"><p class="sub" data-i18n="cat_sub">Професійні лінійки для комерційних залів, студій, готелів і корпоративних просторів.</p></div>
+  </div>
 
-  <!-- PRODUCTS -->
-  <section class="slide" id="products">
-    <div class="slide-pad">
-      <div class="eyebrow" style="margin-bottom:18px">Каталог · <span class="cn">产品介绍</span></div>
-      <div class="filters" id="filters">
-        <button class="filter active" data-f="all">Все</button>
-        <button class="filter" data-f="strength">Силовые</button>
-        <button class="filter" data-f="cardio">Кардио</button>
-        <button class="filter" data-f="multi">Станции</button>
-        <button class="filter" data-f="rack">Рамы и стойки</button>
-      </div>
+  <div class="filters" id="filters">
+    <button class="filter active" data-f="all" data-i18n="f_all">Всі</button>
+    <button class="filter" data-f="strength" data-i18n="f_strength">Силові</button>
+    <button class="filter" data-f="cardio" data-i18n="f_cardio">Кардіо</button>
+    <button class="filter" data-f="multi" data-i18n="f_multi">Станції</button>
+    <button class="filter" data-f="rack" data-i18n="f_rack">Рами та стійки</button>
+  </div>
 
-      <div class="pgrid" id="grid">
+  <div class="grid" id="grid">
 
-        <article class="pcard rv" data-cat="strength">
-          <div class="pviz"><span class="brandtag yr">YR Fitness</span><span class="no">NO. YR-C4</span>
-            <svg viewBox="0 0 100 100"><rect x="22" y="22" width="56" height="56"/><line x1="22" y1="40" x2="78" y2="40"/><line class="o" x1="35" y1="40" x2="35" y2="78"/><line class="o" x1="65" y1="40" x2="65" y2="78"/><circle cx="30" cy="31" r="3"/><circle cx="70" cy="31" r="3"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Силовые · Pin-loaded</div>
-            <h3>C4 Revival Series</h3>
-            <div class="pspec"><span>Серия</span><b>C4 · флагман</b></div>
-            <div class="pspec"><span>Рама</span><b>Сталь Q235</b></div>
-            <div class="pspec"><span>Линейка</span><b>15+ станков</b></div>
-          </div>
-        </article>
+    <article class="card rv" data-cat="strength">
+      <div class="ph"><img src="img/yr-c4.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag yr">YR Fitness</span><span class="no">NO. YR-C4</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="22" y="22" width="56" height="56"/><line stroke x1="22" y1="40" x2="78" y2="40"/><line stroke x1="35" y1="40" x2="35" y2="78"/><line stroke x1="65" y1="40" x2="65" y2="78"/><circle stroke cx="30" cy="31" r="3"/><circle stroke cx="70" cy="31" r="3"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c1_cat">Силові · Pin-loaded</div><h3>C4 Revival Series</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c1_k1">Серія</span><b data-i18n="c1_v1">C4 · флагман</b></div><div class="sp"><span data-i18n="c1_k2">Рама</span><b data-i18n="c1_v2">Сталь Q235</b></div><div class="sp"><span data-i18n="c1_k3">Лінійка</span><b data-i18n="c1_v3">15+ станків</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="strength">
-          <div class="pviz"><span class="brandtag yr">YR Fitness</span><span class="no">NO. YR-61A</span>
-            <svg viewBox="0 0 100 100"><rect x="26" y="26" width="48" height="48"/><line class="o" x1="50" y1="26" x2="50" y2="74"/><circle cx="38" cy="36" r="4"/><circle cx="62" cy="36" r="4"/><path d="M30 74 L30 84 L70 84 L70 74"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Силовые · Plate-loaded</div>
-            <h3>61A Racing Series</h3>
-            <div class="pspec"><span>Тип</span><b>Plate-loaded</b></div>
-            <div class="pspec"><span>Нагрузка</span><b>Диски Ø50</b></div>
-            <div class="pspec"><span>Покрытие</span><b>Порошк. эмаль</b></div>
-          </div>
-        </article>
+    <article class="card rv d1" data-cat="strength">
+      <div class="ph"><img src="img/yr-61a.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag yr">YR Fitness</span><span class="no">NO. YR-61A</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="26" y="26" width="48" height="48"/><line stroke x1="50" y1="26" x2="50" y2="74"/><circle stroke cx="38" cy="36" r="4"/><circle stroke cx="62" cy="36" r="4"/><path stroke d="M30 74 L30 84 L70 84 L70 74"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c2_cat">Силові · Plate-loaded</div><h3>61A Racing Series</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c2_k1">Тип</span><b data-i18n="c2_v1">Plate-loaded</b></div><div class="sp"><span data-i18n="c2_k2">Навантаження</span><b data-i18n="c2_v2">Диски Ø50</b></div><div class="sp"><span data-i18n="c2_k3">Покриття</span><b data-i18n="c2_v3">Порошкова емаль</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="multi">
-          <div class="pviz"><span class="brandtag yr">YR Fitness</span><span class="no">NO. F2004</span>
-            <svg viewBox="0 0 100 100"><rect x="18" y="20" width="64" height="62"/><line x1="18" y1="34" x2="82" y2="34"/><line x1="40" y1="34" x2="40" y2="82"/><line x1="60" y1="34" x2="60" y2="82"/><line class="o" x1="28" y1="34" x2="28" y2="60"/><line class="o" x1="72" y1="34" x2="72" y2="60"/><circle cx="28" cy="28" r="2.5"/><circle cx="72" cy="28" r="2.5"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Мультистанция · Group</div>
-            <h3>Multi Jungle F2004</h3>
-            <div class="pspec"><span>Станций</span><b>14</b></div>
-            <div class="pspec"><span>Тип</span><b>Pin-loaded</b></div>
-            <div class="pspec"><span>Формат</span><b>Групповой тренинг</b></div>
-          </div>
-        </article>
+    <article class="card rv d2" data-cat="multi">
+      <div class="ph"><img src="img/yr-f2004.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag yr">YR Fitness</span><span class="no">NO. F2004</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="18" y="20" width="64" height="62"/><line stroke x1="18" y1="34" x2="82" y2="34"/><line stroke x1="40" y1="34" x2="40" y2="82"/><line stroke x1="60" y1="34" x2="60" y2="82"/><circle stroke cx="28" cy="28" r="2.5"/><circle stroke cx="72" cy="28" r="2.5"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c3_cat">Мультистанція · Group</div><h3>Multi Jungle F2004</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c3_k1">Станцій</span><b>14</b></div><div class="sp"><span data-i18n="c3_k2">Тип</span><b>Pin-loaded</b></div><div class="sp"><span data-i18n="c3_k3">Формат</span><b data-i18n="c3_v3">Груповий</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="rack">
-          <div class="pviz"><span class="brandtag yr">YR Fitness</span><span class="no">NO. YR-73</span>
-            <svg viewBox="0 0 100 100"><rect x="24" y="18" width="52" height="64"/><line x1="24" y1="32" x2="76" y2="32"/><line x1="50" y1="18" x2="50" y2="82"/><line class="o" x1="24" y1="48" x2="76" y2="48"/><line class="o" x1="24" y1="64" x2="76" y2="64"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Рама · Tough Series</div>
-            <h3>73 Tough Series Rack</h3>
-            <div class="pspec"><span>Профиль</span><b>60×60×3 мм</b></div>
-            <div class="pspec"><span>Назначение</span><b>Power / Squat</b></div>
-            <div class="pspec"><span>Модульность</span><b>Любая длина</b></div>
-          </div>
-        </article>
+    <article class="card rv" data-cat="rack">
+      <div class="ph"><img src="img/yr-73.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag yr">YR Fitness</span><span class="no">NO. YR-73</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="24" y="18" width="52" height="64"/><line stroke x1="24" y1="32" x2="76" y2="32"/><line stroke x1="50" y1="18" x2="50" y2="82"/><line stroke x1="24" y1="48" x2="76" y2="48"/><line stroke x1="24" y1="64" x2="76" y2="64"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c4_cat">Рама · Tough Series</div><h3>73 Tough Series Rack</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c4_k1">Профіль</span><b data-i18n="c4_v1">60×60×3 мм</b></div><div class="sp"><span data-i18n="c4_k2">Призначення</span><b>Power / Squat</b></div><div class="sp"><span data-i18n="c4_k3">Модульність</span><b data-i18n="c4_v3">Будь-яка довжина</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="cardio">
-          <div class="pviz"><span class="brandtag">SHUA</span><span class="no">NO. SH-T9100T</span>
-            <svg viewBox="0 0 100 100"><path d="M18 72 L70 72 L78 40 L66 40"/><rect class="o" x="58" y="22" width="24" height="16"/><line x1="18" y1="72" x2="18" y2="58"/><path d="M18 58 L30 58"/><circle cx="22" cy="76" r="4"/><circle cx="66" cy="76" r="4"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Кардио · Treadmill</div>
-            <h3>SHUA SH-T9100T</h3>
-            <div class="pspec"><span>Консоль</span><b>32" Touch</b></div>
-            <div class="pspec"><span>Скорость</span><b>до 22 км/ч</b></div>
-            <div class="pspec"><span>Класс</span><b>Commercial</b></div>
-          </div>
-        </article>
+    <article class="card rv d1" data-cat="cardio">
+      <div class="ph"><img src="img/sh-t9100t.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-T9100T</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><path stroke d="M18 72 L70 72 L78 40 L66 40"/><rect stroke x="58" y="22" width="24" height="16"/><line stroke x1="18" y1="72" x2="18" y2="58"/><path stroke d="M18 58 L30 58"/><circle stroke cx="22" cy="76" r="4"/><circle stroke cx="66" cy="76" r="4"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c5_cat">Кардіо · Treadmill</div><h3>SHUA SH-T9100T</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c5_k1">Консоль</span><b>32" Touch</b></div><div class="sp"><span data-i18n="c5_k2">Швидкість</span><b data-i18n="c5_v2">до 22 км/год</b></div><div class="sp"><span data-i18n="c5_k3">Клас</span><b>Commercial</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="cardio">
-          <div class="pviz"><span class="brandtag">SHUA</span><span class="no">NO. SH-T901Z</span>
-            <svg viewBox="0 0 100 100"><path class="o" d="M20 74 Q50 50 80 74"/><line x1="20" y1="74" x2="20" y2="60"/><path d="M20 60 L34 60"/><line x1="80" y1="74" x2="80" y2="40"/><rect x="72" y="26" width="16" height="14"/><circle cx="24" cy="78" r="4"/><circle cx="76" cy="78" r="4"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Кардио · Curved</div>
-            <h3>SHUA SH-T901Z</h3>
-            <div class="pspec"><span>Тип</span><b>Изогнутая</b></div>
-            <div class="pspec"><span>Привод</span><b>Self-powered</b></div>
-            <div class="pspec"><span>Зона</span><b>HIIT / функционал</b></div>
-          </div>
-        </article>
+    <article class="card rv d2" data-cat="cardio">
+      <div class="ph"><img src="img/sh-t901z.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-T901Z</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><path stroke d="M20 74 Q50 50 80 74"/><line stroke x1="20" y1="74" x2="20" y2="60"/><path stroke d="M20 60 L34 60"/><line stroke x1="80" y1="74" x2="80" y2="40"/><rect stroke x="72" y="26" width="16" height="14"/><circle stroke cx="24" cy="78" r="4"/><circle stroke cx="76" cy="78" r="4"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c6_cat">Кардіо · Curved</div><h3>SHUA SH-T901Z</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c6_k1">Тип</span><b data-i18n="c6_v1">Вигнута</b></div><div class="sp"><span data-i18n="c6_k2">Привід</span><b>Self-powered</b></div><div class="sp"><span data-i18n="c6_k3">Зона</span><b>HIIT</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="cardio">
-          <div class="pviz"><span class="brandtag">SHUA</span><span class="no">NO. SH-B599</span>
-            <svg viewBox="0 0 100 100"><path d="M22 76 L42 42 L62 42 L80 76"/><circle class="o" cx="50" cy="34" r="6"/><line x1="42" y1="42" x2="62" y2="42"/><path d="M60 42 L74 28"/><circle cx="78" cy="24" r="3"/><line x1="22" y1="76" x2="80" y2="76"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Кардио · Spin</div>
-            <h3>SHUA SH-B599 Spin</h3>
-            <div class="pspec"><span>Маховик</span><b>Магнитный</b></div>
-            <div class="pspec"><span>Привод</span><b>Ремень, тихий</b></div>
-            <div class="pspec"><span>Назначение</span><b>Сайкл-студии</b></div>
-          </div>
-        </article>
+    <article class="card rv" data-cat="cardio">
+      <div class="ph"><img src="img/sh-b599.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-B599</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><path stroke d="M22 76 L42 42 L62 42 L80 76"/><circle stroke cx="50" cy="34" r="6"/><line stroke x1="42" y1="42" x2="62" y2="42"/><path stroke d="M60 42 L74 28"/><circle stroke cx="78" cy="24" r="3"/><line stroke x1="22" y1="76" x2="80" y2="76"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c7_cat">Кардіо · Spin</div><h3>SHUA SH-B599 Spin</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c7_k1">Маховик</span><b data-i18n="c7_v1">Магнітний</b></div><div class="sp"><span data-i18n="c7_k2">Привід</span><b data-i18n="c7_v2">Ремінь, тихий</b></div><div class="sp"><span data-i18n="c7_k3">Зона</span><b data-i18n="c7_v3">Сайкл-студії</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="strength">
-          <div class="pviz"><span class="brandtag">SHUA</span><span class="no">NO. SH-98</span>
-            <svg viewBox="0 0 100 100"><rect x="40" y="38" width="20" height="34"/><line x1="50" y1="16" x2="50" y2="38"/><path d="M34 20 L50 16 L66 20"/><circle class="o" cx="50" cy="55" r="5"/><path d="M40 72 L40 84 L60 84 L60 72"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Силовые · Smart</div>
-            <h3>SHUA 98 Series</h3>
-            <div class="pspec"><span>Поколение</span><b>Smart Strength</b></div>
-            <div class="pspec"><span>Функции</span><b>Контроль нагрузки</b></div>
-            <div class="pspec"><span>Данные</span><b>Реал-тайм</b></div>
-          </div>
-        </article>
+    <article class="card rv d1" data-cat="strength">
+      <div class="ph"><img src="img/sh-98.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-98</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="40" y="38" width="20" height="34"/><line stroke x1="50" y1="16" x2="50" y2="38"/><path stroke d="M34 20 L50 16 L66 20"/><circle stroke cx="50" cy="55" r="5"/><path stroke d="M40 72 L40 84 L60 84 L60 72"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c8_cat">Силові · Smart</div><h3>SHUA 98 Series</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c8_k1">Покоління</span><b>Smart Strength</b></div><div class="sp"><span data-i18n="c8_k2">Функції</span><b data-i18n="c8_v2">Контроль навантаження</b></div><div class="sp"><span data-i18n="c8_k3">Дані</span><b data-i18n="c8_v3">Реал-тайм</b></div></div></div>
+    </article>
 
-        <article class="pcard rv" data-cat="multi">
-          <div class="pviz"><span class="brandtag">SHUA</span><span class="no">NO. SH-G699</span>
-            <svg viewBox="0 0 100 100"><rect x="18" y="20" width="9" height="60"/><rect x="73" y="20" width="9" height="60"/><line x1="18" y1="24" x2="82" y2="24"/><circle class="o" cx="27" cy="32" r="4"/><circle class="o" cx="73" cy="32" r="4"/><path class="o" d="M27 36 L40 56 M73 36 L60 56"/></svg>
-          </div>
-          <div class="pbody">
-            <div class="pcat">Кроссовер · Wall-mounted</div>
-            <h3>SHUA SH-G699</h3>
-            <div class="pspec"><span>Тип</span><b>Настенный</b></div>
-            <div class="pspec"><span>Регулировка</span><b>По передачам</b></div>
-            <div class="pspec"><span>Зеркало</span><b>В комплекте</b></div>
-          </div>
-        </article>
+    <article class="card rv d2" data-cat="multi">
+      <div class="ph"><img src="img/sh-g699.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-G699</span><div class="floor"></div>
+        <svg class="bp" viewBox="0 0 100 100"><rect stroke x="18" y="20" width="9" height="60"/><rect stroke x="73" y="20" width="9" height="60"/><line stroke x1="18" y1="24" x2="82" y2="24"/><circle stroke cx="27" cy="32" r="4"/><circle stroke cx="73" cy="32" r="4"/><path stroke d="M27 36 L40 56 M73 36 L60 56"/></svg></div>
+      <div class="body"><div class="cat" data-i18n="c9_cat">Кросовер · Wall-mounted</div><h3>SHUA SH-G699</h3>
+        <div class="specs"><div class="sp"><span data-i18n="c9_k1">Тип</span><b data-i18n="c9_v1">Настінний</b></div><div class="sp"><span data-i18n="c9_k2">Регулювання</span><b data-i18n="c9_v2">За передачами</b></div><div class="sp"><span data-i18n="c9_k3">Дзеркало</span><b data-i18n="c9_v3">У комплекті</b></div></div></div>
+    </article>
 
-      </div>
+  </div>
+  <div class="catnote"><span data-i18n="note1">Показано частину асортименту.</span><span class="b" data-i18n="note2">Під проєкт підберемо повний комплект</span><span data-i18n="note3">— силові, кардіо, вільні ваги, аксесуари, покриття та дзеркала.</span></div>
+</section>
 
-      <div class="products-title">
-        <h2>Оборудование</h2>
-        <span class="cn">产品系列介绍</span>
-      </div>
-      <p style="margin-top:14px;color:var(--ink-2);font-size:14px">Показана часть ассортимента. Под проект подберём полный комплект — силовые, кардио, свободные веса, аксессуары, покрытие и зеркала.</p>
-    </div>
-    <div class="slabel">04 — PRODUCTS</div>
-  </section>
+<!-- PROCESS -->
+<section class="sec wrap" id="process">
+  <div class="sec-head">
+    <div><div class="eyebrow" style="margin-bottom:18px" data-i18n="proc_eyebrow">Під ключ</div>
+      <h2 data-i18n="proc_h" data-i18n-html>Повний цикл<br>створення залу</h2></div>
+    <div class="r"><p class="sub" data-i18n="proc_sub">Від порожнього приміщення до запуску. Один підрядник на весь проєкт.</p></div>
+  </div>
+  <div class="proc">
+    <div class="step rv"><div class="num">01</div><div><h3 data-i18n="step1_h">Підбір</h3><p data-i18n="step1_p">Комплект SHUA / YR під формат залу, площу та бюджет.</p></div><div class="tag" data-i18n="step1_t">Бюджет · Формат</div></div>
+    <div class="step rv"><div class="num">02</div><div><h3 data-i18n="step2_h">Проєкт і розстановка</h3><p data-i18n="step2_p">2D/3D-план зонування з ергономікою потоків і безпечними інтервалами.</p></div><div class="tag" data-i18n="step2_t">2D / 3D</div></div>
+    <div class="step rv"><div class="num">03</div><div><h3 data-i18n="step3_h">Постачання</h3><p data-i18n="step3_p">Прямий імпорт із заводів, логістика і розмитнення під нашим контролем.</p></div><div class="tag" data-i18n="step3_t">Імпорт · Логістика</div></div>
+    <div class="step rv"><div class="num">04</div><div><h3 data-i18n="step4_h">Монтаж і запуск</h3><p data-i18n="step4_p">Збирання, налаштування, калібрування, інструктаж персоналу, здача під ключ.</p></div><div class="tag" data-i18n="step4_t">Збирання · Запуск</div></div>
+    <div class="step rv"><div class="num">05</div><div><h3 data-i18n="step5_h">Сервіс</h3><p data-i18n="step5_p">Гарантія заводу, ЗІП і планове ТО — зал працює без простоїв.</p></div><div class="tag" data-i18n="step5_t">Гарантія · ТО</div></div>
+  </div>
+</section>
 
-  <!-- TURNKEY -->
-  <section class="slide" id="turnkey">
-    <div class="slide-pad">
-      <div class="eyebrow" style="margin-bottom:16px">Под ключ · <span class="cn">一站式服务</span></div>
-      <h2 style="font-size:clamp(26px,4vw,42px)">Полный цикл создания зала</h2>
-      <div class="turn-grid">
-        <div class="turn rv"><div class="num">01</div><h3>Подбор</h3><p>Комплект SHUA / YR под формат зала, площадь и бюджет.</p></div>
-        <div class="turn rv"><div class="num">02</div><h3>Проект</h3><p>2D/3D-план расстановки и зонирования с эргономикой потоков.</p></div>
-        <div class="turn rv"><div class="num">03</div><h3>Поставка</h3><p>Прямой импорт с заводов, логистика и растаможка под контролем.</p></div>
-        <div class="turn rv"><div class="num">04</div><h3>Монтаж</h3><p>Сборка, настройка, запуск и инструктаж персонала.</p></div>
-        <div class="turn rv"><div class="num">05</div><h3>Сервис</h3><p>Гарантия завода, ЗИП и плановое ТО — зал без простоев.</p></div>
-      </div>
-    </div>
-    <div class="slabel">05 — SERVICE</div>
-  </section>
-
-  <!-- CTA -->
-  <section class="slide" id="cta">
-    <div class="cta-grid">
-      <div class="cta-l rv">
-        <div class="eyebrow" style="margin-bottom:18px">Заявка · <span class="cn">询价</span></div>
-        <h2>Получить прайс <span class="o">и расчёт</span></h2>
-        <p>Оставьте контакты — пришлём актуальные каталоги SHUA и YR Fitness, подберём комплект и подготовим смету. Бесплатно.</p>
+<!-- CTA -->
+<section class="sec wrap" id="cta">
+  <div class="cta"><div class="glow"></div>
+    <div class="cta-in">
+      <div class="cta-l">
+        <div class="eyebrow" style="margin-bottom:18px" data-i18n="cta_eyebrow">Заявка</div>
+        <h2 data-i18n="cta_h" data-i18n-html>Отримати прайс <span class="b">і розрахунок</span></h2>
+        <p data-i18n="cta_p">Залиште контакти — надішлемо актуальні каталоги SHUA і YR Fitness, підберемо комплект і підготуємо кошторис. Безкоштовно.</p>
         <div class="cta-contacts">
           <a href="tel:+380000000000"><span class="ic">☎</span> +380 (00) 000-00-00</a>
           <a href="https://t.me/" target="_blank" rel="noopener"><span class="ic">✦</span> Telegram · @creagym</a>
           <a href="mailto:hello@creagym.com"><span class="ic">✉</span> hello@creagym.com</a>
         </div>
       </div>
-      <form id="leadForm" class="rv" novalidate>
-        <div id="formFields" style="display:grid;gap:15px">
-          <div class="field"><label for="name">Имя</label><input id="name" type="text" placeholder="Как к вам обращаться" required></div>
+      <form id="leadForm" novalidate>
+        <div id="ff" style="display:grid;gap:16px">
+          <div class="field"><label for="name" data-i18n="fl_name">Ім'я</label><input id="name" type="text" data-i18n-ph="ph_name" placeholder="Як до вас звертатися" required></div>
           <div class="frow">
-            <div class="field"><label for="phone">Телефон</label><input id="phone" type="tel" placeholder="+380…" required></div>
-            <div class="field"><label for="brand">Интересует</label>
-              <select id="brand"><option>SHUA + YR (подбор)</option><option>SHUA · кардио</option><option>YR · силовые</option><option>Зал под ключ</option></select>
-            </div>
+            <div class="field"><label for="phone" data-i18n="fl_phone">Телефон</label><input id="phone" type="tel" placeholder="+380…" required></div>
+            <div class="field"><label for="brand" data-i18n="fl_brand">Цікавить</label><select id="brand" data-i18n-opts="opts_brand"><option>SHUA + YR (підбір)</option><option>SHUA · кардіо</option><option>YR · силові</option><option>Зал під ключ</option></select></div>
           </div>
           <div class="frow">
-            <div class="field"><label for="area">Площадь, м²</label><input id="area" type="text" placeholder="напр. 250"></div>
-            <div class="field"><label for="budget">Бюджет</label>
-              <select id="budget"><option>Не определён</option><option>до $20 000</option><option>$20 000–50 000</option><option>$50 000–100 000</option><option>$100 000+</option></select>
-            </div>
+            <div class="field"><label for="area" data-i18n="fl_area">Площа, м²</label><input id="area" type="text" data-i18n-ph="ph_area" placeholder="напр. 250"></div>
+            <div class="field"><label for="budget" data-i18n="fl_budget">Бюджет</label><select id="budget" data-i18n-opts="opts_budget"><option>Не визначений</option><option>до $20 000</option><option>$20 000–50 000</option><option>$50 000–100 000</option><option>$100 000+</option></select></div>
           </div>
-          <div class="field"><label for="msg">Комментарий</label><textarea id="msg" placeholder="Сроки, пожелания, текущее оборудование…"></textarea></div>
-          <button type="submit" class="btn btn-o">Отправить заявку ↗</button>
-          <div class="fnote">Нажимая кнопку, вы соглашаетесь на обработку данных.</div>
+          <div class="field"><label for="msg" data-i18n="fl_msg">Коментар</label><textarea id="msg" data-i18n-ph="ph_msg" placeholder="Терміни, побажання, поточне обладнання…"></textarea></div>
+          <button type="submit" class="btn btn-b"><span data-i18n="btn_send">Відправити заявку</span> <span class="ar">↗</span></button>
+          <div class="ferr" id="ferr" data-i18n="err">Не вдалося відправити. Спробуйте ще раз або зателефонуйте.</div>
+          <div class="fnote" data-i18n="fnote">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</div>
         </div>
-        <div class="fsuccess" id="fsuccess">
-          <div class="ok"><svg width="20" height="16" viewBox="0 0 22 18" fill="none" stroke="#3D74F4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 9l7 7L21 2"/></svg></div>
-          <h3>Заявка принята</h3>
-          <p>Свяжемся в течение рабочего дня и пришлём каталоги с расчётом.</p>
+        <div class="fok" id="fok">
+          <div class="ic"><svg width="22" height="18" viewBox="0 0 22 18" fill="none" stroke="#3D74F4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 9l7 7L21 2"/></svg></div>
+          <h3 data-i18n="ok_h">Заявку прийнято</h3><p data-i18n="ok_p">Зв'яжемося протягом робочого дня та надішлемо каталоги з розрахунком.</p>
         </div>
       </form>
     </div>
-    <div class="slabel">06 — CONTACT</div>
-  </section>
-
-</div>
-
-<div class="foot-rule"></div>
-<div class="foot">
-  <div>
-    <div class="logo">CREAGYM<span style="color:var(--orange)">.</span> <span class="cn" style="font-size:11px;color:#8a8a8c">健身器材</span></div>
-    <p style="color:#8a8a8c;font-size:13px;margin-top:12px;max-width:32ch">Импорт коммерческого оборудования SHUA и YR Fitness. Поставка, проект, монтаж, сервис.</p>
   </div>
-  <div class="meta">
-    Житомир, Украина<br>Пн–Сб · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00
-  </div>
-  <div class="meta">
-    <a href="#about">О компании</a><br><a href="#brands">Бренды</a><br><a href="#products">Каталог</a><br><a href="#cta">Запросить прайс</a>
-  </div>
-</div>
-<div class="foot-rule"></div>
-<div class="foot-bottom">
-  <span>© 2026 CREAGYM Equipment</span>
-  <span>SHUA 舒华 × YR FITNESS 燕日 · 官方进口</span>
-</div>
+</section>
 
+<footer>
+  <div class="wrap foot">
+    <div><div class="logo">CREAGYM<span class="d" style="color:var(--blue)">.</span></div>
+      <p data-i18n="foot_p">Імпорт комерційного обладнання SHUA і YR Fitness. Постачання, проєкт, монтаж, сервіс.</p></div>
+    <div class="meta" data-i18n="foot_addr" data-i18n-html>Житомир, Україна<br>Пн–Сб · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00</div>
+    <div class="meta"><a href="#brands" data-i18n="nav_brands">Бренди</a><br><a href="#catalog" data-i18n="nav_catalog">Каталог</a><br><a href="#process" data-i18n="nav_process">Під ключ</a><br><a href="#cta" data-i18n="nav_cta">Запросити прайс</a></div>
+  </div>
+  <div class="foot-b"><span>© 2026 CREAGYM Equipment</span><span data-i18n="foot_bottom">SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ</span></div>
+</footer>
+
+<script src="config.js"></script>
 <script>
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
-  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+/* ---------------- i18n ---------------- */
+const I18N = {
+  ua:{
+    nav_brands:"Бренди",nav_catalog:"Каталог",nav_process:"Під ключ",nav_showcase:"Зали",nav_cta:"Запросити прайс",
+    hero_eyebrow:"SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ",hero_l1:"Профі-",hero_l2:"обладнання",hero_l3:"для <span class='b'>залів</span>",
+    hero_sub:"Постачаємо комерційні тренажери двох заводів — <b>SHUA</b> (постачальник 7 Олімпіад) та <b>YR&nbsp;Fitness</b> (28 років, CE/TÜV/ISO). Прямий імпорт, проєкт розстановки, монтаж і сервіс під ключ.",
+    hero_cta1:"Дивитись каталог",hero_cta2:"Отримати розрахунок",hero_s1:"заводи",hero_s2:"країн",
+    marq:["SHUA","YR FITNESS","СИЛОВІ","КАРДІО","ВІЛЬНІ ВАГИ","МУЛЬТИСТАНЦІЇ","ПІД КЛЮЧ"],
+    st1:"років виробництва YR",st2:"Олімпіад · SHUA",st3:"залів у світі",st4:"країн постачання",
+    brands_eyebrow:"Наші бренди",brands_h:"Два заводи —<br>один постачальник",
+    brands_sub:"Лінійки, що доповнюють одна одну: інженерія та кардіо SHUA + силові серії YR за ціною нижче преміум-брендів.",
+    shua_role:"Кардіо · Smart Strength · Олімпійський рівень",
+    shua_p:"Завод з 1996 року, лістинг A-share, ACSM. Офіційний постачальник 7 Олімпійських ігор. Розумні консолі, адаптивна амортизація, серія 98 Smart Strength.",
+    shua_chips:["Доріжки","Еліпси","Сайкли","Веслування","98 Series"],
+    yr_role:"Силові серії · Plate / Pin loaded · 28 років",
+    yr_p:"Порівнюють з Technogym і Matrix за збиранням, але дешевше. Професійні кути руху, сталь Q235, ~80% перед-збирання. CE / TÜV / ISO, 110+ країн.",
+    yr_chips:["C4 Revival","61A Racing","73 Tough","Multi Jungle","Bench & Rack"],
+    showcase_eyebrow:"Зали під ключ",showcase_h:"Як це<br>виглядає в залі",
+    look1_k:"01 / Силова зона",look1_h:"Грузоблочні станки YR",look2_k:"02 / Кардіо",look2_h:"Доріжки SHUA",look3_k:"03 / Функціонал",look3_h:"Rig / Cross-зона",
+    cat_eyebrow:"Каталог",cat_h:"Обладнання",cat_sub:"Професійні лінійки для комерційних залів, студій, готелів і корпоративних просторів.",
+    f_all:"Всі",f_strength:"Силові",f_cardio:"Кардіо",f_multi:"Станції",f_rack:"Рами та стійки",
+    c1_cat:"Силові · Pin-loaded",c1_k1:"Серія",c1_v1:"C4 · флагман",c1_k2:"Рама",c1_v2:"Сталь Q235",c1_k3:"Лінійка",c1_v3:"15+ станків",
+    c2_cat:"Силові · Plate-loaded",c2_k1:"Тип",c2_v1:"Plate-loaded",c2_k2:"Навантаження",c2_v2:"Диски Ø50",c2_k3:"Покриття",c2_v3:"Порошкова емаль",
+    c3_cat:"Мультистанція · Group",c3_k1:"Станцій",c3_k2:"Тип",c3_k3:"Формат",c3_v3:"Груповий",
+    c4_cat:"Рама · Tough Series",c4_k1:"Профіль",c4_v1:"60×60×3 мм",c4_k2:"Призначення",c4_k3:"Модульність",c4_v3:"Будь-яка довжина",
+    c5_cat:"Кардіо · Treadmill",c5_k1:"Консоль",c5_k2:"Швидкість",c5_v2:"до 22 км/год",c5_k3:"Клас",
+    c6_cat:"Кардіо · Curved",c6_k1:"Тип",c6_v1:"Вигнута",c6_k2:"Привід",c6_k3:"Зона",
+    c7_cat:"Кардіо · Spin",c7_k1:"Маховик",c7_v1:"Магнітний",c7_k2:"Привід",c7_v2:"Ремінь, тихий",c7_k3:"Зона",c7_v3:"Сайкл-студії",
+    c8_cat:"Силові · Smart",c8_k1:"Покоління",c8_k2:"Функції",c8_v2:"Контроль навантаження",c8_k3:"Дані",c8_v3:"Реал-тайм",
+    c9_cat:"Кросовер · Wall-mounted",c9_k1:"Тип",c9_v1:"Настінний",c9_k2:"Регулювання",c9_v2:"За передачами",c9_k3:"Дзеркало",c9_v3:"У комплекті",
+    note1:"Показано частину асортименту.",note2:"Під проєкт підберемо повний комплект",note3:"— силові, кардіо, вільні ваги, аксесуари, покриття та дзеркала.",
+    proc_eyebrow:"Під ключ",proc_h:"Повний цикл<br>створення залу",proc_sub:"Від порожнього приміщення до запуску. Один підрядник на весь проєкт.",
+    step1_h:"Підбір",step1_p:"Комплект SHUA / YR під формат залу, площу та бюджет.",step1_t:"Бюджет · Формат",
+    step2_h:"Проєкт і розстановка",step2_p:"2D/3D-план зонування з ергономікою потоків і безпечними інтервалами.",step2_t:"2D / 3D",
+    step3_h:"Постачання",step3_p:"Прямий імпорт із заводів, логістика і розмитнення під нашим контролем.",step3_t:"Імпорт · Логістика",
+    step4_h:"Монтаж і запуск",step4_p:"Збирання, налаштування, калібрування, інструктаж персоналу, здача під ключ.",step4_t:"Збирання · Запуск",
+    step5_h:"Сервіс",step5_p:"Гарантія заводу, ЗІП і планове ТО — зал працює без простоїв.",step5_t:"Гарантія · ТО",
+    cta_eyebrow:"Заявка",cta_h:"Отримати прайс <span class='b'>і розрахунок</span>",
+    cta_p:"Залиште контакти — надішлемо актуальні каталоги SHUA і YR Fitness, підберемо комплект і підготуємо кошторис. Безкоштовно.",
+    fl_name:"Ім'я",ph_name:"Як до вас звертатися",fl_phone:"Телефон",fl_brand:"Цікавить",
+    opts_brand:["SHUA + YR (підбір)","SHUA · кардіо","YR · силові","Зал під ключ"],
+    fl_area:"Площа, м²",ph_area:"напр. 250",fl_budget:"Бюджет",
+    opts_budget:["Не визначений","до $20 000","$20 000–50 000","$50 000–100 000","$100 000+"],
+    fl_msg:"Коментар",ph_msg:"Терміни, побажання, поточне обладнання…",btn_send:"Відправити заявку",
+    err:"Не вдалося відправити. Спробуйте ще раз або зателефонуйте.",fnote:"Натискаючи кнопку, ви погоджуєтесь на обробку даних.",
+    ok_h:"Заявку прийнято",ok_p:"Зв'яжемося протягом робочого дня та надішлемо каталоги з розрахунком.",
+    foot_p:"Імпорт комерційного обладнання SHUA і YR Fitness. Постачання, проєкт, монтаж, сервіс.",
+    foot_addr:"Житомир, Україна<br>Пн–Сб · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00",
+    foot_bottom:"SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ"
+  },
+  en:{
+    nav_brands:"Brands",nav_catalog:"Catalogue",nav_process:"Turnkey",nav_showcase:"Gyms",nav_cta:"Request pricing",
+    hero_eyebrow:"SHUA × YR FITNESS · OFFICIAL IMPORT",hero_l1:"Pro-grade",hero_l2:"equipment",hero_l3:"for <span class='b'>gyms</span>",
+    hero_sub:"We supply commercial equipment from two factories — <b>SHUA</b> (supplier to 7 Olympic Games) and <b>YR&nbsp;Fitness</b> (28 years, CE/TÜV/ISO). Direct import, layout design, installation and turnkey service.",
+    hero_cta1:"View catalogue",hero_cta2:"Get a quote",hero_s1:"factories",hero_s2:"countries",
+    marq:["SHUA","YR FITNESS","STRENGTH","CARDIO","FREE WEIGHTS","MULTI-STATIONS","TURNKEY"],
+    st1:"years YR manufacturing",st2:"Olympics · SHUA",st3:"gyms worldwide",st4:"countries supplied",
+    brands_eyebrow:"Our brands",brands_h:"Two factories —<br>one supplier",
+    brands_sub:"Complementary lineups: SHUA engineering and cardio + YR strength series at below-premium prices.",
+    shua_role:"Cardio · Smart Strength · Olympic-grade",
+    shua_p:"Founded 1996, A-share listed, ACSM. Official supplier to 7 Olympic Games. Smart consoles, adaptive cushioning, 98 Smart Strength series.",
+    shua_chips:["Treadmills","Ellipticals","Bikes","Rowing","98 Series"],
+    yr_role:"Strength series · Plate / Pin loaded · 28 years",
+    yr_p:"Compared to Technogym and Matrix on build, but cheaper. Pro movement angles, Q235 steel, ~80% pre-assembled. CE / TÜV / ISO, 110+ countries.",
+    yr_chips:["C4 Revival","61A Racing","73 Tough","Multi Jungle","Bench & Rack"],
+    showcase_eyebrow:"Turnkey gyms",showcase_h:"How it<br>looks in the gym",
+    look1_k:"01 / Strength zone",look1_h:"YR selectorized machines",look2_k:"02 / Cardio",look2_h:"SHUA treadmills",look3_k:"03 / Functional",look3_h:"Rig / Cross zone",
+    cat_eyebrow:"Catalogue",cat_h:"Equipment",cat_sub:"Professional lineups for commercial gyms, studios, hotels and corporate spaces.",
+    f_all:"All",f_strength:"Strength",f_cardio:"Cardio",f_multi:"Stations",f_rack:"Racks",
+    c1_cat:"Strength · Pin-loaded",c1_k1:"Series",c1_v1:"C4 · flagship",c1_k2:"Frame",c1_v2:"Q235 steel",c1_k3:"Range",c1_v3:"15+ machines",
+    c2_cat:"Strength · Plate-loaded",c2_k1:"Type",c2_v1:"Plate-loaded",c2_k2:"Load",c2_v2:"Ø50 plates",c2_k3:"Finish",c2_v3:"Powder-coated",
+    c3_cat:"Multi-station · Group",c3_k1:"Stations",c3_k2:"Type",c3_k3:"Format",c3_v3:"Group",
+    c4_cat:"Rack · Tough Series",c4_k1:"Profile",c4_v1:"60×60×3 mm",c4_k2:"Use",c4_k3:"Modular",c4_v3:"Any length",
+    c5_cat:"Cardio · Treadmill",c5_k1:"Console",c5_k2:"Speed",c5_v2:"up to 22 km/h",c5_k3:"Class",
+    c6_cat:"Cardio · Curved",c6_k1:"Type",c6_v1:"Curved",c6_k2:"Drive",c6_k3:"Zone",
+    c7_cat:"Cardio · Spin",c7_k1:"Flywheel",c7_v1:"Magnetic",c7_k2:"Drive",c7_v2:"Belt, quiet",c7_k3:"Zone",c7_v3:"Spin studios",
+    c8_cat:"Strength · Smart",c8_k1:"Generation",c8_k2:"Features",c8_v2:"Load control",c8_k3:"Data",c8_v3:"Real-time",
+    c9_cat:"Crossover · Wall-mounted",c9_k1:"Type",c9_v1:"Wall-mounted",c9_k2:"Adjust",c9_v2:"Geared",c9_k3:"Mirror",c9_v3:"Included",
+    note1:"Showing part of the range.",note2:"We'll select a full set for your project",note3:"— strength, cardio, free weights, accessories, flooring and mirrors.",
+    proc_eyebrow:"Turnkey",proc_h:"Full cycle<br>of building a gym",proc_sub:"From an empty space to launch. One contractor for the whole project.",
+    step1_h:"Selection",step1_p:"SHUA / YR set for your gym format, area and budget.",step1_t:"Budget · Format",
+    step2_h:"Design & layout",step2_p:"2D/3D zoning plan with flow ergonomics and safe spacing.",step2_t:"2D / 3D",
+    step3_h:"Supply",step3_p:"Direct import from factories; logistics and customs under our control.",step3_t:"Import · Logistics",
+    step4_h:"Installation & launch",step4_p:"Assembly, setup, calibration, staff briefing, turnkey handover.",step4_t:"Assembly · Launch",
+    step5_h:"Service",step5_p:"Factory warranty, spare parts and scheduled maintenance — zero downtime.",step5_t:"Warranty · Maintenance",
+    cta_eyebrow:"Request",cta_h:"Get pricing <span class='b'>and a quote</span>",
+    cta_p:"Leave your contacts — we'll send the latest SHUA and YR Fitness catalogues, select a set and prepare an estimate. Free.",
+    fl_name:"Name",ph_name:"How to address you",fl_phone:"Phone",fl_brand:"Interested in",
+    opts_brand:["SHUA + YR (selection)","SHUA · cardio","YR · strength","Turnkey gym"],
+    fl_area:"Area, m²",ph_area:"e.g. 250",fl_budget:"Budget",
+    opts_budget:["Not defined","up to $20,000","$20,000–50,000","$50,000–100,000","$100,000+"],
+    fl_msg:"Comment",ph_msg:"Timeline, preferences, current equipment…",btn_send:"Send request",
+    err:"Couldn't send. Please try again or call us.",fnote:"By clicking, you agree to data processing.",
+    ok_h:"Request received",ok_p:"We'll get back within a business day and send catalogues with a quote.",
+    foot_p:"Import of SHUA and YR Fitness commercial equipment. Supply, design, installation, service.",
+    foot_addr:"Zhytomyr, Ukraine<br>Mon–Sat · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00",
+    foot_bottom:"SHUA × YR FITNESS · OFFICIAL IMPORT"
+  }
+};
 
-  const filters=document.getElementById('filters');
-  const cards=[...document.querySelectorAll('#grid .pcard')];
-  filters.addEventListener('click',e=>{
-    const b=e.target.closest('.filter');if(!b)return;
-    filters.querySelector('.active')?.classList.remove('active');
-    b.classList.add('active');
-    const f=b.dataset.f;
-    cards.forEach(c=>c.classList.toggle('hide',!(f==='all'||c.dataset.cat===f)));
-  });
+let lang = (function(){try{return localStorage.getItem("creagym_lang")}catch(e){}})() || "ua";
 
-  const form=document.getElementById('leadForm');
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const n=document.getElementById('name'),p=document.getElementById('phone');
-    if(!n.value.trim()){n.focus();n.style.borderColor='#3D74F4';return;}
-    if(!p.value.trim()){p.focus();p.style.borderColor='#3D74F4';return;}
-    document.getElementById('formFields').classList.add('hidden');
-    document.getElementById('fsuccess').classList.add('show');
+function buildMarquee(arr){
+  const one = arr.map(t=>`<span>${t}</span>`).join(`<span class="sep">/</span>`)+`<span class="sep">/</span>`;
+  const it = `<span class="it">${one}</span>`;
+  document.getElementById("marq").innerHTML = it+it;
+}
+
+function applyLang(l){
+  lang = l;
+  try{localStorage.setItem("creagym_lang",l)}catch(e){}
+  document.documentElement.lang = (l==="ua"?"uk":"en");
+  const dict = I18N[l];
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const v = dict[el.dataset.i18n]; if(v==null) return;
+    if(el.hasAttribute("data-i18n-html")) el.innerHTML = v; else el.textContent = v;
   });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    const v = dict[el.dataset.i18nPh]; if(v!=null) el.placeholder = v;
+  });
+  document.querySelectorAll("[data-i18n-opts]").forEach(sel=>{
+    const arr = dict[sel.dataset.i18nOpts]; if(!arr) return;
+    [...sel.options].forEach((o,i)=>{ if(arr[i]!=null) o.textContent = arr[i]; });
+  });
+  document.querySelectorAll("[data-i18n-chips]").forEach(box=>{
+    const arr = dict[box.dataset.i18nChips]; if(!arr) return;
+    box.innerHTML = arr.map(c=>`<span class="chip">${c}</span>`).join("");
+  });
+  buildMarquee(dict.marq);
+  document.querySelectorAll(".lang b").forEach(b=>b.classList.toggle("on", b.dataset.l===l));
+}
+document.querySelectorAll(".lang b").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.l)));
+applyLang(lang);
+
+/* ---------------- UI behaviour ---------------- */
+const hdr=document.getElementById("hdr");
+const onScroll=()=>hdr.classList.toggle("s",scrollY>30);
+onScroll();addEventListener("scroll",onScroll,{passive:true});
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelector(".hero").classList.add("go")));
+
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");
+  e.target.querySelectorAll("[data-count]").forEach(c=>count(c));io.unobserve(e.target);}});},{threshold:.16,rootMargin:"0px 0px -7% 0px"});
+document.querySelectorAll(".rv,.st").forEach(el=>io.observe(el));
+function count(el){
+  const t=+el.dataset.count,dur=1400,st=performance.now();
+  const fmt=n=>n>=1000?n.toLocaleString("uk-UA"):n;
+  (function tick(now){const p=Math.min((now-st)/dur,1),e=1-Math.pow(1-p,3);
+    el.textContent=fmt(Math.round(t*e));if(p<1)requestAnimationFrame(tick);})(st);
+}
+
+const par=[...document.querySelectorAll("[data-par]")];
+if(!matchMedia("(prefers-reduced-motion:reduce)").matches){
+  addEventListener("scroll",()=>{const y=scrollY;par.forEach(el=>{el.style.transform=`translateY(${y*+el.dataset.par}px)`});},{passive:true});
+}
+
+const filters=document.getElementById("filters"),cards=[...document.querySelectorAll("#grid .card")];
+filters.addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
+  filters.querySelector(".active")?.classList.remove("active");b.classList.add("active");
+  const f=b.dataset.f;cards.forEach(c=>c.classList.toggle("hide",!(f==="all"||c.dataset.cat===f)));});
+
+/* ---------------- form → leads API ---------------- */
+document.getElementById("leadForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const g=id=>document.getElementById(id);
+  const n=g("name"),p=g("phone"),err=g("ferr");
+  err.classList.remove("show");
+  if(!n.value.trim()){n.focus();n.style.borderColor="#3D74F4";return;}
+  if(!p.value.trim()){p.focus();p.style.borderColor="#3D74F4";return;}
+  const lead={name:n.value.trim(),phone:p.value.trim(),interest:g("brand").value,area:g("area").value.trim(),budget:g("budget").value,comment:g("msg").value.trim()};
+  try{
+    const ok = await window.CREAGYM_API.leadCreate(lead);
+    if(ok){ g("ff").classList.add("hidden"); g("fok").classList.add("show"); }
+    else { err.classList.add("show"); }
+  }catch(ex){ err.classList.add("show"); }
+});
 </script>
 </body>
 </html>
