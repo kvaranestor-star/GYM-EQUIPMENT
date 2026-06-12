@@ -5,8 +5,8 @@
 window.CREAGYM_CFG = {
   // Supabase: вставь URL проекта и публичный anon-ключ.
   // Пример URL: https://rkknbltiylsvmycbbyde.supabase.co
-  SUPABASE_URL: "",
-  SUPABASE_KEY: "",
+  SUPABASE_URL: "https://jugqixsacznucxbanrpf.supabase.co",
+  SUPABASE_KEY: "sb_secret_yQKYfbpW0A8wLFH3L_JzNg_Dqvwzgit",
 
   // Пароль для входа в админ-панель (admin.html)
   ADMIN_PASS: "creagym",
