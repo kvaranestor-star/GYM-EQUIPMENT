@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>CREAGYM · Адмін-панель заявок</title>
+<title>CREAGYM · Адмін-панель</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,23 +20,21 @@
   .mono{font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em}
   h1,h2,h3{font-weight:900;letter-spacing:-.02em}
   .wrap{max-width:1280px;margin:0 auto;padding:0 26px}
+  input,select,textarea{font-family:'Inter'}
 
-  /* GATE */
   .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
   .gate-card{width:100%;max-width:380px;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(160deg,var(--card),var(--bg-2));padding:38px 34px;position:relative;overflow:hidden}
   .gate-card .glow{position:absolute;top:-40%;right:-30%;width:80%;height:90%;background:radial-gradient(circle,var(--glow),transparent 65%);opacity:.5;filter:blur(24px)}
   .gate-card .logo{font-weight:900;font-size:22px;letter-spacing:-.02em;position:relative}
   .gate-card .logo .d{color:var(--blue)}
   .gate-card .lbl{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-2);margin:18px 0 22px;position:relative}
-  .gate-card input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;color:var(--ink);font-size:15px;font-family:'Inter';transition:border-color .2s}
+  .gate-card input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;color:var(--ink);font-size:15px}
   .gate-card input:focus{outline:none;border-color:var(--blue)}
-  .gate-card button{width:100%;margin-top:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:14px;font-family:'IBM Plex Mono';font-size:13px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:background .25s}
+  .gate-card button{width:100%;margin-top:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:14px;font-family:'IBM Plex Mono';font-size:13px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
   .gate-card button:hover{background:var(--blue-2)}
   .gate-err{color:var(--red);font-size:13px;margin-top:12px;min-height:18px;font-family:'IBM Plex Mono'}
 
-  /* APP */
-  .app{display:none}
-  .app.show{display:block}
+  .app{display:none}.app.show{display:block}
   .topbar{position:sticky;top:0;z-index:50;background:rgba(9,9,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .topbar-in{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
   .topbar .logo{font-weight:900;font-size:19px;letter-spacing:-.02em;display:flex;align-items:center;gap:12px}
@@ -47,37 +45,36 @@
   .ibtn:hover{border-color:var(--blue);color:var(--blue-2)}
   .ibtn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
   .ibtn.blue:hover{background:var(--blue-2)}
-
   .source{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:7px}
   .source .dot{width:7px;height:7px;border-radius:50%;background:var(--amber)}
   .source.on .dot{background:var(--green)}
 
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0}
+  .tabs{display:flex;gap:8px;margin:24px 0 6px}
+  .tab{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding:11px 20px;border:1px solid var(--line);border-radius:var(--r);color:var(--ink-2);background:transparent;cursor:pointer;transition:all .2s}
+  .tab:hover{color:var(--ink)}
+  .tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
   .stat{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--card)}
   .stat .n{font-weight:900;font-size:34px;letter-spacing:-.03em}
   .stat .l{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-top:8px}
   .stat.new .n{color:var(--blue-2)}.stat.prog .n{color:var(--amber)}.stat.done .n{color:var(--green)}
 
   .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
-  .controls input,.controls select{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;color:var(--ink);font-size:14px;font-family:'Inter'}
+  .controls input,.controls select{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;color:var(--ink);font-size:14px}
   .controls input{flex:1;min-width:200px}
   .controls input:focus,.controls select:focus{outline:none;border-color:var(--blue)}
   .controls select{appearance:none;cursor:pointer;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%233D74F4' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
 
-  table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;table-layout:fixed}
   thead th{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:14px 16px;background:var(--bg-2);border-bottom:1px solid var(--line);white-space:nowrap}
-  tbody td{padding:15px 16px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+  tbody td{padding:15px 16px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px;overflow-wrap:anywhere;word-break:break-word}
   tbody tr:last-child td{border-bottom:0}
   tbody tr:hover{background:var(--bg-2)}
   td .nm{font-weight:600}
   td .ph a{color:var(--blue-2);font-family:'IBM Plex Mono';font-size:13px}
-  table{table-layout:fixed}
-  tbody td{overflow-wrap:anywhere;word-break:break-word}
   td .meta{font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-3);letter-spacing:.04em}
-  td .nm,td .ph a{overflow-wrap:anywhere;word-break:break-word}
   td .cmt{color:var(--ink-2);font-size:13px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .lcard dd{overflow-wrap:anywhere;word-break:break-word}
-  .lcard .cmt{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .badge{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:2px;display:inline-block}
   .badge.b1{background:rgba(61,116,244,.16);color:var(--blue-2)}
   .badge.b2{background:rgba(230,162,60,.16);color:var(--amber)}
@@ -87,37 +84,83 @@
   .del{background:none;border:1px solid var(--line-2);border-radius:2px;color:var(--ink-3);width:30px;height:30px;cursor:pointer;transition:all .2s;font-size:15px;line-height:1}
   .del:hover{border-color:var(--red);color:var(--red)}
 
-  .empty{text-align:center;padding:70px 20px;border:1px dashed var(--line-2);border-radius:var(--r);color:var(--ink-3)}
+  .empty{text-align:center;padding:60px 20px;border:1px dashed var(--line-2);border-radius:var(--r);color:var(--ink-3)}
   .empty .mono{font-size:13px;color:var(--ink-2)}
   .demo-hint{margin-top:14px;font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-3);letter-spacing:.03em}
   .demo-hint b{color:var(--amber)}
 
-  /* mobile cards */
   .cards{display:none;flex-direction:column;gap:12px}
   .lcard{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px}
   .lcard .row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
   .lcard .nm{font-weight:700;font-size:16px}
   .lcard dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin-top:12px;font-size:13px}
   .lcard dt{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
-  .lcard dd{color:var(--ink)}
+  .lcard dd{color:var(--ink);overflow-wrap:anywhere;word-break:break-word}
+  .lcard .cmt{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .lcard .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
 
-  @media(max-width:860px){
-    .stats{grid-template-columns:1fr 1fr}
-    table{display:none}
-    .cards{display:flex}
-  }
+  /* products */
+  .phead{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin:6px 0 20px}
+  .phead h2{font-size:24px}
+  .phead .right{display:flex;gap:10px;flex-wrap:wrap}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .pc{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card);display:flex;flex-direction:column}
+  .pc .thumb{aspect-ratio:4/3;background:radial-gradient(120% 90% at 50% 12%,#1c1f26,#0c0d11);position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .pc .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .pc .thumb .noimg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.1em}
+  .pc .bt{position:absolute;top:10px;left:10px;font-family:'IBM Plex Mono';font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:2px;background:rgba(243,244,246,.92);color:#0b0b0d}
+  .pc .bt.yr{background:var(--blue);color:#fff}
+  .pc .pb{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
+  .pc .cat{font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .pc h3{font-size:16px;font-weight:800;letter-spacing:-.01em}
+  .pc .mdl{font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-2)}
+  .pc .pa{display:flex;gap:8px;margin-top:auto;padding-top:12px}
+  .pc .pa button{flex:1;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:8px;border:1px solid var(--line-2);border-radius:2px;background:transparent;color:var(--ink-2);cursor:pointer;transition:all .2s}
+  .pc .pa .edit:hover{border-color:var(--blue);color:var(--blue-2)}
+  .pc .pa .rm:hover{border-color:var(--red);color:var(--red)}
+
+  /* modal form */
+  .modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+  .modal.show{display:flex}
+  .modal .back{position:absolute;inset:0;background:rgba(5,5,7,.72);backdrop-filter:blur(6px)}
+  .modal .mc{position:relative;z-index:2;width:100%;max-width:600px;max-height:90vh;overflow:auto;border:1px solid var(--line-2);border-radius:var(--r);background:linear-gradient(160deg,var(--card),var(--bg-2));padding:30px 30px 26px}
+  .modal h2{font-size:22px;margin-bottom:4px}
+  .modal .mh{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-2);margin-bottom:20px}
+  .fgrid{display:grid;gap:14px}
+  .frow2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .fld{display:flex;flex-direction:column;gap:6px}
+  .fld label{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .fld input,.fld select,.fld textarea{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;color:var(--ink);font-size:14px;transition:border-color .2s}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--blue)}
+  .fld textarea{resize:vertical;min-height:64px}
+  .fld select{appearance:none;cursor:pointer;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%233D74F4' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+  .fld .hint{font-family:'IBM Plex Mono';font-size:9.5px;color:var(--ink-3);letter-spacing:.03em}
+  .specs-h{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+  .srow{display:grid;grid-template-columns:1fr 1.3fr auto;gap:8px}
+  .srow input{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:10px 11px;color:var(--ink);font-size:13px}
+  .srow input:focus{outline:none;border-color:var(--blue)}
+  .srow .srm{width:38px;border:1px solid var(--line-2);border-radius:2px;background:transparent;color:var(--ink-3);cursor:pointer;font-size:14px}
+  .srow .srm:hover{border-color:var(--red);color:var(--red)}
+  .addrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--blue-2);background:transparent;border:1px dashed var(--line-2);border-radius:var(--r);padding:9px;cursor:pointer;transition:all .2s}
+  .addrow:hover{border-color:var(--blue)}
+  .mfoot{display:flex;gap:10px;margin-top:22px}
+  .mfoot .save{flex:1;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono';font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
+  .mfoot .save:hover{background:var(--blue-2)}
+  .mfoot .cancel{border:1px solid var(--line-2);background:transparent;color:var(--ink-2);border-radius:var(--r);padding:13px 20px;font-family:'IBM Plex Mono';font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
+  .mfoot .cancel:hover{color:var(--ink)}
+
+  @media(max-width:860px){.stats{grid-template-columns:1fr 1fr}table{display:none}.cards{display:flex}.frow2{grid-template-columns:1fr}}
   :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN GATE -->
+<!-- LOGIN -->
 <div class="gate" id="gate">
   <div class="gate-card">
     <div class="glow"></div>
     <div class="logo">CREAGYM<span class="d">.</span></div>
-    <div class="lbl">Адмін-панель заявок</div>
+    <div class="lbl">Адмін-панель</div>
     <input id="pass" type="password" placeholder="Пароль" autocomplete="current-password">
     <button id="enter">Увійти</button>
     <div class="gate-err" id="gateErr"></div>
@@ -126,38 +169,82 @@
 
 <!-- APP -->
 <div class="app" id="app">
-  <div class="topbar">
-    <div class="wrap topbar-in">
-      <div class="logo">CREAGYM<span class="d">.</span> <span class="tag">Заявки</span></div>
-      <div class="actions">
-        <span class="source" id="source"><span class="dot"></span><span id="sourceTxt">Демо</span></span>
-        <button class="ibtn" id="refresh">Оновити</button>
-        <button class="ibtn" id="csv">Експорт CSV</button>
-        <button class="ibtn" id="logout">Вийти</button>
-      </div>
+  <div class="topbar"><div class="wrap topbar-in">
+    <div class="logo">CREAGYM<span class="d">.</span> <span class="tag">Адмін</span></div>
+    <div class="actions">
+      <span class="source" id="source"><span class="dot"></span><span id="sourceTxt">Демо</span></span>
+      <button class="ibtn" id="refresh">Оновити</button>
+      <button class="ibtn" id="logout">Вийти</button>
     </div>
-  </div>
+  </div></div>
 
   <div class="wrap">
-    <div class="stats">
-      <div class="stat"><div class="n" id="cTotal">0</div><div class="l">Усього заявок</div></div>
-      <div class="stat new"><div class="n" id="cNew">0</div><div class="l">Нові</div></div>
-      <div class="stat prog"><div class="n" id="cProg">0</div><div class="l">В роботі</div></div>
-      <div class="stat done"><div class="n" id="cDone">0</div><div class="l">Закриті</div></div>
+    <div class="tabs">
+      <button class="tab on" data-tab="leads">Заявки</button>
+      <button class="tab" data-tab="products">Товари</button>
     </div>
 
-    <div class="controls">
-      <input id="search" type="text" placeholder="Пошук: ім'я, телефон, коментар…">
-      <select id="fStatus">
-        <option value="all">Усі статуси</option>
-        <option value="new">Нові</option>
-        <option value="in_progress">В роботі</option>
-        <option value="closed">Закриті</option>
-      </select>
+    <!-- LEADS -->
+    <div id="view-leads">
+      <div class="stats">
+        <div class="stat"><div class="n" id="cTotal">0</div><div class="l">Усього заявок</div></div>
+        <div class="stat new"><div class="n" id="cNew">0</div><div class="l">Нові</div></div>
+        <div class="stat prog"><div class="n" id="cProg">0</div><div class="l">В роботі</div></div>
+        <div class="stat done"><div class="n" id="cDone">0</div><div class="l">Закриті</div></div>
+      </div>
+      <div class="controls">
+        <input id="search" type="text" placeholder="Пошук: ім'я, телефон, коментар…">
+        <select id="fStatus"><option value="all">Усі статуси</option><option value="new">Нові</option><option value="in_progress">В роботі</option><option value="closed">Закриті</option></select>
+        <button class="ibtn" id="csv">Експорт CSV</button>
+      </div>
+      <div id="leadList"></div>
     </div>
 
-    <div id="list"></div>
+    <!-- PRODUCTS -->
+    <div id="view-products" style="display:none">
+      <div class="phead">
+        <h2>Каталог товарів · <span id="pCount" style="color:var(--blue-2)">0</span></h2>
+        <div class="right">
+          <button class="ibtn" id="seedBtn">Стандартні товари</button>
+          <button class="ibtn blue" id="addBtn">+ Додати товар</button>
+        </div>
+      </div>
+      <div id="prodList"></div>
+    </div>
+
     <div style="height:60px"></div>
+  </div>
+</div>
+
+<!-- PRODUCT FORM MODAL -->
+<div class="modal" id="pmodal">
+  <div class="back" data-pcancel></div>
+  <div class="mc">
+    <h2 id="mTitle">Новий товар</h2>
+    <div class="mh">Картка товару</div>
+    <div class="fgrid">
+      <div class="frow2">
+        <div class="fld"><label>Бренд</label><select id="mBrand"><option value="SHUA">SHUA</option><option value="YR">YR Fitness</option></select></div>
+        <div class="fld"><label>Категорія</label><select id="mCat"><option value="strength">Силові</option><option value="cardio">Кардіо</option><option value="multi">Станції</option><option value="rack">Рами та стійки</option></select></div>
+      </div>
+      <div class="fld"><label>Назва</label><input id="mName" type="text" maxlength="120" placeholder="напр. S2+ Series Treadmill"></div>
+      <div class="frow2">
+        <div class="fld"><label>Модель / Артикул</label><input id="mModel" type="text" maxlength="60" placeholder="SH-T9100T"></div>
+        <div class="fld"><label>Підпис (категорія)</label><input id="mSub" type="text" maxlength="80" placeholder="Кардіо · Treadmill"></div>
+      </div>
+      <div class="fld"><label>Фото</label><input id="mImage" type="text" maxlength="300" placeholder="sh-t9100t.jpg або https://...">
+        <span class="hint">Ім'я файлу — поклади фото в папку /img з такою назвою. Або встав повне посилання.</span></div>
+      <div class="fld"><label>Опис</label><textarea id="mDesc" maxlength="1200" placeholder="Короткий опис товару…"></textarea></div>
+      <div>
+        <div class="specs-h">Технічні характеристики</div>
+        <div class="fgrid" id="specRows" style="gap:8px;margin-top:8px"></div>
+        <button class="addrow" id="addRow" style="margin-top:8px;width:100%">+ Додати характеристику</button>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="save" id="mSave">Зберегти</button>
+      <button class="cancel" data-pcancel>Скасувати</button>
+    </div>
   </div>
 </div>
 
@@ -168,149 +255,117 @@
   if (!CFG || !API) {
     document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:Inter,system-ui,sans-serif;color:#F3F4F6">'
       + '<div style="max-width:460px"><div style="font-weight:900;font-size:22px">CREAGYM<span style="color:#3D74F4">.</span></div>'
-      + '<p style="color:#A4A6AC;margin-top:14px;line-height:1.6">Не завантажився <b style="color:#fff">config.js</b>.<br>Перевір, що файл лежить поруч з <b>admin.html</b> у корені репозиторію і не містить помилок.</p>'
-      + '<p style="font-family:monospace;font-size:12px;color:#65676D;margin-top:14px">Відкрий /config.js у браузері — він має завантажуватись без помилок.</p></div></div>';
+      + '<p style="color:#A4A6AC;margin-top:14px;line-height:1.6">Не завантажився <b style="color:#fff">config.js</b>.<br>Перевір, що файл лежить поруч з <b>admin.html</b> у корені репозиторію.</p></div></div>';
     throw new Error("config.js not loaded");
   }
   const ST = { new:["Нова","b1"], in_progress:["В роботі","b2"], closed:["Закрита","b3"] };
-  let DATA = [];
+  const CATLBL = { strength:"Силові", cardio:"Кардіо", multi:"Станції", rack:"Рами та стійки" };
+  const BRANDLBL = { YR:"YR Fitness", SHUA:"SHUA" };
+  const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const imgSrc = s => !s ? "" : (/^(https?:|img\/)/.test(s) ? s : "img/"+s);
+  let LEADS = [], PRODUCTS = [], curTab = "leads";
 
   /* ---- gate ---- */
-  function unlock(){ $("#gate").style.display="none"; $("#app").classList.add("show"); load(); }
+  function unlock(){ $("#gate").style.display="none"; $("#app").classList.add("show"); loadLeads(); }
   (function(){ try{ if(sessionStorage.getItem("creagym_admin")==="1") return unlock(); }catch(e){} })();
   $("#enter").addEventListener("click", tryLogin);
   $("#pass").addEventListener("keydown", e=>{ if(e.key==="Enter") tryLogin(); });
-  function tryLogin(){
-    if($("#pass").value === CFG.ADMIN_PASS){
-      try{ sessionStorage.setItem("creagym_admin","1"); }catch(e){}
-      unlock();
-    } else { $("#gateErr").textContent="Невірний пароль"; }
+  function tryLogin(){ if($("#pass").value === CFG.ADMIN_PASS){ try{sessionStorage.setItem("creagym_admin","1")}catch(e){} unlock(); } else $("#gateErr").textContent="Невірний пароль"; }
+  $("#logout").addEventListener("click", ()=>{ try{sessionStorage.removeItem("creagym_admin")}catch(e){} location.reload(); });
+
+  (function(){ const on=API.isOnline(); $("#source").classList.toggle("on",on); $("#sourceTxt").textContent=on?"Supabase":"Демо (локально)"; })();
+
+  /* ---- tabs ---- */
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+    document.querySelector(".tab.on").classList.remove("on"); t.classList.add("on");
+    curTab=t.dataset.tab;
+    $("#view-leads").style.display = curTab==="leads"?"block":"none";
+    $("#view-products").style.display = curTab==="products"?"block":"none";
+    if(curTab==="products" && !PRODUCTS.length) loadProducts();
+  }));
+  $("#refresh").addEventListener("click", ()=> curTab==="leads"?loadLeads():loadProducts());
+
+  /* ===================== LEADS ===================== */
+  async function loadLeads(){ try{ LEADS=await API.leadList(); }catch(e){ LEADS=[]; alert("Помилка Supabase: "+e.message); } renderLeads(); }
+  $("#search").addEventListener("input", renderLeads);
+  $("#fStatus").addEventListener("change", renderLeads);
+  function fmtDate(iso){ const d=new Date(iso); return isNaN(d)?"—":d.toLocaleString("uk-UA",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"}); }
+  function leadCounts(){ const c={total:LEADS.length,new:0,in_progress:0,closed:0}; LEADS.forEach(l=>{if(c[l.status]!=null)c[l.status]++;});
+    $("#cTotal").textContent=c.total;$("#cNew").textContent=c.new;$("#cProg").textContent=c.in_progress;$("#cDone").textContent=c.closed; }
+  function leadFiltered(){ const q=$("#search").value.trim().toLowerCase(),s=$("#fStatus").value;
+    return LEADS.filter(l=>{ if(s!=="all"&&l.status!==s)return false; if(!q)return true;
+      return [l.name,l.phone,l.comment,l.interest,l.budget,l.area].join(" ").toLowerCase().includes(q); }); }
+  function statusSelect(l){ return `<select class="st" data-id="${esc(l.id)}">`+Object.keys(ST).map(k=>`<option value="${k}" ${l.status===k?"selected":""}>${ST[k][0]}</option>`).join("")+`</select>`; }
+  function renderLeads(){
+    leadCounts(); const rows=leadFiltered(), list=$("#leadList");
+    if(!rows.length){ list.innerHTML=`<div class="empty"><div class="mono">Заявок поки немає</div>`+(!API.isOnline()?`<div class="demo-hint">Працює <b>демо-режим</b>. Впиши ключі Supabase у <b>config.js</b>.</div>`:``)+`</div>`; return; }
+    let t=`<table><colgroup><col style="width:88px"><col style="width:170px"><col style="width:120px"><col style="width:70px"><col style="width:110px"><col><col style="width:120px"><col style="width:44px"></colgroup><thead><tr><th>Дата</th><th>Клієнт</th><th>Цікавить</th><th>Площа</th><th>Бюджет</th><th>Коментар</th><th>Статус</th><th></th></tr></thead><tbody>`;
+    rows.forEach(l=>{ t+=`<tr><td class="meta">${fmtDate(l.created_at)}</td><td><div class="nm">${esc(l.name)||"—"}</div><div class="ph"><a href="tel:${esc(l.phone)}">${esc(l.phone)||"—"}</a></div></td><td>${esc(l.interest)||"—"}</td><td>${esc(l.area)||"—"}</td><td>${esc(l.budget)||"—"}</td><td class="cmt">${esc(l.comment)||"—"}</td><td>${statusSelect(l)}</td><td><button class="del" data-ld="${esc(l.id)}">✕</button></td></tr>`; });
+    t+=`</tbody></table><div class="cards">`;
+    rows.forEach(l=>{ const b=ST[l.status]||ST.new; t+=`<div class="lcard"><div class="row"><div class="nm">${esc(l.name)||"—"}</div><span class="badge ${b[1]}">${b[0]}</span></div><div style="margin-top:4px"><a href="tel:${esc(l.phone)}" style="color:var(--blue-2);font-family:'IBM Plex Mono';font-size:13px">${esc(l.phone)||"—"}</a></div><dl><dt>Цікавить</dt><dd>${esc(l.interest)||"—"}</dd><dt>Площа</dt><dd>${esc(l.area)||"—"} м²</dd><dt>Бюджет</dt><dd>${esc(l.budget)||"—"}</dd><dt>Коментар</dt><dd class="cmt">${esc(l.comment)||"—"}</dd><dt>Дата</dt><dd class="meta">${fmtDate(l.created_at)}</dd></dl><div class="foot">${statusSelect(l)}<button class="del" data-ld="${esc(l.id)}">✕ Видалити</button></div></div>`; });
+    t+=`</div>`; list.innerHTML=t;
+    list.querySelectorAll("select.st").forEach(sel=>sel.addEventListener("change",async()=>{ await API.leadUpdate(sel.dataset.id,{status:sel.value}); const l=LEADS.find(x=>String(x.id)===String(sel.dataset.id)); if(l)l.status=sel.value; leadCounts(); }));
+    list.querySelectorAll("[data-ld]").forEach(btn=>btn.addEventListener("click",async()=>{ if(!confirm("Видалити заявку?"))return; await API.leadDelete(btn.dataset.ld); LEADS=LEADS.filter(x=>String(x.id)!==String(btn.dataset.ld)); renderLeads(); }));
   }
-  $("#logout").addEventListener("click", ()=>{ try{ sessionStorage.removeItem("creagym_admin"); }catch(e){} location.reload(); });
-
-  /* ---- source indicator ---- */
-  (function(){
-    const on = API.isOnline();
-    $("#source").classList.toggle("on", on);
-    $("#sourceTxt").textContent = on ? "Supabase" : "Демо (локально)";
-  })();
-
-  /* ---- load + render ---- */
-  async function load(){
-    try{ DATA = await API.leadList(); }
-    catch(e){ DATA = []; alert("Помилка завантаження з Supabase: "+e.message); }
-    render();
-  }
-  $("#refresh").addEventListener("click", load);
-  $("#search").addEventListener("input", render);
-  $("#fStatus").addEventListener("change", render);
-
-  function counts(){
-    const c={total:DATA.length,new:0,in_progress:0,closed:0};
-    DATA.forEach(l=>{ if(c[l.status]!=null) c[l.status]++; });
-    $("#cTotal").textContent=c.total; $("#cNew").textContent=c.new;
-    $("#cProg").textContent=c.in_progress; $("#cDone").textContent=c.closed;
-  }
-
-  function filtered(){
-    const q=$("#search").value.trim().toLowerCase(), s=$("#fStatus").value;
-    return DATA.filter(l=>{
-      if(s!=="all" && l.status!==s) return false;
-      if(!q) return true;
-      return [l.name,l.phone,l.comment,l.interest,l.budget,l.area].join(" ").toLowerCase().includes(q);
-    });
-  }
-
-  function fmtDate(iso){
-    const d=new Date(iso); if(isNaN(d)) return "—";
-    return d.toLocaleString("uk-UA",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
-  }
-  const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-
-  function statusSelect(l){
-    return `<select class="st" data-id="${esc(l.id)}">`+
-      Object.keys(ST).map(k=>`<option value="${k}" ${l.status===k?"selected":""}>${ST[k][0]}</option>`).join("")+
-      `</select>`;
-  }
-
-  function render(){
-    counts();
-    const rows = filtered();
-    const list = $("#list");
-    if(!rows.length){
-      list.innerHTML = `<div class="empty"><div class="mono">Заявок поки немає</div>`+
-        (!API.isOnline()?`<div class="demo-hint">Працює <b>демо-режим</b>. Впиши ключі Supabase у <b>config.js</b>, щоб бачити реальні заявки.</div>`:``)+
-        `</div>`;
-      return;
-    }
-    // table
-    let t = `<table><colgroup><col style="width:88px"><col style="width:170px"><col style="width:120px"><col style="width:70px"><col style="width:110px"><col><col style="width:120px"><col style="width:44px"></colgroup><thead><tr>
-      <th>Дата</th><th>Клієнт</th><th>Цікавить</th><th>Площа</th><th>Бюджет</th><th>Коментар</th><th>Статус</th><th></th>
-    </tr></thead><tbody>`;
-    rows.forEach(l=>{
-      t += `<tr>
-        <td class="meta">${fmtDate(l.created_at)}</td>
-        <td><div class="nm">${esc(l.name)||"—"}</div><div class="ph"><a href="tel:${esc(l.phone)}">${esc(l.phone)||"—"}</a></div></td>
-        <td>${esc(l.interest)||"—"}</td>
-        <td>${esc(l.area)||"—"}</td>
-        <td>${esc(l.budget)||"—"}</td>
-        <td class="cmt">${esc(l.comment)||"—"}</td>
-        <td>${statusSelect(l)}</td>
-        <td><button class="del" data-id="${esc(l.id)}" title="Видалити">✕</button></td>
-      </tr>`;
-    });
-    t += `</tbody></table>`;
-
-    // cards (mobile)
-    let c = `<div class="cards">`;
-    rows.forEach(l=>{
-      const b=ST[l.status]||ST.new;
-      c += `<div class="lcard">
-        <div class="row"><div class="nm">${esc(l.name)||"—"}</div><span class="badge ${b[1]}">${b[0]}</span></div>
-        <div class="ph" style="margin-top:4px"><a href="tel:${esc(l.phone)}" style="color:var(--blue-2);font-family:'IBM Plex Mono';font-size:13px">${esc(l.phone)||"—"}</a></div>
-        <dl>
-          <dt>Цікавить</dt><dd>${esc(l.interest)||"—"}</dd>
-          <dt>Площа</dt><dd>${esc(l.area)||"—"} м²</dd>
-          <dt>Бюджет</dt><dd>${esc(l.budget)||"—"}</dd>
-          <dt>Коментар</dt><dd class="cmt">${esc(l.comment)||"—"}</dd>
-          <dt>Дата</dt><dd class="meta">${fmtDate(l.created_at)}</dd>
-        </dl>
-        <div class="foot">${statusSelect(l)}<button class="del" data-id="${esc(l.id)}" title="Видалити">✕ Видалити</button></div>
-      </div>`;
-    });
-    c += `</div>`;
-
-    list.innerHTML = t + c;
-
-    list.querySelectorAll("select.st").forEach(sel=>{
-      sel.addEventListener("change", async ()=>{
-        await API.leadUpdate(sel.dataset.id, { status: sel.value });
-        const l = DATA.find(x=>String(x.id)===String(sel.dataset.id)); if(l) l.status=sel.value;
-        counts();
-      });
-    });
-    list.querySelectorAll(".del").forEach(btn=>{
-      btn.addEventListener("click", async ()=>{
-        if(!confirm("Видалити заявку?")) return;
-        await API.leadDelete(btn.dataset.id);
-        DATA = DATA.filter(x=>String(x.id)!==String(btn.dataset.id));
-        render();
-      });
-    });
-  }
-
-  /* ---- CSV ---- */
   $("#csv").addEventListener("click", ()=>{
-    const rows = filtered();
-    const head = ["Дата","Ім'я","Телефон","Цікавить","Площа","Бюджет","Коментар","Статус"];
-    const q = s => `"${String(s==null?"":s).replace(/"/g,'""')}"`;
-    const body = rows.map(l=>[fmtDate(l.created_at),l.name,l.phone,l.interest,l.area,l.budget,l.comment,(ST[l.status]||["",""])[0]].map(q).join(","));
-    const csv = "\uFEFF"+[head.map(q).join(","),...body].join("\n");
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
-    a.download="creagym-leads-"+new Date().toISOString().slice(0,10)+".csv";
-    a.click(); URL.revokeObjectURL(a.href);
+    const rows=leadFiltered(), head=["Дата","Ім'я","Телефон","Цікавить","Площа","Бюджет","Коментар","Статус"], q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
+    const body=rows.map(l=>[fmtDate(l.created_at),l.name,l.phone,l.interest,l.area,l.budget,l.comment,(ST[l.status]||["",""])[0]].map(q).join(","));
+    const csv="\uFEFF"+[head.map(q).join(","),...body].join("\n");
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="creagym-leads-"+new Date().toISOString().slice(0,10)+".csv"; a.click(); URL.revokeObjectURL(a.href);
   });
+
+  /* ===================== PRODUCTS ===================== */
+  async function loadProducts(){ try{ PRODUCTS=await API.productList(); }catch(e){ PRODUCTS=[]; alert("Помилка Supabase: "+e.message); } renderProducts(); }
+  function renderProducts(){
+    $("#pCount").textContent=PRODUCTS.length;
+    const list=$("#prodList");
+    if(!PRODUCTS.length){ list.innerHTML=`<div class="empty"><div class="mono">Товарів ще немає</div><div class="demo-hint">Натисни <b style="color:var(--blue-2)">+ Додати товар</b> або <b style="color:var(--blue-2)">Стандартні товари</b>, щоб завантажити базовий каталог.</div></div>`; return; }
+    list.innerHTML=`<div class="pgrid">`+PRODUCTS.map(p=>{
+      const src=imgSrc(p.image);
+      return `<div class="pc"><div class="thumb">${src?`<img src="${esc(src)}" alt="" onerror="this.style.display='none'">`:""}<div class="noimg">${src?"":"немає фото"}</div><span class="bt ${p.brand==='YR'?'yr':''}">${esc(BRANDLBL[p.brand]||p.brand)}</span></div>
+        <div class="pb"><div class="cat">${esc(CATLBL[p.category]||p.category)} · ${esc(p.subtitle||"")}</div><h3>${esc(p.name)||"—"}</h3><div class="mdl">NO. ${esc(p.model||"—")}</div>
+        <div class="pa"><button class="edit" data-ed="${esc(p.id)}">Редагувати</button><button class="rm" data-rm="${esc(p.id)}">✕</button></div></div></div>`;
+    }).join("")+`</div>`;
+    list.querySelectorAll("[data-ed]").forEach(b=>b.addEventListener("click",()=>openForm(PRODUCTS.find(x=>String(x.id)===String(b.dataset.ed)))));
+    list.querySelectorAll("[data-rm]").forEach(b=>b.addEventListener("click",async()=>{ if(!confirm("Видалити товар?"))return; await API.productDelete(b.dataset.rm); PRODUCTS=PRODUCTS.filter(x=>String(x.id)!==String(b.dataset.rm)); renderProducts(); }));
+  }
+  $("#seedBtn").addEventListener("click", async ()=>{
+    if(!confirm("Завантажити стандартний каталог (9 товарів)?"))return;
+    $("#seedBtn").disabled=true; $("#seedBtn").textContent="Завантаження…";
+    await API.productSeedDefaults(); await loadProducts();
+    $("#seedBtn").disabled=false; $("#seedBtn").textContent="Стандартні товари";
+  });
+
+  /* ---- product form ---- */
+  const pmodal=$("#pmodal"); let editId=null;
+  function specRow(k,v){ const d=document.createElement("div"); d.className="srow";
+    d.innerHTML=`<input class="sk" placeholder="Параметр" maxlength="60" value="${esc(k||"")}"><input class="sv" placeholder="Значення" maxlength="120" value="${esc(v||"")}"><button class="srm" title="Прибрати">✕</button>`;
+    d.querySelector(".srm").addEventListener("click",()=>d.remove()); return d; }
+  $("#addRow").addEventListener("click",()=>$("#specRows").appendChild(specRow("","")));
+  $("#addBtn").addEventListener("click",()=>openForm(null));
+  function openForm(p){
+    editId = p? p.id : null;
+    $("#mTitle").textContent = p? "Редагувати товар" : "Новий товар";
+    $("#mBrand").value=p?.brand||"SHUA"; $("#mCat").value=p?.category||"strength";
+    $("#mName").value=p?.name||""; $("#mModel").value=p?.model||""; $("#mSub").value=p?.subtitle||"";
+    $("#mImage").value=p?.image||""; $("#mDesc").value=p?.description||"";
+    const sr=$("#specRows"); sr.innerHTML="";
+    const specs=(p&&Array.isArray(p.specs)&&p.specs.length)?p.specs:[{k:"",v:""},{k:"",v:""}];
+    specs.forEach(s=>sr.appendChild(specRow(s.k,s.v)));
+    pmodal.classList.add("show"); document.body.style.overflow="hidden"; $("#mName").focus();
+  }
+  function closeForm(){ pmodal.classList.remove("show"); document.body.style.overflow=""; }
+  pmodal.querySelectorAll("[data-pcancel]").forEach(el=>el.addEventListener("click",closeForm));
+  $("#mSave").addEventListener("click", async ()=>{
+    const specs=[...$("#specRows").querySelectorAll(".srow")].map(r=>({k:r.querySelector(".sk").value.trim(),v:r.querySelector(".sv").value.trim()})).filter(s=>s.k||s.v);
+    const data={ brand:$("#mBrand").value, category:$("#mCat").value, name:$("#mName").value.trim(), model:$("#mModel").value.trim(), subtitle:$("#mSub").value.trim(), image:$("#mImage").value.trim(), description:$("#mDesc").value.trim(), specs };
+    if(!data.name){ $("#mName").focus(); $("#mName").style.borderColor="#E5484D"; return; }
+    $("#mSave").disabled=true; $("#mSave").textContent="Збереження…";
+    try{ if(editId) await API.productUpdate(editId,data); else await API.productCreate(data); await loadProducts(); closeForm(); }
+    catch(e){ alert("Помилка збереження: "+e.message); }
+    $("#mSave").disabled=false; $("#mSave").textContent="Зберегти";
+  });
+  addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeForm(); } });
 </script>
 </body>
 </html>

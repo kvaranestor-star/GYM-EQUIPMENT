@@ -155,6 +155,30 @@
   .card .sp b{color:var(--ink);font-weight:500}
   .catnote{margin-top:36px;color:var(--ink-2);font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .catnote .b{color:var(--blue-2)}
+  .card{cursor:pointer}
+
+  .pmodal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:24px}
+  .pmodal.show{display:flex}
+  .pm-back{position:absolute;inset:0;background:rgba(5,5,7,.72);backdrop-filter:blur(6px)}
+  .pm-card{position:relative;z-index:2;width:100%;max-width:880px;max-height:88vh;overflow:auto;border:1px solid var(--line-2);border-radius:var(--r);background:linear-gradient(160deg,var(--card),var(--bg-2));display:grid;grid-template-columns:1fr 1fr}
+  .pm-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border:1px solid var(--line-2);border-radius:2px;background:rgba(9,9,11,.6);color:var(--ink-2);cursor:pointer;font-size:16px}
+  .pm-x:hover{border-color:var(--blue);color:var(--blue-2)}
+  .pm-img{position:relative;min-height:320px;border-right:1px solid var(--line);background:radial-gradient(120% 90% at 50% 12%,#1c1f26,#0c0d11)}
+  .pm-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+  .pm-img .bp{position:absolute;inset:0;margin:auto;width:60%;height:60%;z-index:1;filter:drop-shadow(0 0 20px var(--glow))}
+  .pm-img .bp [stroke]{stroke:var(--blue-2);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:.85}
+  .pm-info{padding:36px 34px}
+  .pm-brand{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-2)}
+  .pm-sub{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+  .pm-name{font-size:28px;text-transform:none;font-weight:800;margin:8px 0 4px;letter-spacing:-.02em}
+  .pm-model{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink-2);letter-spacing:.06em}
+  .pm-desc{color:var(--ink-2);font-size:14px;margin:16px 0 20px;line-height:1.6}
+  .pm-specs{display:grid;gap:0;border-top:1px solid var(--line)}
+  .pm-specs .sp{display:flex;justify-content:space-between;gap:14px;font-family:'IBM Plex Mono';font-size:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .pm-specs .sp span{color:var(--ink-3)}
+  .pm-specs .sp b{color:var(--ink);font-weight:500;text-align:right}
+  .pm-cta{margin-top:24px}
+  @media(max-width:720px){.pm-card{grid-template-columns:1fr}.pm-img{min-height:240px;border-right:0;border-bottom:1px solid var(--line)}}
 
   .proc{border-top:1px solid var(--line)}
   .step{display:grid;grid-template-columns:96px 1fr auto;gap:28px;align-items:center;padding:30px 6px;border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding-left .4s var(--ease)}
@@ -504,6 +528,24 @@
   <div class="foot-b"><span>© 2026 CREAGYM Equipment</span><span data-i18n="foot_bottom">SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ</span></div>
 </footer>
 
+<!-- PRODUCT MODAL -->
+<div class="pmodal" id="pmodal" aria-hidden="true">
+  <div class="pm-back" data-close></div>
+  <div class="pm-card">
+    <button class="pm-x" data-close aria-label="Закрити">✕</button>
+    <div class="pm-img"></div>
+    <div class="pm-info">
+      <div class="pm-brand"></div>
+      <div class="pm-sub"></div>
+      <h3 class="pm-name"></h3>
+      <div class="pm-model"></div>
+      <p class="pm-desc"></p>
+      <div class="pm-specs"></div>
+      <a href="#cta" class="btn btn-b pm-cta" data-close>Запросити ціну ↗</a>
+    </div>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script>
 /* ---------------- i18n ---------------- */
@@ -661,10 +703,53 @@ if(!matchMedia("(prefers-reduced-motion:reduce)").matches){
   addEventListener("scroll",()=>{const y=scrollY;par.forEach(el=>{el.style.transform=`translateY(${y*+el.dataset.par}px)`});},{passive:true});
 }
 
-const filters=document.getElementById("filters"),cards=[...document.querySelectorAll("#grid .card")];
-filters.addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
-  filters.querySelector(".active")?.classList.remove("active");b.classList.add("active");
-  const f=b.dataset.f;cards.forEach(c=>c.classList.toggle("hide",!(f==="all"||c.dataset.cat===f)));});
+/* ---------------- catalog (dynamic from API) ---------------- */
+const grid=document.getElementById("grid");
+const BRANDLBL={YR:"YR Fitness",SHUA:"SHUA"};
+const PH_SVG=`<svg class="bp" viewBox="0 0 100 100"><line stroke x1="20" y1="50" x2="80" y2="50"/><rect stroke x="20" y="40" width="9" height="20"/><rect stroke x="12" y="44" width="7" height="12"/><rect stroke x="71" y="40" width="9" height="20"/><rect stroke x="81" y="44" width="7" height="12"/></svg>`;
+function imgSrc(s){ if(!s) return ""; return /^(https?:|img\/)/.test(s) ? s : "img/"+s; }
+function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+let CATALOG=[];
+async function renderCatalog(){
+  try{ CATALOG = await window.CREAGYM_API.productList(); }catch(e){ CATALOG=[]; }
+  if(!CATALOG || !CATALOG.length) CATALOG = window.CREAGYM_PRODUCTS_DEFAULT || [];
+  grid.innerHTML = CATALOG.map((p,i)=>{
+    const src=imgSrc(p.image);
+    const specs=(p.specs||[]).slice(0,3).map(s=>`<div class="sp"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join("");
+    return `<article class="card rv" data-cat="${esc(p.category||'')}" data-i="${i}">
+      <div class="ph">${src?`<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'">`:""}
+        <span class="brandtag ${p.brand==='YR'?'yr':''}">${esc(BRANDLBL[p.brand]||p.brand||'')}</span>
+        <span class="no">NO. ${esc(p.model||'')}</span><div class="floor"></div>${PH_SVG}</div>
+      <div class="body"><div class="cat">${esc(p.subtitle||'')}</div><h3>${esc(p.name||'')}</h3>
+        <div class="specs">${specs}</div></div></article>`;
+  }).join("");
+  grid.querySelectorAll(".card").forEach(c=>{ io.observe(c); c.addEventListener("click",()=>openProduct(CATALOG[+c.dataset.i])); });
+  applyFilter();
+}
+let curFilter="all";
+function applyFilter(){ grid.querySelectorAll(".card").forEach(c=>c.classList.toggle("hide",!(curFilter==="all"||c.dataset.cat===curFilter))); }
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
+  document.querySelector("#filters .active")?.classList.remove("active");b.classList.add("active");curFilter=b.dataset.f;applyFilter();});
+renderCatalog();
+
+/* product modal */
+const pmodal=document.getElementById("pmodal");
+function openProduct(p){
+  if(!p)return;
+  const src=imgSrc(p.image);
+  pmodal.querySelector(".pm-img").innerHTML=(src?`<img src="${esc(src)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:"")+PH_SVG;
+  pmodal.querySelector(".pm-brand").textContent=BRANDLBL[p.brand]||p.brand||"";
+  pmodal.querySelector(".pm-sub").textContent=p.subtitle||"";
+  pmodal.querySelector(".pm-name").textContent=p.name||"";
+  pmodal.querySelector(".pm-model").textContent=p.model?("NO. "+p.model):"";
+  pmodal.querySelector(".pm-desc").textContent=p.description||"";
+  pmodal.querySelector(".pm-specs").innerHTML=(p.specs||[]).map(s=>`<div class="sp"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join("");
+  pmodal.querySelector(".pm-cta").textContent=(lang==="ua"?"Запросити ціну ↗":"Request price ↗");
+  pmodal.classList.add("show"); document.body.style.overflow="hidden";
+}
+function closeProduct(){ pmodal.classList.remove("show"); document.body.style.overflow=""; }
+pmodal.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",closeProduct));
+addEventListener("keydown",e=>{ if(e.key==="Escape") closeProduct(); });
 
 /* ---------------- form → leads API ---------------- */
 document.getElementById("leadForm").addEventListener("submit",async e=>{
