@@ -166,6 +166,8 @@
   .uprow2 #mUrl:focus{outline:none;border-color:var(--blue)}
   .upadd{font-family:'IBM Plex Mono';font-size:11px;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line-2);border-radius:var(--r);background:transparent;color:var(--ink-2);cursor:pointer;padding:9px 14px}
   .upadd:hover{border-color:var(--blue);color:var(--blue-2)}
+  .siteslot{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px;margin-bottom:14px}
+  .sl-head{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
   .mfoot{display:flex;gap:10px;margin-top:22px}
   .mfoot .save{flex:1;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono';font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
   .mfoot .save:hover{background:var(--blue-2)}
@@ -205,6 +207,7 @@
     <div class="tabs">
       <button class="tab on" data-tab="leads">Заявки</button>
       <button class="tab" data-tab="products">Товари</button>
+      <button class="tab" data-tab="site">Сайт</button>
     </div>
 
     <!-- LEADS -->
@@ -233,6 +236,14 @@
         </div>
       </div>
       <div id="prodList"></div>
+    </div>
+
+    <!-- SITE -->
+    <div id="view-site" style="display:none">
+      <div class="phead"><h2>Фото сайту</h2>
+        <div class="right"><button class="ibtn blue" id="siteSave">Зберегти зміни</button></div>
+      </div>
+      <div id="siteSlots"></div>
     </div>
 
     <div style="height:60px"></div>
@@ -310,11 +321,11 @@
   document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
     document.querySelector(".tab.on").classList.remove("on"); t.classList.add("on");
     curTab=t.dataset.tab;
-    $("#view-leads").style.display = curTab==="leads"?"block":"none";
-    $("#view-products").style.display = curTab==="products"?"block":"none";
+    ["leads","products","site"].forEach(v=>$("#view-"+v).style.display = curTab===v?"block":"none");
     if(curTab==="products" && !PRODUCTS.length) loadProducts();
+    if(curTab==="site" && !siteLoaded) loadSite();
   }));
-  $("#refresh").addEventListener("click", ()=> curTab==="leads"?loadLeads():loadProducts());
+  $("#refresh").addEventListener("click", ()=> curTab==="leads"?loadLeads():(curTab==="products"?loadProducts():loadSite()));
 
   /* ===================== LEADS ===================== */
   async function loadLeads(){ try{ LEADS=await API.leadList(); }catch(e){ LEADS=[]; alert("Помилка Supabase: "+e.message); } renderLeads(); }
@@ -421,6 +432,48 @@
     catch(e){ alert("Помилка збереження: "+e.message); }
     $("#mSave").disabled=false; $("#mSave").textContent="Зберегти";
   });
+  /* ===================== SITE PHOTOS ===================== */
+  let siteLoaded=false, siteData={hero:"",look1:"",look2:"",look3:""};
+  const SITE_KEYS=[["hero","Hero · головне фото (справа вгорі)"],["look1","Зал · Силова зона"],["look2","Зал · Кардіо"],["look3","Зал · Функціонал"]];
+  function buildSiteSlots(){
+    $("#siteSlots").innerHTML=SITE_KEYS.map(([k,label])=>`
+      <div class="siteslot">
+        <div class="sl-head">${label}</div>
+        <div class="uprow">
+          <div class="upbox" data-prev="${k}"><span class="uphint">Немає фото</span></div>
+          <div class="upctl">
+            <input type="file" accept="image/*" hidden data-file="${k}">
+            <button type="button" class="upbtn" data-up="${k}">Завантажити з комп'ютера</button>
+            <input type="text" maxlength="300" data-url="${k}" placeholder="або посилання / ім'я файлу">
+            <div class="upstatus" data-st="${k}"></div>
+          </div>
+        </div>
+      </div>`).join("");
+    SITE_KEYS.forEach(([k])=>{
+      document.querySelector(`[data-up="${k}"]`).addEventListener("click",()=>document.querySelector(`[data-file="${k}"]`).click());
+      document.querySelector(`[data-file="${k}"]`).addEventListener("change",async e=>{
+        const f=e.target.files[0]; if(!f)return; const st=document.querySelector(`[data-st="${k}"]`); st.className="upstatus"; st.textContent="Завантаження…";
+        try{ const url=await API.imageUpload(f); siteData[k]=url; document.querySelector(`[data-url="${k}"]`).value=url; slotPreview(k); st.className="upstatus ok"; st.textContent=API.isOnline()?"Завантажено ✓":"Готово (демо) ✓"; }
+        catch(err){ st.className="upstatus err"; st.textContent="Помилка: "+err.message; }
+        e.target.value="";
+      });
+      document.querySelector(`[data-url="${k}"]`).addEventListener("input",e=>{ siteData[k]=e.target.value.trim(); slotPreview(k); });
+    });
+  }
+  function slotPreview(k){ const box=document.querySelector(`[data-prev="${k}"]`); if(!box)return; const src=imgSrc(siteData[k]);
+    box.innerHTML = src?`<img src="${esc(src)}" alt="" onerror="this.style.display='none'">`:`<span class="uphint">Немає фото</span>`; }
+  async function loadSite(){
+    if(!$("#siteSlots").children.length) buildSiteSlots();
+    try{ siteData=await API.siteGet(); }catch(e){ alert("Помилка: "+e.message); }
+    SITE_KEYS.forEach(([k])=>{ const u=document.querySelector(`[data-url="${k}"]`); if(u)u.value=siteData[k]||""; slotPreview(k); });
+    siteLoaded=true;
+  }
+  $("#siteSave").addEventListener("click",async()=>{
+    const b=$("#siteSave"); b.disabled=true; b.textContent="Збереження…";
+    try{ await API.siteSave(siteData); b.textContent="Збережено ✓"; setTimeout(()=>{b.textContent="Зберегти зміни";b.disabled=false;},1500); }
+    catch(e){ alert("Помилка: "+e.message); b.disabled=false; b.textContent="Зберегти зміни"; }
+  });
+
   addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeForm(); } });
 </script>
 </body>

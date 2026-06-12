@@ -115,6 +115,7 @@
 
   .look{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px;height:520px}
   .look .tile{position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .look .ph img,.look .tile img{object-fit:cover!important;padding:0!important}
   .look .tile:hover img{transform:scale(1.06)}
   .look .tile .cap{position:absolute;left:18px;bottom:18px;z-index:4}
   .look .tile .cap .k{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-2)}
@@ -164,8 +165,8 @@
   .pm-card{position:relative;z-index:2;width:100%;max-width:880px;max-height:88vh;overflow:auto;border:1px solid var(--line-2);border-radius:var(--r);background:linear-gradient(160deg,var(--card),var(--bg-2));display:grid;grid-template-columns:1fr 1fr}
   .pm-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border:1px solid var(--line-2);border-radius:2px;background:rgba(9,9,11,.6);color:var(--ink-2);cursor:pointer;font-size:16px}
   .pm-x:hover{border-color:var(--blue);color:var(--blue-2)}
-  .pm-img{display:flex;flex-direction:column;border-right:1px solid var(--line)}
-  .pm-main{position:relative;flex:1;min-height:300px;background:radial-gradient(120% 90% at 50% 12%,#1c1f26,#0c0d11)}
+  .pm-img{display:flex;flex-direction:column;border-right:1px solid var(--line);position:sticky;top:0;align-self:start;max-height:88vh}
+  .pm-main{position:relative;flex:1;min-height:340px;background:radial-gradient(120% 90% at 50% 12%,#1c1f26,#0c0d11)}
   .pm-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:2%;z-index:2}
   .pm-main.hasimg .bp{display:none}
   .pm-main .bp{position:absolute;inset:0;margin:auto;width:60%;height:60%;z-index:1;filter:drop-shadow(0 0 20px var(--glow))}
@@ -185,7 +186,7 @@
   .pm-specs .sp span{color:var(--ink-3)}
   .pm-specs .sp b{color:var(--ink);font-weight:500;text-align:right}
   .pm-cta{margin-top:24px}
-  @media(max-width:720px){.pm-card{grid-template-columns:1fr}.pm-img{min-height:240px;border-right:0;border-bottom:1px solid var(--line)}}
+  @media(max-width:720px){.pm-card{grid-template-columns:1fr}.pm-img{position:static;max-height:none;min-height:240px;border-right:0;border-bottom:1px solid var(--line)}}
 
   .proc{border-top:1px solid var(--line)}
   .step{display:grid;grid-template-columns:96px 1fr auto;gap:28px;align-items:center;padding:30px 6px;border-bottom:1px solid var(--line);transition:background .4s var(--ease),padding-left .4s var(--ease)}
@@ -738,6 +739,23 @@ function applyFilter(){ grid.querySelectorAll(".card").forEach(c=>c.classList.to
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
   document.querySelector("#filters .active")?.classList.remove("active");b.classList.add("active");curFilter=b.dataset.f;applyFilter();});
 renderCatalog();
+
+/* ---- site photos from admin (hero + showcase) ---- */
+function setSlot(ph,src){
+  if(!ph||!src)return; src=imgSrc(src);
+  let img=ph.querySelector("img");
+  if(!img){ img=document.createElement("img"); img.alt=""; ph.insertBefore(img,ph.firstChild); }
+  img.onerror=function(){ this.style.display="none"; ph.classList.remove("hasimg"); };
+  img.src=src; img.style.display=""; ph.classList.add("hasimg");
+}
+(async function(){
+  try{
+    const s=await window.CREAGYM_API.siteGet();
+    setSlot(document.querySelector(".hero-photo .ph"), s.hero);
+    const looks=document.querySelectorAll(".look .tile .ph");
+    setSlot(looks[0], s.look1); setSlot(looks[1], s.look2); setSlot(looks[2], s.look3);
+  }catch(e){}
+})();
 
 /* product modal */
 const pmodal=document.getElementById("pmodal");

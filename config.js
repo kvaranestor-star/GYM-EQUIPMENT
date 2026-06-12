@@ -5,8 +5,8 @@
 window.CREAGYM_CFG = {
   // Supabase: URL проекта и публичный anon/publishable ключ.
   // URL: https://jugqixsacznucxbanrpf.supabase.co
-  SUPABASE_URL: "https://jugqixsacznucxbanrpf.supabase.co",
-  SUPABASE_KEY: "sb_publishable_4HEzfI6H5MA9cLsKtferyw_slYgL8po",
+  SUPABASE_URL: "",
+  SUPABASE_KEY: "",
 
   // Пароль для входа в админ-панель (admin.html)
   ADMIN_PASS: "creagym",
@@ -162,10 +162,35 @@ window.CREAGYM_PRODUCTS_DEFAULT = [
     return await fileToDataURL(file); // демо
   }
 
+  /* ---------------- SITE SETTINGS (hero / showcase images) ---------------- */
+  const S = "creagym_site";
+  const SITE_DEFAULT = { hero:"", look1:"", look2:"", look3:"" };
+  async function siteGet() {
+    if (online()) {
+      const r = await fetch(URL() + "/rest/v1/site_settings?id=eq.1&select=data", { headers: headers() });
+      if (!r.ok) throw new Error("Supabase " + r.status);
+      const rows = await r.json();
+      return Object.assign({}, SITE_DEFAULT, (rows[0] && rows[0].data) || {});
+    }
+    return Object.assign({}, SITE_DEFAULT, lsGet(S, {}));
+  }
+  async function siteSave(data) {
+    const clean = { hero: cut(data.hero, 600), look1: cut(data.look1, 600), look2: cut(data.look2, 600), look3: cut(data.look3, 600) };
+    if (online()) {
+      const r = await fetch(URL() + "/rest/v1/site_settings?on_conflict=id", {
+        method: "POST",
+        headers: Object.assign(headers(), { Prefer: "resolution=merge-duplicates,return=minimal" }),
+        body: JSON.stringify({ id: 1, data: clean })
+      });
+      return r.ok;
+    }
+    lsSet(S, clean); return true;
+  }
+
   window.CREAGYM_API = {
     isOnline: online,
     leadCreate, leadList, leadUpdate, leadDelete,
     productList, productCreate, productUpdate, productDelete, productSeedDefaults,
-    imageUpload
+    imageUpload, siteGet, siteSave
   };
 })();
