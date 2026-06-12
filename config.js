@@ -5,8 +5,8 @@
 window.CREAGYM_CFG = {
   // Supabase: URL проекта и публичный anon/publishable ключ.
   // URL: https://jugqixsacznucxbanrpf.supabase.co
-  SUPABASE_URL: "https://jugqixsacznucxbanrpf.supabase.co",
-  SUPABASE_KEY: "sb_publishable_4HEzfI6H5MA9cLsKtferyw_slYgL8po",
+  SUPABASE_URL: "",
+  SUPABASE_KEY: "",
 
   // Пароль для входа в админ-панель (admin.html)
   ADMIN_PASS: "creagym",
@@ -134,9 +134,34 @@ window.CREAGYM_PRODUCTS_DEFAULT = [
     return n;
   }
 
+  /* ---------------- IMAGE UPLOAD ---------------- */
+  // Загружает файл в Supabase Storage (bucket: product-images) и возвращает публичный URL.
+  // В демо-режиме возвращает data-URL, чтобы фото отображалось локально.
+  const BUCKET = "product-images";
+  function fileToDataURL(file) {
+    return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(new Error("read error")); r.readAsDataURL(file); });
+  }
+  async function imageUpload(file) {
+    if (!file) throw new Error("no file");
+    if (file.size > 5 * 1024 * 1024) throw new Error("Файл більший за 5 МБ");
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const path = Date.now() + "-" + Math.random().toString(36).slice(2) + "." + ext;
+    if (online()) {
+      const r = await fetch(URL() + "/storage/v1/object/" + BUCKET + "/" + path, {
+        method: "POST",
+        headers: { apikey: cfg.SUPABASE_KEY, Authorization: "Bearer " + cfg.SUPABASE_KEY, "Content-Type": file.type || "application/octet-stream", "x-upsert": "true" },
+        body: file
+      });
+      if (!r.ok) { let m = ""; try { m = (await r.json()).message || ""; } catch (e) {} throw new Error("Storage " + r.status + (m ? " · " + m : "")); }
+      return URL() + "/storage/v1/object/public/" + BUCKET + "/" + path;
+    }
+    return await fileToDataURL(file); // демо
+  }
+
   window.CREAGYM_API = {
     isOnline: online,
     leadCreate, leadList, leadUpdate, leadDelete,
-    productList, productCreate, productUpdate, productDelete, productSeedDefaults
+    productList, productCreate, productUpdate, productDelete, productSeedDefaults,
+    imageUpload
   };
 })();

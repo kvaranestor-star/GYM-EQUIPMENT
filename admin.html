@@ -143,6 +143,17 @@
   .srow .srm:hover{border-color:var(--red);color:var(--red)}
   .addrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--blue-2);background:transparent;border:1px dashed var(--line-2);border-radius:var(--r);padding:9px;cursor:pointer;transition:all .2s}
   .addrow:hover{border-color:var(--blue)}
+  .uprow{display:flex;gap:12px;align-items:stretch}
+  .upbox{width:100px;height:74px;flex:none;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:radial-gradient(120% 90% at 50% 12%,#1c1f26,#0c0d11);display:flex;align-items:center;justify-content:center;position:relative}
+  .upbox img{width:100%;height:100%;object-fit:cover}
+  .upbox .uphint{font-family:'IBM Plex Mono';font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .upctl{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+  .upbtn{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:10px;border:1px dashed var(--line-2);border-radius:var(--r);background:transparent;color:var(--blue-2);cursor:pointer;transition:all .2s}
+  .upbtn:hover{border-color:var(--blue)}
+  .upctl input{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;color:var(--ink);font-size:13px}
+  .upctl input:focus{outline:none;border-color:var(--blue)}
+  .upstatus{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.03em;color:var(--ink-3);min-height:13px}
+  .upstatus.err{color:var(--red)}.upstatus.ok{color:var(--green)}
   .mfoot{display:flex;gap:10px;margin-top:22px}
   .mfoot .save{flex:1;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono';font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
   .mfoot .save:hover{background:var(--blue-2)}
@@ -232,8 +243,17 @@
         <div class="fld"><label>Модель / Артикул</label><input id="mModel" type="text" maxlength="60" placeholder="SH-T9100T"></div>
         <div class="fld"><label>Підпис (категорія)</label><input id="mSub" type="text" maxlength="80" placeholder="Кардіо · Treadmill"></div>
       </div>
-      <div class="fld"><label>Фото</label><input id="mImage" type="text" maxlength="300" placeholder="sh-t9100t.jpg або https://...">
-        <span class="hint">Ім'я файлу — поклади фото в папку /img з такою назвою. Або встав повне посилання.</span></div>
+      <div class="fld"><label>Фото</label>
+        <div class="uprow">
+          <div class="upbox" id="upPreview"><span class="uphint">Немає фото</span></div>
+          <div class="upctl">
+            <input type="file" id="mFile" accept="image/*" hidden>
+            <button type="button" class="upbtn" id="upBtn">Завантажити з комп'ютера</button>
+            <div class="upstatus" id="upStatus"></div>
+            <input id="mImage" type="text" maxlength="300" placeholder="або встав посилання / ім'я файлу">
+          </div>
+        </div>
+        <span class="hint">JPG / PNG / WebP до 5 МБ. Або встав повне посилання чи ім'я файлу з /img.</span></div>
       <div class="fld"><label>Опис</label><textarea id="mDesc" maxlength="1200" placeholder="Короткий опис товару…"></textarea></div>
       <div>
         <div class="specs-h">Технічні характеристики</div>
@@ -343,12 +363,30 @@
     d.querySelector(".srm").addEventListener("click",()=>d.remove()); return d; }
   $("#addRow").addEventListener("click",()=>$("#specRows").appendChild(specRow("","")));
   $("#addBtn").addEventListener("click",()=>openForm(null));
+
+  /* ---- photo upload / preview ---- */
+  function updatePreview(){
+    const v=$("#mImage").value.trim(), box=$("#upPreview"), src=imgSrc(v);
+    box.innerHTML = src ? `<img src="${esc(src)}" alt="" onerror="this.parentNode.innerHTML='<span class=&quot;uphint&quot;>файл не знайдено</span>'">` : `<span class="uphint">Немає фото</span>`;
+  }
+  $("#mImage").addEventListener("input", updatePreview);
+  $("#upBtn").addEventListener("click", ()=>$("#mFile").click());
+  $("#mFile").addEventListener("change", async ()=>{
+    const f=$("#mFile").files[0]; if(!f) return;
+    const st=$("#upStatus"); st.className="upstatus"; st.textContent="Завантаження…";
+    try{
+      const url=await API.imageUpload(f);
+      $("#mImage").value=url; updatePreview();
+      st.className="upstatus ok"; st.textContent= API.isOnline()? "Завантажено ✓" : "Готово (демо) ✓";
+    }catch(e){ st.className="upstatus err"; st.textContent="Помилка: "+e.message; }
+    $("#mFile").value="";
+  });
   function openForm(p){
     editId = p? p.id : null;
     $("#mTitle").textContent = p? "Редагувати товар" : "Новий товар";
     $("#mBrand").value=p?.brand||"SHUA"; $("#mCat").value=p?.category||"strength";
     $("#mName").value=p?.name||""; $("#mModel").value=p?.model||""; $("#mSub").value=p?.subtitle||"";
-    $("#mImage").value=p?.image||""; $("#mDesc").value=p?.description||"";
+    $("#mImage").value=p?.image||""; $("#mDesc").value=p?.description||""; updatePreview();
     const sr=$("#specRows"); sr.innerHTML="";
     const specs=(p&&Array.isArray(p.specs)&&p.specs.length)?p.specs:[{k:"",v:""},{k:"",v:""}];
     specs.forEach(s=>sr.appendChild(specRow(s.k,s.v)));
