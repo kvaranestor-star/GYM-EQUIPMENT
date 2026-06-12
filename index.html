@@ -53,7 +53,8 @@
   .btn:hover .ar{transform:translate(3px,-3px)}
 
   .ph{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 50% 12%,#1c1f26 0%,#101116 55%,#0c0d11 100%)}
-  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;transition:transform .9s var(--ease),opacity .4s}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;z-index:2;transition:transform .9s var(--ease),opacity .4s}
+  .ph.hasimg .bp{display:none}
   .ph .bp{position:absolute;inset:0;margin:auto;width:62%;height:62%;z-index:1;filter:drop-shadow(0 0 18px var(--glow))}
   .ph .bp [stroke]{stroke:var(--blue-2);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:.85}
   .ph .bp .dim[stroke]{stroke:var(--ink-3);opacity:.5}
@@ -165,7 +166,8 @@
   .pm-x:hover{border-color:var(--blue);color:var(--blue-2)}
   .pm-img{display:flex;flex-direction:column;border-right:1px solid var(--line)}
   .pm-main{position:relative;flex:1;min-height:300px;background:radial-gradient(120% 90% at 50% 12%,#1c1f26,#0c0d11)}
-  .pm-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+  .pm-main img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6%;z-index:2}
+  .pm-main.hasimg .bp{display:none}
   .pm-main .bp{position:absolute;inset:0;margin:auto;width:60%;height:60%;z-index:1;filter:drop-shadow(0 0 20px var(--glow))}
   .pm-main .bp [stroke]{stroke:var(--blue-2);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:.85}
   .pm-thumbs{display:flex;gap:6px;padding:8px;flex-wrap:wrap;border-top:1px solid var(--line);background:var(--bg-2)}
@@ -722,7 +724,7 @@ async function renderCatalog(){
     const src=imgSrc(p.image);
     const specs=(p.specs||[]).slice(0,3).map(s=>`<div class="sp"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join("");
     return `<article class="card rv" data-cat="${esc(p.category||'')}" data-i="${i}">
-      <div class="ph">${src?`<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'">`:""}
+      <div class="ph${src?' hasimg':''}">${src?`<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.closest('.ph').classList.remove('hasimg')">`:""}
         <span class="brandtag ${p.brand==='YR'?'yr':''}">${esc(BRANDLBL[p.brand]||p.brand||'')}</span>
         <span class="no">NO. ${esc(p.model||'')}</span><div class="floor"></div>${PH_SVG}</div>
       <div class="body"><div class="cat">${esc(p.subtitle||'')}</div><h3>${esc(p.name||'')}</h3>
@@ -744,12 +746,12 @@ function openProduct(p){
   const imgs=(p.images&&p.images.length)?p.images:(p.image?[p.image]:[]);
   const main=imgs[0]?imgSrc(imgs[0]):"";
   pmodal.querySelector(".pm-img").innerHTML=
-    `<div class="pm-main">${main?`<img id="pmMain" src="${esc(main)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:""}${PH_SVG}</div>`
+    `<div class="pm-main${main?' hasimg':''}">${main?`<img id="pmMain" src="${esc(main)}" alt="${esc(p.name)}" onerror="this.style.display='none';this.closest('.pm-main').classList.remove('hasimg')">`:""}${PH_SVG}</div>`
     + (imgs.length>1?`<div class="pm-thumbs">${imgs.map((s,i)=>`<button data-pi="${i}" class="${i===0?'on':''}"><img src="${esc(imgSrc(s))}" alt=""></button>`).join("")}</div>`:"");
   const mainEl=pmodal.querySelector("#pmMain");
   pmodal.querySelectorAll(".pm-thumbs button").forEach(b=>b.addEventListener("click",()=>{
     pmodal.querySelector(".pm-thumbs .on")?.classList.remove("on"); b.classList.add("on");
-    if(mainEl){ mainEl.style.display=""; mainEl.src=imgSrc(imgs[+b.dataset.pi]); }
+    if(mainEl){ mainEl.style.display=""; mainEl.src=imgSrc(imgs[+b.dataset.pi]); mainEl.closest(".pm-main").classList.add("hasimg"); }
   }));
   pmodal.querySelector(".pm-brand").textContent=BRANDLBL[p.brand]||p.brand||"";
   pmodal.querySelector(".pm-sub").textContent=p.subtitle||"";
