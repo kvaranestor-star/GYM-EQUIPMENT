@@ -71,8 +71,13 @@
   tbody tr:hover{background:var(--bg-2)}
   td .nm{font-weight:600}
   td .ph a{color:var(--blue-2);font-family:'IBM Plex Mono';font-size:13px}
+  table{table-layout:fixed}
+  tbody td{overflow-wrap:anywhere;word-break:break-word}
   td .meta{font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-3);letter-spacing:.04em}
-  td .cmt{color:var(--ink-2);font-size:13px;max-width:260px}
+  td .nm,td .ph a{overflow-wrap:anywhere;word-break:break-word}
+  td .cmt{color:var(--ink-2);font-size:13px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .lcard dd{overflow-wrap:anywhere;word-break:break-word}
+  .lcard .cmt{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .badge{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:2px;display:inline-block}
   .badge.b1{background:rgba(61,116,244,.16);color:var(--blue-2)}
   .badge.b2{background:rgba(230,162,60,.16);color:var(--amber)}
@@ -160,6 +165,13 @@
 <script>
   const $ = s => document.querySelector(s);
   const CFG = window.CREAGYM_CFG, API = window.CREAGYM_API;
+  if (!CFG || !API) {
+    document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:Inter,system-ui,sans-serif;color:#F3F4F6">'
+      + '<div style="max-width:460px"><div style="font-weight:900;font-size:22px">CREAGYM<span style="color:#3D74F4">.</span></div>'
+      + '<p style="color:#A4A6AC;margin-top:14px;line-height:1.6">Не завантажився <b style="color:#fff">config.js</b>.<br>Перевір, що файл лежить поруч з <b>admin.html</b> у корені репозиторію і не містить помилок.</p>'
+      + '<p style="font-family:monospace;font-size:12px;color:#65676D;margin-top:14px">Відкрий /config.js у браузері — він має завантажуватись без помилок.</p></div></div>';
+    throw new Error("config.js not loaded");
+  }
   const ST = { new:["Нова","b1"], in_progress:["В роботі","b2"], closed:["Закрита","b3"] };
   let DATA = [];
 
@@ -232,7 +244,7 @@
       return;
     }
     // table
-    let t = `<table><thead><tr>
+    let t = `<table><colgroup><col style="width:88px"><col style="width:170px"><col style="width:120px"><col style="width:70px"><col style="width:110px"><col><col style="width:120px"><col style="width:44px"></colgroup><thead><tr>
       <th>Дата</th><th>Клієнт</th><th>Цікавить</th><th>Площа</th><th>Бюджет</th><th>Коментар</th><th>Статус</th><th></th>
     </tr></thead><tbody>`;
     rows.forEach(l=>{
@@ -260,7 +272,7 @@
           <dt>Цікавить</dt><dd>${esc(l.interest)||"—"}</dd>
           <dt>Площа</dt><dd>${esc(l.area)||"—"} м²</dd>
           <dt>Бюджет</dt><dd>${esc(l.budget)||"—"}</dd>
-          <dt>Коментар</dt><dd>${esc(l.comment)||"—"}</dd>
+          <dt>Коментар</dt><dd class="cmt">${esc(l.comment)||"—"}</dd>
           <dt>Дата</dt><dd class="meta">${fmtDate(l.created_at)}</dd>
         </dl>
         <div class="foot">${statusSelect(l)}<button class="del" data-id="${esc(l.id)}" title="Видалити">✕ Видалити</button></div>

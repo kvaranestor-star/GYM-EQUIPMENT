@@ -470,16 +470,17 @@
       </div>
       <form id="leadForm" novalidate>
         <div id="ff" style="display:grid;gap:16px">
-          <div class="field"><label for="name" data-i18n="fl_name">Ім'я</label><input id="name" type="text" data-i18n-ph="ph_name" placeholder="Як до вас звертатися" required></div>
+          <input type="text" id="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <div class="field"><label for="name" data-i18n="fl_name">Ім'я</label><input id="name" type="text" maxlength="80" data-i18n-ph="ph_name" placeholder="Як до вас звертатися" required></div>
           <div class="frow">
-            <div class="field"><label for="phone" data-i18n="fl_phone">Телефон</label><input id="phone" type="tel" placeholder="+380…" required></div>
+            <div class="field"><label for="phone" data-i18n="fl_phone">Телефон</label><input id="phone" type="tel" maxlength="30" placeholder="+380…" required></div>
             <div class="field"><label for="brand" data-i18n="fl_brand">Цікавить</label><select id="brand" data-i18n-opts="opts_brand"><option>SHUA + YR (підбір)</option><option>SHUA · кардіо</option><option>YR · силові</option><option>Зал під ключ</option></select></div>
           </div>
           <div class="frow">
-            <div class="field"><label for="area" data-i18n="fl_area">Площа, м²</label><input id="area" type="text" data-i18n-ph="ph_area" placeholder="напр. 250"></div>
+            <div class="field"><label for="area" data-i18n="fl_area">Площа, м²</label><input id="area" type="text" maxlength="10" data-i18n-ph="ph_area" placeholder="напр. 250"></div>
             <div class="field"><label for="budget" data-i18n="fl_budget">Бюджет</label><select id="budget" data-i18n-opts="opts_budget"><option>Не визначений</option><option>до $20 000</option><option>$20 000–50 000</option><option>$50 000–100 000</option><option>$100 000+</option></select></div>
           </div>
-          <div class="field"><label for="msg" data-i18n="fl_msg">Коментар</label><textarea id="msg" data-i18n-ph="ph_msg" placeholder="Терміни, побажання, поточне обладнання…"></textarea></div>
+          <div class="field"><label for="msg" data-i18n="fl_msg">Коментар</label><textarea id="msg" maxlength="600" data-i18n-ph="ph_msg" placeholder="Терміни, побажання, поточне обладнання…"></textarea></div>
           <button type="submit" class="btn btn-b"><span data-i18n="btn_send">Відправити заявку</span> <span class="ar">↗</span></button>
           <div class="ferr" id="ferr" data-i18n="err">Не вдалося відправити. Спробуйте ще раз або зателефонуйте.</div>
           <div class="fnote" data-i18n="fnote">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</div>
@@ -671,14 +672,31 @@ document.getElementById("leadForm").addEventListener("submit",async e=>{
   const g=id=>document.getElementById(id);
   const n=g("name"),p=g("phone"),err=g("ferr");
   err.classList.remove("show");
+
+  // honeypot: боты заполняют скрытое поле — тихо игнорируем
+  if(g("company").value){ g("ff").classList.add("hidden"); g("fok").classList.add("show"); return; }
+
   if(!n.value.trim()){n.focus();n.style.borderColor="#3D74F4";return;}
   if(!p.value.trim()){p.focus();p.style.borderColor="#3D74F4";return;}
-  const lead={name:n.value.trim(),phone:p.value.trim(),interest:g("brand").value,area:g("area").value.trim(),budget:g("budget").value,comment:g("msg").value.trim()};
+  // телефон: только цифры/символы, минимум 7 цифр
+  if((p.value.match(/\d/g)||[]).length < 7){ p.focus(); p.style.borderColor="#E5727A"; return; }
+
+  // антифлуд: кулдаун 30с + не более 5 заявок в час с одного браузера
+  const now=Date.now();
+  let hist=[]; try{ hist=JSON.parse(localStorage.getItem("creagym_sent")||"[]"); }catch(_){}
+  hist=hist.filter(t=>now-t<3600000);
+  if(hist.length && now-hist[hist.length-1]<30000){ err.textContent=lang==="ua"?"Зачекайте трохи перед повторною відправкою.":"Please wait a moment before sending again."; err.classList.add("show"); return; }
+  if(hist.length>=5){ err.textContent=lang==="ua"?"Забагато заявок. Спробуйте пізніше або зателефонуйте.":"Too many requests. Try later or call us."; err.classList.add("show"); return; }
+
+  const cut=(s,m)=>String(s||"").trim().slice(0,m);
+  const lead={name:cut(n.value,80),phone:cut(p.value,30),interest:cut(g("brand").value,40),area:cut(g("area").value,10),budget:cut(g("budget").value,30),comment:cut(g("msg").value,600)};
   try{
     const ok = await window.CREAGYM_API.leadCreate(lead);
-    if(ok){ g("ff").classList.add("hidden"); g("fok").classList.add("show"); }
-    else { err.classList.add("show"); }
-  }catch(ex){ err.classList.add("show"); }
+    if(ok){
+      hist.push(now); try{localStorage.setItem("creagym_sent",JSON.stringify(hist));}catch(_){}
+      g("ff").classList.add("hidden"); g("fok").classList.add("show");
+    } else { err.textContent=I18N[lang].err; err.classList.add("show"); }
+  }catch(ex){ err.textContent=I18N[lang].err; err.classList.add("show"); }
 });
 </script>
 </body>

@@ -5,8 +5,8 @@
 window.CREAGYM_CFG = {
   // Supabase: вставь URL проекта и публичный anon-ключ.
   // Пример URL: https://rkknbltiylsvmycbbyde.supabase.co
-  SUPABASE_URL: "https://jugqixsacznucxbanrpf.supabase.co",
-  SUPABASE_KEY: "sb_publishable_4HEzfI6H5MA9cLsKtferyw_slYgL8po",
+  SUPABASE_URL: "",
+  SUPABASE_KEY: "",
 
   // Пароль для входа в админ-панель (admin.html)
   ADMIN_PASS: "creagym",
@@ -32,7 +32,12 @@ window.CREAGYM_CFG = {
   const lsSet = (a) => { try { localStorage.setItem(LS, JSON.stringify(a)); } catch (e) {} };
 
   async function leadCreate(lead) {
-    const rec = Object.assign({}, lead, { status: "new", created_at: new Date().toISOString() });
+    const cut = (s, m) => String(s == null ? "" : s).slice(0, m);
+    const clean = {
+      name: cut(lead.name, 80), phone: cut(lead.phone, 30), interest: cut(lead.interest, 40),
+      area: cut(lead.area, 10), budget: cut(lead.budget, 30), comment: cut(lead.comment, 600)
+    };
+    const rec = Object.assign({}, clean, { status: "new", created_at: new Date().toISOString() });
     if (online()) {
       const r = await fetch(cfg.SUPABASE_URL + "/rest/v1/leads", {
         method: "POST",
