@@ -5,8 +5,8 @@
 window.CREAGYM_CFG = {
   // Supabase: URL проекта и публичный anon/publishable ключ.
   // URL: https://jugqixsacznucxbanrpf.supabase.co
-  SUPABASE_URL: "https://jugqixsacznucxbanrpf.supabase.co",
-  SUPABASE_KEY: "sb_publishable_4HEzfI6H5MA9cLsKtferyw_slYgL8po",
+  SUPABASE_URL: "",
+  SUPABASE_KEY: "",
 
   // Пароль для входа в админ-панель (admin.html)
   ADMIN_PASS: "creagym",
@@ -91,13 +91,17 @@ window.CREAGYM_PRODUCTS_DEFAULT = [
   /* ---------------- PRODUCTS ---------------- */
   const P = "creagym_products";
   function normProduct(p) {
+    let images = Array.isArray(p.images) ? p.images : [];
+    if (!images.length && p.image) images = [p.image];
+    images = images.map(s => cut(s, 600)).filter(Boolean).slice(0, 12);
     return {
       brand: cut(p.brand, 20) || "SHUA",
       category: cut(p.category, 20) || "strength",
       name: cut(p.name, 120),
       model: cut(p.model, 60),
       subtitle: cut(p.subtitle, 80),
-      image: cut(p.image, 300),
+      image: images[0] || "",            // обложка (совместимость)
+      images: images,                    // все фото
       description: cut(p.description, 1200),
       specs: (Array.isArray(p.specs) ? p.specs : []).slice(0, 30)
         .map(s => ({ k: cut(s.k, 60), v: cut(s.v, 120) }))
