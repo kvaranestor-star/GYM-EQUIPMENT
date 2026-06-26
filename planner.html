@@ -95,7 +95,8 @@
 </head>
 <body>
 <div class="topbar">
-  <span class="brand">CREAGYM</span>
+  <button id="btnHome" title="На головну">← На сайт</button>
+  
   <h1 data-i18n="h1">Планувальник залу</h1>
   <div class="tb-tools">
     
@@ -106,6 +107,7 @@
     <button id="btnDel" class="danger" data-i18n="btn_del">Видалити</button>
     <button id="btnFit" data-i18n="btn_fit">В розмір</button>
     <button id="mBom" class="mobtog" style="display:none" data-i18n="m_bom">Склад</button>
+    <button id="btnHelp" title="Інструкція" style="font-weight:800">?</button>
   </div>
 </div>
 <div class="layout">
@@ -143,16 +145,13 @@
     <div class="total"><span class="l">Итого оборудование</span><span class="v" id="grandtotal">$0</span></div>
     <div class="io">
       <button id="btnCsv" class="acc">📋 Список (Excel)</button>
-      <button id="btnPng" class="acc" data-i18n="btn_png">🖼️ План (PNG)</button>
+      
     </div>
     <div class="io" style="border-top:none;padding-top:0">
       <button id="btnQuote" style="background:#BE1E2D;color:#fff;border-color:#BE1E2D;font-weight:700;width:100%" data-i18n="btn_quote">Надіслати на прорахунок →</button>
     </div>
-    <div class="io" style="border-top:none;padding-top:0">
-      <button id="btnExport" data-i18n="btn_export">Зберегти проєкт</button>
-      <button id="btnImport" data-i18n="btn_import">Завантажити проєкт</button>
-    </div>
-    <input type="file" id="fileIn" accept="application/json" style="display:none">
+
+    
   </div>
 </div>
 <div id="preview"><img alt=""><div class="pcap"></div></div>
@@ -166,14 +165,14 @@ const PT={
   m_palette:'Каталог', m_bom:'Склад',
   scale:'1 клітинка = 1 м',
   walls_h:'Стіни',
-  walls_help:'Клік «Стіни» → клікай по кутах приміщення, лінія тягнеться по сітці. <b>Готово</b> / Enter — завершити контур, <b>Esc</b> — скасувати, <b>Backspace</b> — прибрати останню точку. Клік по стіні (без режиму малювання) виділяє її, <b>Del</b> — видалити.',
+  walls_help:'<b>Стіни:</b> натисни «✏️ Стіни» та клікай по кутах приміщення. Клік у <b>першу точку</b> — замкнути кімнату (інтер’єр підсвітиться). <b>Готово</b>/Enter — завершити, <b>Esc</b> — скасувати, <b>Backspace</b> — прибрати точку.<br><br><b>Тренажери:</b> обери в каталозі → перетягуй мишею. Ручка зверху — поворот 15°, <b>R</b> або «⟳ 90°» — на 90°.<br><br><b>Виділити кілька:</b> затисни ліву кнопку на порожньому місці та обведи тренажери рамкою — рухай чи видаляй групу разом.<br><br><b>Полотно:</b> рухати — <b>права кнопка</b> миші (або два пальці), колесо — масштаб.<br><b>Del</b> — видалити виділене (тренажер або стіну).',
   step_label:'крок сітки', clear_walls:'Стерти стіни', clear_items:'Прибрати тренажери',
   st_walls_l:'Стіни', st_used_l:'Тренажери', st_cnt_l:'Одиниць',
   bom_h:'Склад залу', btn_png:'🖼️ План (PNG)',
   btn_quote:'Надіслати на прорахунок →', btn_export:'Зберегти проєкт', btn_import:'Завантажити проєкт',
   nothing:'Нічого не знайдено', bom_empty:'Поки порожньо.<br>Додай тренажери з каталогу.',
   hint_default:'Натисни «Стіни» та обведи приміщення по сітці. Потім став тренажери з каталогу.',
-  hint_wall:'Клікай по кутах приміщення. Готово/Enter — завершити, Esc — скасувати, Backspace — назад.',
+  hint_wall:'Клікай по кутах приміщення. Клік у першу точку — замкнути кімнату. Готово/Enter — завершити, Esc — скасувати, Backspace — назад.',
   hint_select:'Тягни тренажери мишею · ручка зверху = поворот (15°) · клік по стіні + Del — видалити стіну.',
   need_items:'Спочатку додай тренажери в зал.', csv_empty:'Список порожній — спочатку постав тренажери.',
   m:'м', m2:'м²',
@@ -224,7 +223,7 @@ const CATS=['Все','Кардио','Грузоблочные','Нагружае
 const NS='http://www.w3.org/2000/svg';
 
 let MPP=40, zoom=1, panX=120, panY=110;
-let items=[], walls=[], sel=null, selWall=-1;
+let items=[], walls=[], sel=null, selWall=-1, selMulti=[];
 let STEP=0.25, uid=1, activeCat='Все', activeLine='Все', query='';
 let mode='select';           // 'select' | 'wall'
 let curWall=null, mouseM=null;
@@ -303,12 +302,17 @@ function ptsStr(poly){return poly.map(p=>`${p.x*MPP},${p.y*MPP}`).join(' ');}
 
 function renderWalls(){wallsG.innerHTML='';
   walls.forEach((poly,idx)=>{
+    const closed=poly.length>=4 && poly[0].x===poly[poly.length-1].x && poly[0].y===poly[poly.length-1].y;
+    if(closed){const pg=document.createElementNS(NS,'polygon');
+      pg.setAttribute('points',poly.slice(0,-1).map(p=>`${p.x*MPP},${p.y*MPP}`).join(' '));
+      pg.setAttribute('fill','rgba(0,0,0,0.06)');pg.setAttribute('stroke','none');
+      pg.style.pointerEvents='none';wallsG.appendChild(pg);}
     const pl=document.createElementNS(NS,'polyline');
     pl.setAttribute('points',ptsStr(poly));pl.setAttribute('fill','none');
     pl.setAttribute('stroke',idx===selWall?'#BE1E2D':'#15171a');
     pl.setAttribute('stroke-width',idx===selWall?7:5);
     pl.setAttribute('stroke-linejoin','round');pl.setAttribute('stroke-linecap','round');
-    if(mode==='select'){pl.style.cursor='pointer';pl.addEventListener('pointerdown',ev=>{ev.stopPropagation();selWall=idx;sel=null;renderWalls();renderItems();renderBom();});}
+    if(mode==='select'){pl.style.cursor='pointer';pl.addEventListener('pointerdown',ev=>{ev.stopPropagation();selWall=idx;sel=null;selMulti=[];renderWalls();renderItems();renderBom();});}
     else pl.style.pointerEvents='none';
     wallsG.appendChild(pl);
     // segment length labels
@@ -338,7 +342,7 @@ function renderItems(){itemsG.innerHTML='';
     const bgr=document.createElementNS(NS,'rect');bgr.setAttribute('x',-w/2);bgr.setAttribute('y',-h/2);bgr.setAttribute('width',w);bgr.setAttribute('height',h);bgr.setAttribute('rx',2);bgr.setAttribute('fill','#fff');g.appendChild(bgr);
     if(it.img){const im=document.createElementNS(NS,'image');im.setAttributeNS('http://www.w3.org/1999/xlink','href',it.img);im.setAttribute('href',it.img);
       im.setAttribute('x',-w/2+1);im.setAttribute('y',-h/2+1);im.setAttribute('width',w-2);im.setAttribute('height',h-2);im.setAttribute('preserveAspectRatio','xMidYMid meet');im.style.pointerEvents='none';g.appendChild(im);}
-    const br=document.createElementNS(NS,'rect');br.setAttribute('x',-w/2);br.setAttribute('y',-h/2);br.setAttribute('width',w);br.setAttribute('height',h);br.setAttribute('rx',2);br.setAttribute('fill','none');br.setAttribute('stroke',it===sel?'#111':col);br.setAttribute('stroke-width',it===sel?3:2);g.appendChild(br);
+    const br=document.createElementNS(NS,'rect');br.setAttribute('x',-w/2);br.setAttribute('y',-h/2);br.setAttribute('width',w);br.setAttribute('height',h);br.setAttribute('rx',2);br.setAttribute('fill','none');const _seld=(it===sel||selMulti.indexOf(it)>-1);br.setAttribute('stroke',_seld?'#BE1E2D':col);br.setAttribute('stroke-width',_seld?3:2);g.appendChild(br);
     const fs=Math.max(8,Math.min(12,w/Math.max(it.model.length,4)*1.7));
     const t=document.createElementNS(NS,'text');t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');
     t.setAttribute('y',h/2-fs*0.85);t.setAttribute('fill','#111');t.setAttribute('font-size',fs);t.setAttribute('font-weight',800);
@@ -346,7 +350,7 @@ function renderItems(){itemsG.innerHTML='';
     t.setAttribute('transform',`rotate(${-it.rot})`);t.style.pointerEvents='none';t.textContent=it.model;g.appendChild(t);
     if(mode==='select'){g.style.cursor='move';g.addEventListener('pointerdown',ev=>startDrag(ev,it));}
     else g.style.pointerEvents='none';
-    if(it===sel&&mode==='select'){const K=18;mkline(g,0,-h/2,0,-h/2-K,'#BE1E2D',2.5);
+    if(it===sel&&mode==='select'&&selMulti.length<=1){const K=18;mkline(g,0,-h/2,0,-h/2-K,'#BE1E2D',2.5);
       const kn=document.createElementNS(NS,'circle');kn.setAttribute('cx',0);kn.setAttribute('cy',-h/2-K);kn.setAttribute('r',7);
       kn.setAttribute('fill','#BE1E2D');kn.setAttribute('stroke','#111');kn.setAttribute('stroke-width',1.5);kn.style.cursor='grab';
       kn.addEventListener('pointerdown',ev=>startRotate(ev,it));g.appendChild(kn);}
@@ -366,33 +370,46 @@ document.getElementById('btnWall').onclick=()=>setMode(mode==='wall'?'select':'w
 document.getElementById('btnDoneWall').onclick=()=>{finishWall();};
 
 // ---- interactions ----
-let drag=null,panning=null,rotating=null;
-function startDrag(ev,it){ev.stopPropagation();sel=it;selWall=-1;renderItems();renderWalls();renderBom();
-  const m=screenToM(ev.clientX,ev.clientY);drag={it,ox:m.x-it.cx,oy:m.y-it.cy};stage.setPointerCapture(ev.pointerId);}
+let drag=null,panning=null,rotating=null,marquee=null,marqEl=null;
+function updateMarqRect(){if(!marqEl||!marquee)return;const x=Math.min(marquee.sx,marquee.cx),y=Math.min(marquee.sy,marquee.cy),w=Math.abs(marquee.cx-marquee.sx),h=Math.abs(marquee.cy-marquee.sy);marqEl.setAttribute('x',x);marqEl.setAttribute('y',y);marqEl.setAttribute('width',w);marqEl.setAttribute('height',h);}
+function finalizeMarquee(){const _r=stage.getBoundingClientRect();const x1=Math.min(marquee.sx,marquee.cx),y1=Math.min(marquee.sy,marquee.cy),x2=Math.max(marquee.sx,marquee.cx),y2=Math.max(marquee.sy,marquee.cy);
+  selMulti=items.filter(it=>{const p=mToScreen(it.cx,it.cy);const px=p.x-_r.left,py=p.y-_r.top;return px>=x1&&px<=x2&&py>=y1&&py<=y2;});
+  sel=selMulti.length?selMulti[0]:null;if(marqEl){marqEl.remove();marqEl=null;}marquee=null;renderItems();renderBom();}
+function startDrag(ev,it){ev.stopPropagation();selWall=-1;const m=screenToM(ev.clientX,ev.clientY);
+  if(selMulti.length>1&&selMulti.indexOf(it)>-1){sel=it;drag={group:true,items:selMulti.map(o=>({it:o,ox:m.x-o.cx,oy:m.y-o.cy}))};}
+  else{sel=it;selMulti=[it];drag={it,ox:m.x-it.cx,oy:m.y-it.cy};}
+  renderItems();renderWalls();renderBom();stage.setPointerCapture(ev.pointerId);}
 function startRotate(ev,it){ev.stopPropagation();sel=it;rotating={it};stage.setPointerCapture(ev.pointerId);}
 stage.addEventListener('pointerdown',ev=>{
   if(mode==='wall'){const m=snapP(screenToM(ev.clientX,ev.clientY));
     if(!curWall)curWall=[];
+    if(curWall.length>=3 && curWall[0].x===m.x && curWall[0].y===m.y){
+      curWall.push({x:curWall[0].x,y:curWall[0].y}); finishWall(); setMode('select'); return;}
     const last=curWall[curWall.length-1];
     if(!last||last.x!==m.x||last.y!==m.y)curWall.push(m);
     renderWalls();return;}
   if(ev.target.closest('g[data-id]')||ev.target.closest('polyline'))return;
-  sel=null;selWall=-1;renderItems();renderWalls();renderBom();
-  panning={x:ev.clientX-panX,y:ev.clientY-panY};stage.setPointerCapture(ev.pointerId);
+  sel=null;selMulti=[];selWall=-1;renderItems();renderWalls();renderBom();
+  const _isMouse=ev.pointerType!=='touch';
+  if(!_isMouse||ev.button===1||ev.button===2){panning={x:ev.clientX-panX,y:ev.clientY-panY};stage.setPointerCapture(ev.pointerId);return;}
+  const _r=stage.getBoundingClientRect();
+  marquee={sx:ev.clientX-_r.left,sy:ev.clientY-_r.top,cx:ev.clientX-_r.left,cy:ev.clientY-_r.top};
+  marqEl=document.createElementNS(NS,'rect');marqEl.setAttribute('fill','rgba(190,30,45,0.10)');marqEl.setAttribute('stroke','#BE1E2D');marqEl.setAttribute('stroke-width','1');marqEl.setAttribute('stroke-dasharray','4 3');marqEl.style.pointerEvents='none';stage.appendChild(marqEl);updateMarqRect();stage.setPointerCapture(ev.pointerId);
 });
 stage.addEventListener('pointermove',ev=>{
   if(mode==='wall'){mouseM=screenToM(ev.clientX,ev.clientY);if(curWall&&curWall.length)renderWalls();return;}
+  if(marquee){const _r=stage.getBoundingClientRect();marquee.cx=ev.clientX-_r.left;marquee.cy=ev.clientY-_r.top;updateMarqRect();return;}
   if(rotating){const c=mToScreen(rotating.it.cx,rotating.it.cy);
     let a=Math.atan2(ev.clientY-c.y,ev.clientX-c.x)*180/Math.PI+90;a=Math.round(a/15)*15;
     rotating.it.rot=((a%360)+360)%360;renderItems();
   }else if(drag){const m=screenToM(ev.clientX,ev.clientY);
-    drag.it.cx=snapv(m.x-drag.ox);drag.it.cy=snapv(m.y-drag.oy);
-    const g=itemsG.querySelector(`g[data-id="${drag.it.id}"]`);
-    if(g)g.setAttribute('transform',`translate(${drag.it.cx*MPP} ${drag.it.cy*MPP}) rotate(${drag.it.rot})`);
+    const _mv=(o,ox,oy)=>{o.cx=snapv(m.x-ox);o.cy=snapv(m.y-oy);const g=itemsG.querySelector(`g[data-id="${o.id}"]`);if(g)g.setAttribute('transform',`translate(${o.cx*MPP} ${o.cy*MPP}) rotate(${o.rot})`);};
+    if(drag.group){drag.items.forEach(d=>_mv(d.it,d.ox,d.oy));}else{_mv(drag.it,drag.ox,drag.oy);}
   }else if(panning){panX=ev.clientX-panning.x;panY=ev.clientY-panning.y;applyTransform();}
 });
-stage.addEventListener('pointerup',()=>{drag=null;panning=null;rotating=null;});
-stage.addEventListener('pointercancel',()=>{drag=null;panning=null;rotating=null;});
+stage.addEventListener('pointerup',()=>{if(marquee)finalizeMarquee();drag=null;panning=null;rotating=null;});
+stage.addEventListener('pointercancel',()=>{if(marqEl){marqEl.remove();marqEl=null;}marquee=null;drag=null;panning=null;rotating=null;});
+stage.addEventListener('contextmenu',e=>e.preventDefault());
 stage.addEventListener('dblclick',ev=>{if(mode==='wall'){ev.preventDefault();finishWall();}});
 stage.addEventListener('wheel',ev=>{ev.preventDefault();
   const r=stage.getBoundingClientRect();const mx=ev.clientX-r.left,my=ev.clientY-r.top,old=zoom;
@@ -404,11 +421,12 @@ document.getElementById('zoom').oninput=e=>{const r=stage.getBoundingClientRect(
 
 function rotateSel(){if(!sel)return;sel.rot=(sel.rot+90)%360;renderItems();}
 function delSel(){if(selWall>=0){walls.splice(selWall,1);selWall=-1;renderWalls();return;}
-  if(sel){items=items.filter(i=>i!==sel);sel=null;renderItems();renderBom();}}
+  if(selMulti.length>1){items=items.filter(i=>selMulti.indexOf(i)<0);selMulti=[];sel=null;renderItems();renderBom();return;}
+  if(sel){items=items.filter(i=>i!==sel);sel=null;selMulti=[];renderItems();renderBom();}}
 document.getElementById('btnRotate').onclick=rotateSel;
 document.getElementById('btnDel').onclick=delSel;
-document.getElementById('btnClearWalls').onclick=()=>{if(walls.length&&confirm('Стерти всі стіни?')){walls=[];selWall=-1;renderWalls();}};
-document.getElementById('btnClearItems').onclick=()=>{if(items.length&&confirm('Прибрати всі тренажери?')){items=[];sel=null;renderItems();renderBom();}};
+document.getElementById('btnClearWalls').onclick=()=>{if(walls.length&&confirm('Стерти всі стіни?')){walls=[];selWall=-1;curWall=[];renderWalls();renderBom();}};
+document.getElementById('btnClearItems').onclick=()=>{if(items.length&&confirm('Прибрати всі тренажери?')){items=[];sel=null;selMulti=[];renderItems();renderBom();}};
 document.getElementById('btnFit').onclick=fitView;
 document.getElementById('step').onchange=e=>{STEP=parseFloat(e.target.value);};
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
@@ -416,7 +434,7 @@ window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(
     if(e.key==='Backspace'){e.preventDefault();if(curWall&&curWall.length){curWall.pop();renderWalls();}}return;}
   if(e.key==='r'||e.key==='R'){rotateSel();}
   if(e.key==='Delete'||e.key==='Backspace'){delSel();}
-  if(e.key==='Escape'){sel=null;selWall=-1;renderItems();renderWalls();}});
+  if(e.key==='Escape'){sel=null;selMulti=[];selWall=-1;renderItems();renderWalls();}});
 
 function fitView(){const xs=[],ys=[];
   walls.forEach(p=>p.forEach(q=>{xs.push(q.x);ys.push(q.y);}));
@@ -448,15 +466,7 @@ function renderBom(){const bom=document.getElementById('bom');
   document.getElementById('grandtotal').textContent='$'+total.toLocaleString();updateStats();}
 
 // ---- save/load/png ----
-document.getElementById('btnExport').onclick=()=>{const slim=items.map(({img,...r})=>r);
-  const blob=new Blob([JSON.stringify({walls,items:slim},null,1)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='creagym-layout.json';a.click();};
-document.getElementById('btnImport').onclick=()=>document.getElementById('fileIn').click();
-document.getElementById('fileIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
-  rd.onload=()=>{try{const o=JSON.parse(rd.result);walls=o.walls||[];
-    items=(o.items||[]).map(i=>{const d=DATA.find(x=>x.model===i.model);return {...i,id:uid++,img:i.img||(d?d.img:null)};});
-    renderWalls();renderItems();renderBom();fitView();}catch(err){alert('Не получилось прочитать файл');}};
-  rd.readAsText(f);e.target.value='';};
+
 document.getElementById('btnCsv').onclick=()=>{
   if(!items.length){alert(L('csv_empty'));return;}
   const map={};items.forEach(i=>{if(!map[i.model])map[i.model]={...i,q:0};map[i.model].q++;});
@@ -474,20 +484,7 @@ document.getElementById('btnCsv').onclick=()=>{
   const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='creagym-zakupka.csv';a.click();
 };
-document.getElementById('btnPng').onclick=()=>{
-  const xs=[0],ys=[0];walls.forEach(p=>p.forEach(q=>{xs.push(q.x);ys.push(q.y);}));
-  items.forEach(i=>{const e=Math.max(i.L,i.W)/2;xs.push(i.cx-e,i.cx+e);ys.push(i.cy-e,i.cy+e);});
-  const minx=Math.min(...xs)-1,maxx=Math.max(...xs)+1,miny=Math.min(...ys)-1,maxy=Math.max(...ys)+1;
-  const sc=42,pad=20,W=(maxx-minx)*sc+pad*2,H=(maxy-miny)*sc+pad*2;
-  const out=document.createElementNS(NS,'svg');out.setAttribute('xmlns',NS);out.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
-  out.setAttribute('width',W);out.setAttribute('height',H);out.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  const bgr=document.createElementNS(NS,'rect');bgr.setAttribute('width',W);bgr.setAttribute('height',H);bgr.setAttribute('fill','#fff');out.appendChild(bgr);
-  const g=document.createElementNS(NS,'g');g.setAttribute('transform',`translate(${pad-minx*sc} ${pad-miny*sc}) scale(${sc/MPP})`);
-  g.appendChild(wallsG.cloneNode(true));g.appendChild(itemsG.cloneNode(true));out.appendChild(g);
-  const xml=new XMLSerializer().serializeToString(out);const img=new Image();
-  img.onload=()=>{const cv=document.createElement('canvas');cv.width=W*2;cv.height=H*2;const ctx=cv.getContext('2d');ctx.scale(2,2);ctx.drawImage(img,0,0);
-    const a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='creagym-plan.png';a.click();};
-  img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(xml)));};
+
 
 function isMob(){return window.innerWidth<=860;}
 function setupMob(){const mob=isMob();document.querySelectorAll('.mobtog').forEach(b=>b.style.display=mob?'inline-block':'none');
@@ -547,6 +544,47 @@ function applyLang(l){PLANG=l;try{localStorage.setItem('creagym_lang',l)}catch(e
 }
 document.querySelectorAll('.langp b').forEach(function(b){b.addEventListener('click',function(){applyLang(b.dataset.l);});});
 applyLang(PLANG);
+</script>
+
+<!-- EXIT GUARD -->
+<div id="exitmodal" style="display:none;position:fixed;inset:0;z-index:99998;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif">
+  <div onclick="closeExit()" style="position:absolute;inset:0;background:rgba(20,18,18,.55);backdrop-filter:blur(3px)"></div>
+  <div style="position:relative;width:100%;max-width:400px;background:#fff;border:1px solid #E6E2E0;border-radius:10px;padding:26px;color:#1A1718;box-shadow:0 30px 70px -20px rgba(0,0,0,.18)">
+    <div style="font-weight:800;font-size:18px;margin-bottom:6px">Вийти на головну?</div>
+    <div style="font-size:13px;color:#6B6562;margin-bottom:18px;line-height:1.5">У вас є незбережений план залу. Можна спершу надіслати його на прорахунок — ми порахуємо вартість.</div>
+    <button onclick="closeExit();openQuote();" style="width:100%;background:#BE1E2D;color:#fff;border:none;border-radius:6px;padding:13px;font-weight:700;font-size:14px;cursor:pointer">Надіслати на прорахунок</button>
+    <button onclick="leaveHome()" style="width:100%;background:#fff;color:#1A1718;border:1px solid #E6E2E0;border-radius:6px;padding:12px;font-size:14px;cursor:pointer;margin-top:8px">Вийти без збереження</button>
+    <button onclick="closeExit()" style="width:100%;background:transparent;color:#6B6562;border:none;padding:10px;font-size:13px;cursor:pointer;margin-top:2px">Скасувати</button>
+  </div>
+</div>
+
+<!-- HELP -->
+<div id="helpmodal" style="display:none;position:fixed;inset:0;z-index:99998;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif">
+  <div onclick="closeHelp()" style="position:absolute;inset:0;background:rgba(20,18,18,.55);backdrop-filter:blur(3px)"></div>
+  <div style="position:relative;width:100%;max-width:460px;max-height:86vh;overflow:auto;background:#fff;border:1px solid #E6E2E0;border-radius:10px;padding:26px;color:#1A1718;box-shadow:0 30px 70px -20px rgba(0,0,0,.18)">
+    <div style="font-weight:800;font-size:19px;margin-bottom:16px">Як користуватися планувальником</div>
+    <div style="display:flex;flex-direction:column;gap:14px;font-size:13.5px;line-height:1.55">
+      <div><b style="color:#BE1E2D">1 · Стіни кімнати</b><br>Натисни «✏️ Стіни» та клікай по кутах приміщення. Клік у <b>першу точку</b> замикає кімнату — інтер'єр підсвітиться. «Готово» або Enter — завершити, Esc — скасувати, Backspace — прибрати точку.</div>
+      <div><b style="color:#BE1E2D">2 · Тренажери</b><br>Обери тренажер у каталозі зліва — він з'явиться по центру. Перетягуй мишею. Ручка зверху обертає на 15°, кнопка «⟳ 90°» або клавіша R — на 90°.</div>
+      <div><b style="color:#BE1E2D">3 · Виділити кілька</b><br>Затисни <b>ліву кнопку миші</b> на порожньому місці та обведи тренажери рамкою. Виділену групу можна перетягувати й видаляти разом.</div>
+      <div><b style="color:#BE1E2D">4 · Рухати полотно / масштаб</b><br>Полотно рухається <b>правою кнопкою</b> миші (або двома пальцями на тачскріні). Колесо миші — масштаб. «В розмір» — показати весь план.</div>
+      <div><b style="color:#BE1E2D">5 · Видалити</b><br>Виділи тренажер або стіну → кнопка «Видалити» чи клавіша Del.</div>
+      <div><b style="color:#BE1E2D">6 · Готово</b><br>Натисни «Надіслати на прорахунок» — ми порахуємо вартість обладнання й зв'яжемося з тобою.</div>
+    </div>
+    <button onclick="closeHelp()" style="width:100%;margin-top:20px;background:#BE1E2D;color:#fff;border:none;border-radius:6px;padding:12px;font-weight:700;cursor:pointer">Зрозуміло</button>
+  </div>
+</div>
+<script>
+function hasProject(){return (typeof items!=='undefined'&&items.length>0)||(typeof walls!=='undefined'&&walls.length>0);}
+function openExit(){document.getElementById('exitmodal').style.display='flex';}
+function closeExit(){document.getElementById('exitmodal').style.display='none';}
+var _leaving=false;
+function leaveHome(){_leaving=true;location.href='index.html';}
+function openHelp(){document.getElementById('helpmodal').style.display='flex';}
+function closeHelp(){document.getElementById('helpmodal').style.display='none';}
+document.getElementById('btnHome').onclick=function(){ if(hasProject())openExit(); else leaveHome(); };
+document.getElementById('btnHelp').onclick=openHelp;
+window.addEventListener('beforeunload',function(e){ if(_leaving)return; if(hasProject()){e.preventDefault();e.returnValue='';} });
 </script>
 </body>
 </html>
