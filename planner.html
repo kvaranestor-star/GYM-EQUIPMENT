@@ -306,7 +306,10 @@ function renderWalls(){wallsG.innerHTML='';
     if(closed){const pg=document.createElementNS(NS,'polygon');
       pg.setAttribute('points',poly.slice(0,-1).map(p=>`${p.x*MPP},${p.y*MPP}`).join(' '));
       pg.setAttribute('fill','rgba(0,0,0,0.06)');pg.setAttribute('stroke','none');
-      pg.style.pointerEvents='none';wallsG.appendChild(pg);}
+      pg.style.pointerEvents='none';wallsG.appendChild(pg);
+      const rp=poly.slice(0,-1);let _A=0,_cx=0,_cy=0;for(let n=0;n<rp.length;n++){const a=rp[n],b=rp[(n+1)%rp.length];const cr=a.x*b.y-b.x*a.y;_A+=cr;_cx+=(a.x+b.x)*cr;_cy+=(a.y+b.y)*cr;}
+      const _As=_A/2,_area=Math.abs(_As);
+      if(_area>0.2&&_As!==0){const ax=_cx/(6*_As),ay=_cy/(6*_As);const tx=document.createElementNS(NS,'text');tx.setAttribute('x',ax*MPP);tx.setAttribute('y',ay*MPP);tx.setAttribute('text-anchor','middle');tx.setAttribute('dominant-baseline','middle');tx.setAttribute('fill','#6B6562');tx.setAttribute('font-size','14');tx.setAttribute('font-weight','700');tx.setAttribute('stroke','#fff');tx.setAttribute('stroke-width','3.2');tx.setAttribute('paint-order','stroke');tx.style.pointerEvents='none';tx.textContent=_area.toFixed(1).replace('.',',')+' м²';wallsG.appendChild(tx);}}
     const pl=document.createElementNS(NS,'polyline');
     pl.setAttribute('points',ptsStr(poly));pl.setAttribute('fill','none');
     pl.setAttribute('stroke',idx===selWall?'#BE1E2D':'#15171a');
