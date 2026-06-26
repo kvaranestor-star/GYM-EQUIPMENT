@@ -200,6 +200,9 @@
   .qbtns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
   .qbtn{font-family:'IBM Plex Mono';font-size:12px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r);background:transparent;color:var(--ink-2);cursor:pointer}
   .qbtn:hover{border-color:#BE1E2D;color:#BE1E2D}
+  .pfilters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+  .pfilters input,.pfilters select{font-family:'IBM Plex Mono';font-size:12px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);color:var(--ink-2)}
+  .pfilters input{min-width:220px;flex:1}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -260,6 +263,12 @@
           <button class="ibtn" id="seedBtn">Стандартні товари</button>
           <button class="ibtn blue" id="addBtn">+ Додати товар</button>
         </div>
+      </div>
+      <div class="pfilters">
+        <input id="pSearch" placeholder="Пошук: назва або модель…">
+        <select id="pCat"><option value="">Всі категорії</option><option value="cardio">Кардіо</option><option value="strength">Силові</option><option value="multi">Мультистанції</option><option value="rack">Рами та стійки</option></select>
+        <select id="pPhoto"><option value="">Фото: всі</option><option value="no">Без фото</option><option value="yes">З фото</option></select>
+        <select id="pSort"><option value="nophoto">Спершу без фото</option><option value="cat">За категорією</option><option value="name">За назвою</option><option value="model">За моделлю</option></select>
       </div>
       <div id="prodList"></div>
     </div>
@@ -393,11 +402,26 @@
 
   /* ===================== PRODUCTS ===================== */
   async function loadProducts(){ try{ PRODUCTS=await API.productList(); }catch(e){ PRODUCTS=[]; alert("Помилка Supabase: "+e.message); } renderProducts(); }
+  ['pSearch','pCat','pPhoto','pSort'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener(el.tagName==='INPUT'?'input':'change',renderProducts);});
   function renderProducts(){
-    $("#pCount").textContent=PRODUCTS.length;
+    const _q=(document.getElementById('pSearch')?.value||'').trim().toLowerCase();
+    const _fc=document.getElementById('pCat')?.value||'';
+    const _fp=document.getElementById('pPhoto')?.value||'';
+    const _sort=document.getElementById('pSort')?.value||'nophoto';
+    const _has=p=>!!imgSrc(p.image)||(Array.isArray(p.images)&&p.images.length>0);
+    let _arr=PRODUCTS.slice();
+    if(_q)_arr=_arr.filter(p=>((p.name||'')+' '+(p.model||'')).toLowerCase().includes(_q));
+    if(_fc)_arr=_arr.filter(p=>p.category===_fc);
+    if(_fp==='no')_arr=_arr.filter(p=>!_has(p)); else if(_fp==='yes')_arr=_arr.filter(p=>_has(p));
+    if(_sort==='nophoto')_arr.sort((a,b)=>(_has(a)?1:0)-(_has(b)?1:0)||String(a.category||'').localeCompare(String(b.category||'')));
+    else if(_sort==='cat')_arr.sort((a,b)=>String(a.category||'').localeCompare(String(b.category||''))||String(a.name||'').localeCompare(String(b.name||'')));
+    else if(_sort==='name')_arr.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
+    else if(_sort==='model')_arr.sort((a,b)=>String(a.model||'').localeCompare(String(b.model||'')));
+    $("#pCount").textContent=_arr.length+(_arr.length!==PRODUCTS.length?(" / "+PRODUCTS.length):"");
     const list=$("#prodList");
     if(!PRODUCTS.length){ list.innerHTML=`<div class="empty"><div class="mono">Товарів ще немає</div><div class="demo-hint">Натисни <b style="color:var(--blue-2)">+ Додати товар</b> або <b style="color:var(--blue-2)">Стандартні товари</b>, щоб завантажити базовий каталог.</div></div>`; return; }
-    list.innerHTML=`<div class="pgrid">`+PRODUCTS.map(p=>{
+    if(!_arr.length){ list.innerHTML=`<div class="empty"><div class="mono">Нічого не знайдено за фільтром</div></div>`; return; }
+    list.innerHTML=`<div class="pgrid">`+_arr.map(p=>{
       const src=imgSrc(p.image);
       return `<div class="pc"><div class="thumb">${src?`<img src="${esc(src)}" alt="" onerror="this.style.display='none'">`:""}<div class="noimg">${src?"":"немає фото"}</div><span class="bt ${p.brand==='YR'?'yr':''}">${esc(BRANDLBL[p.brand]||p.brand)}</span></div>
         <div class="pb"><div class="cat">${esc(CATLBL[p.category]||p.category)} · ${esc(p.subtitle||"")}</div><h3>${esc(p.name)||"—"}</h3><div class="mdl">NO. ${esc(p.model||"—")}</div>
