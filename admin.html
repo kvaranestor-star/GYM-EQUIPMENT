@@ -519,18 +519,34 @@
     pcs.forEach(it=>{const e=Math.max(it.L,it.W)/2;pts.push({x:it.cx-e,y:it.cy-e});pts.push({x:it.cx+e,y:it.cy+e});});
     if(!pts.length)return'';
     const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
-    const minx=Math.min.apply(0,xs)-0.6,maxx=Math.max.apply(0,xs)+0.6,miny=Math.min.apply(0,ys)-0.6,maxy=Math.max.apply(0,ys)+0.6;
-    const wm=Math.max(0.5,maxx-minx),hm=Math.max(0.5,maxy-miny),sc=Math.max(8,Math.min(60,(maxW||300)/wm)),W=wm*sc,H=hm*sc;
-    const X=v=>((v-minx)*sc).toFixed(1),Y=v=>((v-miny)*sc).toFixed(1);let g='';
+    const minx=Math.min.apply(0,xs)-0.8,maxx=Math.max.apply(0,xs)+0.8,miny=Math.min.apply(0,ys)-0.8,maxy=Math.max.apply(0,ys)+1.2;
+    const wm=Math.max(0.5,maxx-minx),hm=Math.max(0.5,maxy-miny),sc=Math.max(8,Math.min(70,(maxW||300)/wm)),W=wm*sc,H=hm*sc;
+    const X=v=>((v-minx)*sc).toFixed(1),Y=v=>((v-miny)*sc).toFixed(1);
+    let grid='';
+    for(let gx=Math.ceil(minx);gx<=Math.floor(maxx);gx++){grid+='<line x1="'+X(gx)+'" y1="0" x2="'+X(gx)+'" y2="'+H.toFixed(1)+'" stroke="#e2e6ea" stroke-width="1"/>';}
+    for(let gy=Math.ceil(miny);gy<=Math.floor(maxy);gy++){grid+='<line x1="0" y1="'+Y(gy)+'" x2="'+W.toFixed(1)+'" y2="'+Y(gy)+'" stroke="#e2e6ea" stroke-width="1"/>';}
+    let g='',totalArea=0;
     walls.forEach(p=>{if(!p||!p.length)return;
       const closed=p.length>=4&&Math.abs(p[0].x-p[p.length-1].x)<0.001&&Math.abs(p[0].y-p[p.length-1].y)<0.001;
-      if(closed)g+='<polygon points="'+p.slice(0,-1).map(pt=>X(pt.x)+','+Y(pt.y)).join(' ')+'" fill="rgba(0,0,0,0.06)" stroke="none"/>';
-      g+='<polyline points="'+p.map(pt=>X(pt.x)+','+Y(pt.y)).join(' ')+'" fill="none" stroke="#15171a" stroke-width="3" stroke-linejoin="round"/>';});
+      if(closed){
+        g+='<polygon points="'+p.slice(0,-1).map(pt=>X(pt.x)+','+Y(pt.y)).join(' ')+'" fill="rgba(0,0,0,0.05)" stroke="none"/>';
+        const poly=p.slice(0,-1);let A=0,cx=0,cy=0;
+        for(let n=0;n<poly.length;n++){const a=poly[n],b=poly[(n+1)%poly.length];const cr=a.x*b.y-b.x*a.y;A+=cr;cx+=(a.x+b.x)*cr;cy+=(a.y+b.y)*cr;}
+        const As=A/2,area=Math.abs(As);totalArea+=area;
+        if(area>0.2&&As!==0){const ax=cx/(6*As),ay=cy/(6*As);
+          g+='<text x="'+X(ax)+'" y="'+Y(ay)+'" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#555" stroke="#fff" stroke-width="3" paint-order="stroke">'+area.toFixed(1).replace('.',',')+' м²</text>';}
+      }
+      g+='<polyline points="'+p.map(pt=>X(pt.x)+','+Y(pt.y)).join(' ')+'" fill="none" stroke="#15171a" stroke-width="3" stroke-linejoin="round"/>';
+      for(let n=1;n<p.length;n++){const a=p[n-1],b=p[n];const Lm=Math.hypot(b.x-a.x,b.y-a.y);if(Lm>0.3){const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+        g+='<text x="'+X(mx)+'" y="'+(parseFloat(Y(my))-5).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#9A1622" stroke="#fff" stroke-width="2.6" paint-order="stroke">'+Lm.toFixed(2).replace('.',',')+'</text>';}}
+    });
     pcs.forEach(it=>{const col=QCAT[it.cat]||'#888',w=it.L*sc,h=it.W*sc,fs=Math.max(7,Math.min(11,w/Math.max((it.model||'').length,4)*1.6));
       g+='<g transform="translate('+X(it.cx)+','+Y(it.cy)+') rotate('+(it.rot||0)+')">'
         +'<rect x="'+(-w/2).toFixed(1)+'" y="'+(-h/2).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="2" fill="#fff" stroke="'+col+'" stroke-width="2"/>'
         +'<text text-anchor="middle" dominant-baseline="middle" y="'+(h/2-fs*0.85).toFixed(1)+'" font-size="'+fs.toFixed(1)+'" font-weight="800" fill="#111" stroke="#fff" stroke-width="2.2" paint-order="stroke" transform="rotate('+(-(it.rot||0))+')">'+escSVG(it.model||'')+'</text></g>';});
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W.toFixed(1)+' '+H.toFixed(1)+'" width="100%" style="max-width:'+Math.round(W)+'px;display:block"><rect width="'+W.toFixed(1)+'" height="'+H.toFixed(1)+'" fill="#F6F3F2"/>'+g+'</svg>';
+    const shownArea=totalArea>0.2?totalArea:wm*hm;
+    const badge='<rect x="4" y="4" width="138" height="22" rx="3" fill="#1A1718"/><text x="11" y="19" font-size="12" font-weight="800" fill="#fff">Площа: '+shownArea.toFixed(1).replace('.',',')+' м²</text>';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W.toFixed(1)+' '+H.toFixed(1)+'" width="100%" style="max-width:'+Math.round(W)+'px;display:block"><rect width="'+W.toFixed(1)+'" height="'+H.toFixed(1)+'" fill="#FAFAFA"/>'+grid+g+badge+'</svg>';
   }
   function safeName(q){return (q.name||'client').replace(/[^\w\u0400-\u04FF]+/g,'_');}
   function downloadSVGPlan(q){const svg=planSVG(q,900);if(!svg){alert('У цій заявці немає плану.');return;}
