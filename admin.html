@@ -192,7 +192,16 @@
 
   @media(max-width:860px){.stats{grid-template-columns:1fr 1fr}table{display:none}.cards{display:flex}.frow2{grid-template-columns:1fr}}
   :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#BE1E2D;margin-right:7px;vertical-align:middle;box-shadow:0 0 0 3px rgba(190,30,45,.18)}
+  .qcard.unread{border-color:rgba(190,30,45,.45)}
+  .tbadge{display:none;min-width:18px;height:18px;line-height:18px;padding:0 5px;border-radius:9px;background:#BE1E2D;color:#fff;font-size:11px;font-weight:700;text-align:center;margin-left:2px;vertical-align:middle}
+  .tbadge.show{display:inline-block}
+  .qplan{margin:10px 0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#F6F3F2}
+  .qbtns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+  .qbtn{font-family:'IBM Plex Mono';font-size:12px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r);background:transparent;color:var(--ink-2);cursor:pointer}
+  .qbtn:hover{border-color:#BE1E2D;color:#BE1E2D}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -224,7 +233,7 @@
       <button class="tab on" data-tab="leads">Заявки</button>
       <button class="tab" data-tab="products">Товари</button>
       <button class="tab" data-tab="site">Сайт</button>
-      <button class="tab" data-tab="quotes">Прорахунки</button>
+      <button class="tab" data-tab="quotes">Прорахунки <span class="tbadge" id="qNewBadge"></span></button>
     </div>
 
     <!-- LEADS -->
@@ -333,7 +342,7 @@
   let LEADS = [], PRODUCTS = [], QUOTES = [], curTab = "leads";
 
   /* ---- gate ---- */
-  function unlock(){ $("#gate").style.display="none"; $("#app").classList.add("show"); loadLeads(); }
+  function unlock(){ $("#gate").style.display="none"; $("#app").classList.add("show"); loadLeads(); loadQuotes(); }
   (function(){ try{ if(sessionStorage.getItem("creagym_admin")==="1") return unlock(); }catch(e){} })();
   $("#enter").addEventListener("click", tryLogin);
   $("#pass").addEventListener("keydown", e=>{ if(e.key==="Enter") tryLogin(); });
@@ -502,6 +511,39 @@
 
   /* ===================== QUOTES (gym layouts) ===================== */
   async function loadQuotes(){ try{ QUOTES=await API.quoteList(); }catch(e){ QUOTES=[]; alert("Помилка Supabase: "+e.message); } renderQuotes(); }
+  const QCAT={'Кардио':'#3b82f6','Грузоблочные':'#f59e0b','Нагружаемые':'#ef4444','Мультистанции':'#a855f7','Скамьи и рамы':'#22c55e'};
+  function escSVG(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function planSVG(q,maxW){
+    const lay=q.layout||{},walls=Array.isArray(lay.walls)?lay.walls:[],pcs=Array.isArray(lay.pieces)?lay.pieces:[];
+    const pts=[]; walls.forEach(p=>(p||[]).forEach(pt=>pts.push(pt)));
+    pcs.forEach(it=>{const e=Math.max(it.L,it.W)/2;pts.push({x:it.cx-e,y:it.cy-e});pts.push({x:it.cx+e,y:it.cy+e});});
+    if(!pts.length)return'';
+    const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+    const minx=Math.min.apply(0,xs)-0.6,maxx=Math.max.apply(0,xs)+0.6,miny=Math.min.apply(0,ys)-0.6,maxy=Math.max.apply(0,ys)+0.6;
+    const wm=Math.max(0.5,maxx-minx),hm=Math.max(0.5,maxy-miny),sc=Math.max(8,Math.min(60,(maxW||300)/wm)),W=wm*sc,H=hm*sc;
+    const X=v=>((v-minx)*sc).toFixed(1),Y=v=>((v-miny)*sc).toFixed(1);let g='';
+    walls.forEach(p=>{if(!p||!p.length)return;
+      const closed=p.length>=4&&Math.abs(p[0].x-p[p.length-1].x)<0.001&&Math.abs(p[0].y-p[p.length-1].y)<0.001;
+      if(closed)g+='<polygon points="'+p.slice(0,-1).map(pt=>X(pt.x)+','+Y(pt.y)).join(' ')+'" fill="rgba(0,0,0,0.06)" stroke="none"/>';
+      g+='<polyline points="'+p.map(pt=>X(pt.x)+','+Y(pt.y)).join(' ')+'" fill="none" stroke="#15171a" stroke-width="3" stroke-linejoin="round"/>';});
+    pcs.forEach(it=>{const col=QCAT[it.cat]||'#888',w=it.L*sc,h=it.W*sc,fs=Math.max(7,Math.min(11,w/Math.max((it.model||'').length,4)*1.6));
+      g+='<g transform="translate('+X(it.cx)+','+Y(it.cy)+') rotate('+(it.rot||0)+')">'
+        +'<rect x="'+(-w/2).toFixed(1)+'" y="'+(-h/2).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="2" fill="#fff" stroke="'+col+'" stroke-width="2"/>'
+        +'<text text-anchor="middle" dominant-baseline="middle" y="'+(h/2-fs*0.85).toFixed(1)+'" font-size="'+fs.toFixed(1)+'" font-weight="800" fill="#111" stroke="#fff" stroke-width="2.2" paint-order="stroke" transform="rotate('+(-(it.rot||0))+')">'+escSVG(it.model||'')+'</text></g>';});
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W.toFixed(1)+' '+H.toFixed(1)+'" width="100%" style="max-width:'+Math.round(W)+'px;display:block"><rect width="'+W.toFixed(1)+'" height="'+H.toFixed(1)+'" fill="#F6F3F2"/>'+g+'</svg>';
+  }
+  function safeName(q){return (q.name||'client').replace(/[^\w\u0400-\u04FF]+/g,'_');}
+  function downloadSVGPlan(q){const svg=planSVG(q,900);if(!svg){alert('У цій заявці немає плану.');return;}
+    const blob=new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n'+svg],{type:'image/svg+xml'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='creagym-plan-'+safeName(q)+'.svg';a.click();}
+  function quoteExcel(q){if(typeof XLSX==='undefined'){alert('Бібліотека Excel не завантажилась (перевір інтернет).');return;}
+    const rows=[['Модель','Назва','К-сть','Опт. ціна, $','Сума, $']];let total=0;
+    (q.items||[]).forEach(it=>{const sum=(it.price||0)*(it.q||1);total+=sum;rows.push([it.model||'',it.name||'',it.q||1,it.price||0,sum]);});
+    rows.push([]);rows.push(['','','','РАЗОМ',total]);
+    const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=[{wch:16},{wch:34},{wch:7},{wch:13},{wch:12}];
+    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Зал');
+    XLSX.writeFile(wb,'creagym-zal-'+safeName(q)+'.xlsx');}
+  function updateQuoteBadge(){const n=(QUOTES||[]).filter(q=>q.status==='new').length;const el=document.getElementById('qNewBadge');if(el){el.textContent=n;el.classList.toggle('show',n>0);}}
   function renderQuotes(){
     $("#qCount").textContent=QUOTES.length;
     const list=$("#quoteList");
@@ -509,20 +551,25 @@
     list.innerHTML=QUOTES.map(q=>{
       const b=ST[q.status]||ST.new;
       const items=(q.items||[]).map(it=>`<div class="qi"><span class="qq">${it.q}×</span><span class="qm">${esc(it.model)}</span><span class="qn">${esc(it.name)}</span><span class="qp">$${((it.price||0)*(it.q||1)).toLocaleString()}</span></div>`).join("");
-      return `<div class="qcard">
+      return `<div class="qcard ${q.status==='new'?'unread':''}">
         <div class="qhead">
-          <div><div class="qname">${esc(q.name)||"—"} <span class="badge ${b[1]}" style="margin-left:6px">${b[0]}</span></div>
+          <div><div class="qname">${q.status==='new'?'<span class="dot" title="Нова заявка"></span>':''}${esc(q.name)||"—"} <span class="badge ${b[1]}" style="margin-left:6px">${b[0]}</span></div>
             <a href="tel:${esc(q.phone)}" class="qphone">${esc(q.phone)||"—"}</a></div>
           <div class="qtotal">$${(q.total||0).toLocaleString()}</div>
         </div>
         <div class="qmeta">${fmtDate(q.created_at)} · ${q.count||0} од. · ${(q.items||[]).length} позицій · ${esc(q.dims)||"—"} · ${esc(q.area)||"—"}</div>
         ${q.comment?`<div class="qcomment">${esc(q.comment)}</div>`:""}
+        ${(q.layout&&((q.layout.pieces&&q.layout.pieces.length)||(q.layout.walls&&q.layout.walls.length)))?`<div class="qplan">${planSVG(q,300)}</div>`:""}
         <details class="qdetails"><summary>Склад залу (${(q.items||[]).length})</summary><div class="qitems">${items}</div></details>
+        <div class="qbtns"><button class="qbtn" data-qx="${esc(q.id)}">⬇ Список (Excel)</button><button class="qbtn" data-qp="${esc(q.id)}">🗺 План (SVG)</button></div>
         <div class="qfoot">${quoteStatusSelect(q)}<button class="del" data-qd="${esc(q.id)}">✕ Видалити</button></div>
       </div>`;
     }).join("");
     list.querySelectorAll("select.qst").forEach(sel=>sel.addEventListener("change",async()=>{ await API.quoteUpdate(sel.dataset.id,{status:sel.value}); const q=QUOTES.find(x=>String(x.id)===String(sel.dataset.id)); if(q)q.status=sel.value; renderQuotes(); }));
     list.querySelectorAll("[data-qd]").forEach(b=>b.addEventListener("click",async()=>{ if(!confirm("Видалити прорахунок?"))return; await API.quoteDelete(b.dataset.qd); QUOTES=QUOTES.filter(x=>String(x.id)!==String(b.dataset.qd)); renderQuotes(); }));
+    list.querySelectorAll("[data-qx]").forEach(b=>b.addEventListener("click",()=>{const q=QUOTES.find(x=>String(x.id)===String(b.dataset.qx));if(q)quoteExcel(q);}));
+    list.querySelectorAll("[data-qp]").forEach(b=>b.addEventListener("click",()=>{const q=QUOTES.find(x=>String(x.id)===String(b.dataset.qp));if(q)downloadSVGPlan(q);}));
+    updateQuoteBadge();
   }
   function quoteStatusSelect(q){ return `<select class="st qst" data-id="${esc(q.id)}">`+Object.keys(ST).map(k=>`<option value="${k}" ${q.status===k?"selected":""}>${ST[k][0]}</option>`).join("")+`</select>`; }
   $("#qCsv").addEventListener("click", ()=>{
