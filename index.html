@@ -66,7 +66,8 @@
   .hero-bg .g1{position:absolute;top:-12%;right:-8%;width:62vw;height:62vw;background:radial-gradient(circle,var(--glow),transparent 62%);filter:blur(20px)}
   .hero-bg .g2{position:absolute;bottom:-20%;left:-10%;width:46vw;height:46vw;background:radial-gradient(circle,rgba(61,116,244,.16),transparent 65%);filter:blur(30px)}
   .hero-bg .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:70px 70px;mask-image:radial-gradient(ellipse 75% 65% at 60% 40%,#000,transparent 82%)}
-  .hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;width:100%}
+  .hero-in{position:relative;z-index:2;display:block;width:100%}
+  .hero-photo{display:none}
   .hero-h{font-size:clamp(44px,8vw,104px);font-weight:900;letter-spacing:-.045em}
   .hero-h .b{color:var(--blue)}
   .hero-h .line{display:block;overflow:hidden}
@@ -281,6 +282,7 @@
     <nav class="nav-links">
       <a href="#brands" data-i18n="nav_brands">Бренди</a>
       <a href="#catalog" data-i18n="nav_catalog">Каталог</a>
+      <a href="planner.html" data-i18n="nav_planner">Планувальник</a>
       <a href="#process" data-i18n="nav_process">Під ключ</a>
       <a href="#showcase" data-i18n="nav_showcase">Зали</a>
     </nav>
@@ -472,6 +474,10 @@
 
   </div>
   <div class="catnote"><span data-i18n="note1">Показано частину асортименту.</span><span class="b" data-i18n="note2">Під проєкт підберемо повний комплект</span><span data-i18n="note3">— силові, кардіо, вільні ваги, аксесуари, покриття та дзеркала.</span></div>
+  <div style="margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+    <a href="planner.html" class="btn btn-b" data-i18n="planner_cta">Спланувати свій зал →</a>
+    <span style="color:var(--ink-3);font-size:13px" data-i18n="planner_hint">Розставте тренажери на плані та надішліть на прорахунок</span>
+  </div>
 </section>
 
 <!-- PROCESS -->
@@ -563,7 +569,7 @@
 /* ---------------- i18n ---------------- */
 const I18N = {
   ua:{
-    nav_brands:"Бренди",nav_catalog:"Каталог",nav_process:"Під ключ",nav_showcase:"Зали",nav_cta:"Запросити прайс",
+    nav_brands:"Бренди",nav_catalog:"Каталог",nav_process:"Під ключ",nav_showcase:"Зали",nav_planner:"Планувальник",planner_cta:"Спланувати свій зал →",planner_hint:"Розставте тренажери на плані та надішліть на прорахунок",nav_cta:"Запросити прайс",
     hero_eyebrow:"SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ",hero_l1:"Профі-",hero_l2:"обладнання",hero_l3:"для <span class='b'>залів</span>",
     hero_sub:"Постачаємо комерційні тренажери двох заводів — <b>SHUA</b> (постачальник 7 Олімпіад) та <b>YR&nbsp;Fitness</b> (28 років, CE/TÜV/ISO). Прямий імпорт, проєкт розстановки, монтаж і сервіс під ключ.",
     hero_cta1:"Дивитись каталог",hero_cta2:"Отримати розрахунок",hero_s1:"заводи",hero_s2:"країн",
@@ -611,7 +617,7 @@ const I18N = {
     foot_bottom:"SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ"
   },
   en:{
-    nav_brands:"Brands",nav_catalog:"Catalogue",nav_process:"Turnkey",nav_showcase:"Gyms",nav_cta:"Request pricing",
+    nav_brands:"Brands",nav_catalog:"Catalogue",nav_process:"Turnkey",nav_showcase:"Gyms",nav_planner:"Planner",planner_cta:"Plan your own gym →",planner_hint:"Arrange equipment on the floor plan and send for a quote",nav_cta:"Request pricing",
     hero_eyebrow:"SHUA × YR FITNESS · OFFICIAL IMPORT",hero_l1:"Pro-grade",hero_l2:"equipment",hero_l3:"for <span class='b'>gyms</span>",
     hero_sub:"We supply commercial equipment from two factories — <b>SHUA</b> (supplier to 7 Olympic Games) and <b>YR&nbsp;Fitness</b> (28 years, CE/TÜV/ISO). Direct import, layout design, installation and turnkey service.",
     hero_cta1:"View catalogue",hero_cta2:"Get a quote",hero_s1:"factories",hero_s2:"countries",

@@ -168,6 +168,22 @@
   .upadd:hover{border-color:var(--blue);color:var(--blue-2)}
   .siteslot{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px;margin-bottom:14px}
   .sl-head{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
+  .qcard{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px 20px;margin-bottom:14px}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+  .qname{font-weight:700;font-size:16px}
+  .qphone{font-family:'IBM Plex Mono';font-size:13px;color:var(--blue-2)}
+  .qtotal{font-weight:900;font-size:26px;letter-spacing:-.03em;color:var(--blue-2);white-space:nowrap}
+  .qmeta{font-family:'IBM Plex Mono';font-size:11px;color:var(--ink-3);letter-spacing:.03em;margin-top:8px}
+  .qcomment{color:var(--ink-2);font-size:13px;margin-top:10px;padding:10px 12px;background:var(--bg-2);border-radius:var(--r)}
+  .qdetails{margin-top:12px}
+  .qdetails summary{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-2);cursor:pointer}
+  .qitems{margin-top:10px;border-top:1px solid var(--line)}
+  .qi{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .qi .qq{font-family:'IBM Plex Mono';font-weight:700;color:var(--blue-2);min-width:30px}
+  .qi .qm{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink);min-width:80px}
+  .qi .qn{flex:1;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .qi .qp{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink)}
+  .qfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
   .mfoot{display:flex;gap:10px;margin-top:22px}
   .mfoot .save{flex:1;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:13px;font-family:'IBM Plex Mono';font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
   .mfoot .save:hover{background:var(--blue-2)}
@@ -208,6 +224,7 @@
       <button class="tab on" data-tab="leads">Заявки</button>
       <button class="tab" data-tab="products">Товари</button>
       <button class="tab" data-tab="site">Сайт</button>
+      <button class="tab" data-tab="quotes">Прорахунки</button>
     </div>
 
     <!-- LEADS -->
@@ -244,6 +261,14 @@
         <div class="right"><button class="ibtn blue" id="siteSave">Зберегти зміни</button></div>
       </div>
       <div id="siteSlots"></div>
+    </div>
+
+    <!-- QUOTES -->
+    <div id="view-quotes" style="display:none">
+      <div class="phead"><h2>Прорахунки залів · <span id="qCount" style="color:var(--blue-2)">0</span></h2>
+        <div class="right"><button class="ibtn" id="qCsv">Експорт CSV</button></div>
+      </div>
+      <div id="quoteList"></div>
     </div>
 
     <div style="height:60px"></div>
@@ -305,7 +330,7 @@
   const BRANDLBL = { YR:"YR Fitness", SHUA:"SHUA" };
   const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const imgSrc = s => !s ? "" : (/^(https?:|img\/)/.test(s) ? s : "img/"+s);
-  let LEADS = [], PRODUCTS = [], curTab = "leads";
+  let LEADS = [], PRODUCTS = [], QUOTES = [], curTab = "leads";
 
   /* ---- gate ---- */
   function unlock(){ $("#gate").style.display="none"; $("#app").classList.add("show"); loadLeads(); }
@@ -321,11 +346,12 @@
   document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
     document.querySelector(".tab.on").classList.remove("on"); t.classList.add("on");
     curTab=t.dataset.tab;
-    ["leads","products","site"].forEach(v=>$("#view-"+v).style.display = curTab===v?"block":"none");
+    ["leads","products","site","quotes"].forEach(v=>$("#view-"+v).style.display = curTab===v?"block":"none");
     if(curTab==="products" && !PRODUCTS.length) loadProducts();
     if(curTab==="site" && !siteLoaded) loadSite();
+    if(curTab==="quotes" && !QUOTES.length) loadQuotes();
   }));
-  $("#refresh").addEventListener("click", ()=> curTab==="leads"?loadLeads():(curTab==="products"?loadProducts():loadSite()));
+  $("#refresh").addEventListener("click", ()=>{ if(curTab==="leads")loadLeads(); else if(curTab==="products")loadProducts(); else if(curTab==="quotes")loadQuotes(); else loadSite(); });
 
   /* ===================== LEADS ===================== */
   async function loadLeads(){ try{ LEADS=await API.leadList(); }catch(e){ LEADS=[]; alert("Помилка Supabase: "+e.message); } renderLeads(); }
@@ -472,6 +498,38 @@
     const b=$("#siteSave"); b.disabled=true; b.textContent="Збереження…";
     try{ await API.siteSave(siteData); b.textContent="Збережено ✓"; setTimeout(()=>{b.textContent="Зберегти зміни";b.disabled=false;},1500); }
     catch(e){ alert("Помилка: "+e.message); b.disabled=false; b.textContent="Зберегти зміни"; }
+  });
+
+  /* ===================== QUOTES (gym layouts) ===================== */
+  async function loadQuotes(){ try{ QUOTES=await API.quoteList(); }catch(e){ QUOTES=[]; alert("Помилка Supabase: "+e.message); } renderQuotes(); }
+  function renderQuotes(){
+    $("#qCount").textContent=QUOTES.length;
+    const list=$("#quoteList");
+    if(!QUOTES.length){ list.innerHTML=`<div class="empty"><div class="mono">Прорахунків ще немає</div><div class="demo-hint">Заявки з планувальника залу (planner.html) з'являться тут.</div></div>`; return; }
+    list.innerHTML=QUOTES.map(q=>{
+      const b=ST[q.status]||ST.new;
+      const items=(q.items||[]).map(it=>`<div class="qi"><span class="qq">${it.q}×</span><span class="qm">${esc(it.model)}</span><span class="qn">${esc(it.name)}</span><span class="qp">$${((it.price||0)*(it.q||1)).toLocaleString()}</span></div>`).join("");
+      return `<div class="qcard">
+        <div class="qhead">
+          <div><div class="qname">${esc(q.name)||"—"} <span class="badge ${b[1]}" style="margin-left:6px">${b[0]}</span></div>
+            <a href="tel:${esc(q.phone)}" class="qphone">${esc(q.phone)||"—"}</a></div>
+          <div class="qtotal">$${(q.total||0).toLocaleString()}</div>
+        </div>
+        <div class="qmeta">${fmtDate(q.created_at)} · ${q.count||0} од. · ${(q.items||[]).length} позицій · ${esc(q.dims)||"—"} · ${esc(q.area)||"—"}</div>
+        ${q.comment?`<div class="qcomment">${esc(q.comment)}</div>`:""}
+        <details class="qdetails"><summary>Склад залу (${(q.items||[]).length})</summary><div class="qitems">${items}</div></details>
+        <div class="qfoot">${quoteStatusSelect(q)}<button class="del" data-qd="${esc(q.id)}">✕ Видалити</button></div>
+      </div>`;
+    }).join("");
+    list.querySelectorAll("select.qst").forEach(sel=>sel.addEventListener("change",async()=>{ await API.quoteUpdate(sel.dataset.id,{status:sel.value}); const q=QUOTES.find(x=>String(x.id)===String(sel.dataset.id)); if(q)q.status=sel.value; renderQuotes(); }));
+    list.querySelectorAll("[data-qd]").forEach(b=>b.addEventListener("click",async()=>{ if(!confirm("Видалити прорахунок?"))return; await API.quoteDelete(b.dataset.qd); QUOTES=QUOTES.filter(x=>String(x.id)!==String(b.dataset.qd)); renderQuotes(); }));
+  }
+  function quoteStatusSelect(q){ return `<select class="st qst" data-id="${esc(q.id)}">`+Object.keys(ST).map(k=>`<option value="${k}" ${q.status===k?"selected":""}>${ST[k][0]}</option>`).join("")+`</select>`; }
+  $("#qCsv").addEventListener("click", ()=>{
+    const head=["Дата","Ім'я","Телефон","Сума $","Од.","Габарити","Площа","Склад","Статус"], qc=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
+    const body=QUOTES.map(q=>[fmtDate(q.created_at),q.name,q.phone,q.total,q.count,q.dims,q.area,(q.items||[]).map(it=>it.q+"× "+it.model).join("; "),(ST[q.status]||["",""])[0]].map(qc).join(","));
+    const csv="\uFEFF"+[head.map(qc).join(","),...body].join("\n");
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="creagym-quotes-"+new Date().toISOString().slice(0,10)+".csv"; a.click(); URL.revokeObjectURL(a.href);
   });
 
   addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeForm(); } });
