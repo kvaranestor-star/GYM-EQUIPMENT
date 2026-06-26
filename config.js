@@ -5,8 +5,8 @@
 window.CREAGYM_CFG = {
   // Supabase: URL проекта и публичный anon/publishable ключ.
   // URL: https://jugqixsacznucxbanrpf.supabase.co
-  SUPABASE_URL: "https://jugqixsacznucxbanrpf.supabase.co",
-  SUPABASE_KEY: "sb_publishable_4HEzfI6H5MA9cLsKtferyw_slYgL8po",
+  SUPABASE_URL: "",
+  SUPABASE_KEY: "",
 
   // Пароль для входа в админ-панель (admin.html)
   ADMIN_PASS: "creagym",
@@ -199,7 +199,13 @@ window.CREAGYM_PRODUCTS_DEFAULT = [
       count: Math.max(0, Math.round(+q.count || 0)),
       dims: cut(q.dims, 40), area: cut(q.area, 40),
       items: (Array.isArray(q.items) ? q.items : []).slice(0, 200)
-        .map(it => ({ model: cut(it.model, 60), name: cut(it.name, 120), q: Math.round(+it.q || 1), price: Math.round(+it.price || 0) }))
+        .map(it => ({ model: cut(it.model, 60), name: cut(it.name, 120), q: Math.round(+it.q || 1), price: Math.round(+it.price || 0) })),
+      layout: (q.layout && typeof q.layout === "object") ? {
+        walls: (Array.isArray(q.layout.walls) ? q.layout.walls : []).slice(0, 60)
+          .map(p => (Array.isArray(p) ? p.slice(0, 200).map(pt => ({ x: +pt.x || 0, y: +pt.y || 0 })) : [])),
+        pieces: (Array.isArray(q.layout.pieces) ? q.layout.pieces : []).slice(0, 400)
+          .map(it => ({ model: cut(it.model, 60), cat: cut(it.cat, 40), cx: +it.cx || 0, cy: +it.cy || 0, L: +it.L || 0, W: +it.W || 0, rot: +it.rot || 0 }))
+      } : { walls: [], pieces: [] }
     };
   }
   async function quoteCreate(q) {
