@@ -210,7 +210,14 @@ window.CREAGYM_PRODUCTS_DEFAULT = [
   }
   async function quoteCreate(q) {
     const rec = Object.assign({}, normQuote(q), { status: "new", created_at: new Date().toISOString() });
-    if (online()) { const r = await fetch(URL() + "/rest/v1/quotes", { method: "POST", headers: Object.assign(headers(), { Prefer: "return=minimal" }), body: JSON.stringify(rec) }); return r.ok; }
+    if (online()) {
+      let r = await fetch(URL() + "/rest/v1/quotes", { method: "POST", headers: Object.assign(headers(), { Prefer: "return=minimal" }), body: JSON.stringify(rec) });
+      if (!r.ok && rec.layout) {
+        const rec2 = Object.assign({}, rec); delete rec2.layout;
+        r = await fetch(URL() + "/rest/v1/quotes", { method: "POST", headers: Object.assign(headers(), { Prefer: "return=minimal" }), body: JSON.stringify(rec2) });
+      }
+      return r.ok;
+    }
     rec.id = "qt_" + Date.now(); const a = lsGet(Q, []); a.unshift(rec); lsSet(Q, a); return true;
   }
   async function quoteList() {
