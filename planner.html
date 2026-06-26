@@ -83,6 +83,14 @@
   #preview .pcap .pn{display:block;font-weight:500;color:#555;font-size:11px;margin-top:1px}
   #preview .pcap .pru{display:block;font-weight:700;color:#0a7d2c;font-size:12px;margin-top:4px;padding-top:4px;border-top:1px solid #eee}
 </style>
+
+<style id="hide-prices-for-client">
+  .row .pr{display:none!important}          /* цена в каталоге */
+  .bomrow .pr{display:none!important}       /* цена в позиции сметы */
+  .total{display:none!important}            /* блок «Оборудование» */
+  .pru{display:none!important}              /* цена в превью */
+  #btnCsv{display:none!important}           /* экспорт Excel с ценами */
+</style>
 </head>
 <body>
 <div class="topbar">
@@ -128,7 +136,7 @@
       <div class="stat"><div class="v" id="st_used">0 м²</div><div class="l">Тренажёры</div></div>
       <div class="stat"><div class="v" id="st_cnt">0</div><div class="l">Единиц</div></div>
     </div>
-    <h2>Смета (дистриб. цены)</h2>
+    <h2>Состав зала</h2>
     <div class="bom" id="bom"><div class="empty">Пока пусто.<br>Добавь тренажёры из каталога.</div></div>
     <div class="total"><span class="l">Итого оборудование</span><span class="v" id="grandtotal">$0</span></div>
     <div class="io">
@@ -459,7 +467,7 @@ setTimeout(()=>{const r=stage.getBoundingClientRect();panX=r.width/2-9*MPP;panY=
 function gymBom(){const m={};items.forEach(function(i){if(!m[i.model])m[i.model]={model:i.model,name:i.name,price:i.price||0,q:0};m[i.model].q++;});return Object.values(m);}
 function gymBounds(){var pts=[];(walls||[]).forEach(function(p){p.forEach(function(q){pts.push(q);});});if(!pts.length)items.forEach(function(it){pts.push({x:it.cx-it.L/2,y:it.cy-it.W/2});pts.push({x:it.cx+it.L/2,y:it.cy+it.W/2});});if(!pts.length)return null;var xs=pts.map(function(p){return p.x;}),ys=pts.map(function(p){return p.y;});var w=Math.max.apply(0,xs)-Math.min.apply(0,xs),d=Math.max.apply(0,ys)-Math.min.apply(0,ys);return{w:w,d:d,area:w*d};}
 function dimsStr(b){return b?(b.w.toFixed(1)+'×'+b.d.toFixed(1)+' м'):'—';}
-function openQuote(){if(!items.length){alert('Сначала добавьте тренажёры в зал.');return;}var bom=gymBom();var total=bom.reduce(function(s,m){return s+m.price*m.q;},0);var b=gymBounds();document.getElementById('qsummary').textContent=items.length+' ед. · '+bom.length+' позиций · '+dimsStr(b)+' · $'+total.toLocaleString();document.getElementById('qform').style.display='block';document.getElementById('qok').style.display='none';document.getElementById('qerr').textContent='';document.getElementById('qmodal').style.display='flex';}
+function openQuote(){if(!items.length){alert('Сначала добавьте тренажёры в зал.');return;}var bom=gymBom();var total=bom.reduce(function(s,m){return s+m.price*m.q;},0);var b=gymBounds();document.getElementById('qsummary').textContent=items.length+' ед. · '+bom.length+' позиций · '+dimsStr(b);document.getElementById('qform').style.display='block';document.getElementById('qok').style.display='none';document.getElementById('qerr').textContent='';document.getElementById('qmodal').style.display='flex';}
 function closeQuote(){document.getElementById('qmodal').style.display='none';}
 document.getElementById('btnQuote').onclick=openQuote;
 document.getElementById('qsend').onclick=async function(){var name=document.getElementById('qname').value.trim();var phone=document.getElementById('qphone').value.trim();var err=document.getElementById('qerr');if(!name||!phone){err.textContent='Укажите имя и телефон.';return;}if((phone.match(/\d/g)||[]).length<7){err.textContent='Проверьте номер телефона.';return;}var bom=gymBom();var total=bom.reduce(function(s,m){return s+m.price*m.q;},0);var b=gymBounds();var payload={name:name,phone:phone,comment:document.getElementById('qcomment').value.trim(),total:total,count:items.length,dims:dimsStr(b),area:b?b.area.toFixed(1)+' м²':'—',items:bom.map(function(m){return {model:m.model,name:m.name,q:m.q,price:m.price};})};var btn=this;btn.disabled=true;btn.textContent='Отправка…';try{if(!window.CREAGYM_API){err.textContent='config.js не підключено. Перевір, що файл лежить поруч з planner.html.';btn.disabled=false;btn.textContent='Отправить';return;}var ok=await window.CREAGYM_API.quoteCreate(payload);if(ok){document.getElementById('qform').style.display='none';document.getElementById('qok').style.display='block';}else{err.textContent='Не удалось отправить. Попробуйте ещё раз.';}}catch(e){err.textContent='Ошибка отправки: '+e.message;}btn.disabled=false;btn.textContent='Отправить';};
