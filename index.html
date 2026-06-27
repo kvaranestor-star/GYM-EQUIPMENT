@@ -284,6 +284,7 @@
   .pager button:disabled{opacity:.4;cursor:default}
   .pager .pg-dots{color:var(--ink-3);padding:0 2px}
   .pager .pg-info{margin-left:10px;color:var(--ink-3);font-family:'IBM Plex Mono';font-size:12px}
+  .series-sel{margin:12px auto 0;display:block;font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.03em;padding:9px 34px 9px 13px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23BE1E2D' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>") no-repeat right 12px center;color:var(--ink);cursor:pointer;-webkit-appearance:none;appearance:none}
 </style>
 </head>
 <body>
@@ -722,9 +723,9 @@ function cardHTML(p,i){
       <div class="body"><div class="cat">${esc(p.subtitle||'')}</div><h3>${esc(stripBrand(p.name)||'')}</h3>
         <div class="specs">${specs}</div></div></article>`;
 }
-let curFilter="all", catPage=1; const PER_PAGE=12;
+let curFilter="all", curSeries="all", catPage=1; const PER_PAGE=12;
 function renderGrid(){
-  const fl=CATALOG.map((p,i)=>({p,i})).filter(x=>curFilter==="all"||(x.p.category||"")===curFilter);
+  const fl=CATALOG.map((p,i)=>({p,i})).filter(x=>(curFilter==="all"||(x.p.category||"")===curFilter)&&(curSeries==="all"||(x.p.series||"")===curSeries));
   const total=Math.max(1,Math.ceil(fl.length/PER_PAGE));
   if(catPage>total)catPage=total; if(catPage<1)catPage=1;
   const slice=fl.slice((catPage-1)*PER_PAGE, catPage*PER_PAGE);
@@ -745,13 +746,25 @@ function renderGrid(){
     document.getElementById("catalog")?.scrollIntoView({behavior:"smooth",block:"start"});
   }));
 }
+function buildSeriesFilter(){
+  let sel=document.getElementById("seriesFilter");
+  if(!sel){ const filters=document.getElementById("filters"); sel=document.createElement("select"); sel.id="seriesFilter"; sel.className="series-sel";
+    filters.parentNode.insertBefore(sel, filters.nextSibling);
+    sel.addEventListener("change",()=>{ curSeries=sel.value; catPage=1; renderGrid(); }); }
+  const pool=CATALOG.filter(p=>curFilter==="all"||(p.category||"")===curFilter);
+  const set=[...new Set(pool.map(p=>p.series).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
+  sel.innerHTML='<option value="all">Усі серії</option>'+set.map(sv=>`<option value="${esc(sv)}">Серія ${esc(sv)}</option>`).join("");
+  sel.style.display = set.length>1 ? "" : "none";
+  if(![...sel.options].some(o=>o.value===curSeries)) curSeries="all";
+  sel.value=curSeries;
+}
 async function renderCatalog(){
   try{ CATALOG = await window.CREAGYM_API.productList(); }catch(e){ CATALOG=[]; }
   if(!CATALOG || !CATALOG.length) CATALOG = window.CREAGYM_PRODUCTS_DEFAULT || [];
-  catPage=1; renderGrid();
+  curSeries="all"; buildSeriesFilter(); catPage=1; renderGrid();
 }
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
-  document.querySelector("#filters .active")?.classList.remove("active");b.classList.add("active");curFilter=b.dataset.f;catPage=1;renderGrid();});
+  document.querySelector("#filters .active")?.classList.remove("active");b.classList.add("active");curFilter=b.dataset.f;curSeries="all";buildSeriesFilter();catPage=1;renderGrid();});
 renderCatalog();
 
 /* ---- site photos from admin (hero + showcase) ---- */
