@@ -266,7 +266,7 @@
       </div>
       <div class="pfilters">
         <input id="pSearch" placeholder="Пошук: назва або модель…">
-        <select id="pCat"><option value="">Всі категорії</option><option value="cardio">Кардіо</option><option value="strength">Силові</option><option value="multi">Мультистанції</option><option value="rack">Рами та стійки</option></select>
+        <select id="pCat"><option value="">Всі категорії</option><option value="cardio">Кардіо</option><option value="strength">Вантажоблочні</option><option value="plate">Навантажувані</option><option value="multi">Мультистанції</option><option value="rack">Рами та стійки</option></select>
         <select id="pPhoto"><option value="">Фото: всі</option><option value="no">Без фото</option><option value="yes">З фото</option></select>
         <select id="pSort"><option value="nophoto">Спершу без фото</option><option value="cat">За категорією</option><option value="name">За назвою</option><option value="model">За моделлю</option></select>
       </div>
@@ -344,7 +344,7 @@
     throw new Error("config.js not loaded");
   }
   const ST = { new:["Нова","b1"], in_progress:["В роботі","b2"], closed:["Закрита","b3"] };
-  const CATLBL = { strength:"Силові", cardio:"Кардіо", multi:"Станції", rack:"Рами та стійки" };
+  const CATLBL = { strength:"Вантажоблочні", plate:"Навантажувані", cardio:"Кардіо", multi:"Станції", rack:"Рами та стійки" };
   const BRANDLBL = { YR:"YR Fitness", SHUA:"SHUA" };
   const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const imgSrc = s => !s ? "" : (/^(https?:|img\/)/.test(s) ? s : "img/"+s);
