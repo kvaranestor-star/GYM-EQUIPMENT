@@ -262,6 +262,7 @@
         <div class="right">
           <button class="ibtn" id="seedBtn">Стандартні товари</button>
           <button class="ibtn blue" id="addBtn">+ Додати товар</button>
+          <button class="ibtn" id="hiresBtn">Фото з прайсу (HD)</button>
         </div>
       </div>
       <div class="pfilters">
@@ -444,6 +445,30 @@
     d.querySelector(".srm").addEventListener("click",()=>d.remove()); return d; }
   $("#addRow").addEventListener("click",()=>$("#specRows").appendChild(specRow("","")));
   $("#addBtn").addEventListener("click",()=>openForm(null));
+  $("#hiresBtn").addEventListener("click", importHiresPhotos);
+  async function importHiresPhotos(){
+    const btn=$("#hiresBtn");
+    if(!confirm("Імпортувати HD-фото з прайсу для всіх моделей? Наявні фото буде перезаписано. Це може зайняти 1–2 хв."))return;
+    let map;
+    try{ const r=await fetch("photos-hires.json",{cache:"no-store"}); if(!r.ok)throw 0; map=await r.json(); }
+    catch(e){ alert("Не знайдено photos-hires.json у корені сайту. Завантаж його в репозиторій і задеплой."); return; }
+    if(!CFG.SUPABASE_URL||!CFG.SUPABASE_KEY){ alert("Supabase не налаштовано в config.js"); return; }
+    const H={apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"};
+    const base=CFG.SUPABASE_URL.replace(/\/$/,"");
+    const models=Object.keys(map); let done=0, ok=0, fail=0;
+    btn.disabled=true;
+    async function one(m){
+      const url=base+"/rest/v1/products?model=eq."+encodeURIComponent(m)+"&brand=eq.YR";
+      try{ const res=await fetch(url,{method:"PATCH",headers:H,body:JSON.stringify({image:map[m],images:[map[m]]})}); res.ok?ok++:fail++; }
+      catch(e){ fail++; }
+      done++; btn.textContent="Фото… "+done+"/"+models.length;
+    }
+    const CONC=6;
+    for(let i=0;i<models.length;i+=CONC){ await Promise.all(models.slice(i,i+CONC).map(one)); }
+    btn.disabled=false; btn.textContent="Фото з прайсу (HD)";
+    alert("Готово. Оновлено: "+ok+", помилок: "+fail+". Онови сторінку (Ctrl+Shift+R).");
+    if(typeof loadProducts==="function"){ try{ await loadProducts(); }catch(e){} }
+  }
 
   /* ---- photos: multi-image gallery ---- */
   let formImages = [];
