@@ -390,7 +390,8 @@
   </div>
 
   <div class="filters" id="filters">
-    <button class="filter" data-f="strength" data-i18n="f_strength">Силові</button>
+    <button class="filter" data-f="strength" data-i18n="f_strength">Вантажоблочні</button>
+    <button class="filter" data-f="plate" data-i18n="f_plate">Навантажувані</button>
     <button class="filter" data-f="cardio" data-i18n="f_cardio">Кардіо</button>
     <button class="filter" data-f="multi" data-i18n="f_multi">Станції</button>
     <button class="filter" data-f="rack" data-i18n="f_rack">Рами та стійки</button>
@@ -569,7 +570,7 @@ const I18N = {
     showcase_eyebrow:"Зали під ключ",showcase_h:"Як це<br>виглядає в залі",
     look1_k:"01 / Силова зона",look1_h:"Грузоблочні станції",look2_k:"02 / Кардіо",look2_h:"Бігові доріжки",look3_k:"03 / Функціонал",look3_h:"Rig / Cross-зона",
     cat_eyebrow:"Каталог",cat_h:"Обладнання",cat_sub:"Професійні лінійки для комерційних залів, студій, готелів і корпоративних просторів.",
-    f_all:"Всі",f_strength:"Силові",f_cardio:"Кардіо",f_multi:"Станції",f_rack:"Рами та стійки",
+    f_all:"Всі",f_strength:"Вантажоблочні",f_plate:"Навантажувані",f_cardio:"Кардіо",f_multi:"Станції",f_rack:"Рами та стійки",
     c1_cat:"Силові · Pin-loaded",c1_k1:"Серія",c1_v1:"C4 · флагман",c1_k2:"Рама",c1_v2:"Сталь Q235",c1_k3:"Лінійка",c1_v3:"15+ станків",
     c2_cat:"Силові · Plate-loaded",c2_k1:"Тип",c2_v1:"Plate-loaded",c2_k2:"Навантаження",c2_v2:"Диски Ø50",c2_k3:"Покриття",c2_v3:"Порошкова емаль",
     c3_cat:"Мультистанція · Group",c3_k1:"Станцій",c3_k2:"Тип",c3_k3:"Формат",c3_v3:"Груповий",
@@ -617,7 +618,7 @@ const I18N = {
     showcase_eyebrow:"Turnkey gyms",showcase_h:"How it<br>looks in the gym",
     look1_k:"01 / Strength zone",look1_h:"Selectorized machines",look2_k:"02 / Cardio",look2_h:"Treadmills",look3_k:"03 / Functional",look3_h:"Rig / Cross zone",
     cat_eyebrow:"Catalogue",cat_h:"Equipment",cat_sub:"Professional lineups for commercial gyms, studios, hotels and corporate spaces.",
-    f_all:"All",f_strength:"Strength",f_cardio:"Cardio",f_multi:"Stations",f_rack:"Racks",
+    f_all:"All",f_strength:"Selectorized",f_plate:"Plate-loaded",f_cardio:"Cardio",f_multi:"Stations",f_rack:"Racks",
     c1_cat:"Strength · Pin-loaded",c1_k1:"Series",c1_v1:"C4 · flagship",c1_k2:"Frame",c1_v2:"Q235 steel",c1_k3:"Range",c1_v3:"15+ machines",
     c2_cat:"Strength · Plate-loaded",c2_k1:"Type",c2_v1:"Plate-loaded",c2_k2:"Load",c2_v2:"Ø50 plates",c2_k3:"Finish",c2_v3:"Powder-coated",
     c3_cat:"Multi-station · Group",c3_k1:"Stations",c3_k2:"Type",c3_k3:"Format",c3_v3:"Group",
@@ -753,7 +754,7 @@ function buildSeriesFilter(){
   const pool=CATALOG.filter(p=>curFilter==="all"||(p.category||"")===curFilter);
   const set=[...new Set(pool.map(p=>p.series).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
   sel.innerHTML='<option value="all">Усі серії</option>'+set.map(sv=>`<option value="${esc(sv)}">Серія ${esc(sv)}</option>`).join("");
-  sel.style.display = set.length>1 ? "" : "none";
+  sel.style.display = (curFilter==="strength" && set.length>1) ? "" : "none";
   if(![...sel.options].some(o=>o.value===curSeries)) curSeries="all";
   sel.value=curSeries;
 }
