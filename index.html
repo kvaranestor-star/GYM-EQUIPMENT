@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CREAGYM Equipment · SHUA × YR Fitness</title>
-<meta name="description" content="Імпорт комерційного фітнес-обладнання SHUA і YR Fitness. Постачання, проєкт розстановки, монтаж і сервіс під ключ.">
-<meta property="og:title" content="CREAGYM Equipment · SHUA × YR Fitness">
-<meta property="og:description" content="Професійні тренажери SHUA і YR Fitness. Зал під ключ — постачання, проєкт, монтаж, сервіс.">
+<title>CGM · Комерційні тренажери</title>
+<meta name="description" content="Імпорт комерційного фітнес-обладнання. Постачання, проєкт розстановки, монтаж і сервіс під ключ.">
+<meta property="og:title" content="CGM · Комерційні тренажери">
+<meta property="og:description" content="Професійні комерційні тренажери. Зал під ключ — постачання, проєкт, монтаж, сервіс.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +34,9 @@
   header.s{background:rgba(255,255,255,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;height:74px;transition:height .4s var(--ease)}
   header.s .nav{height:60px}
-  .logo{display:flex;align-items:baseline;gap:2px;font-weight:900;font-size:21px;letter-spacing:-.02em}
+  .logo{display:flex;flex-direction:column;gap:1px;font-weight:900;letter-spacing:-.02em;line-height:1;text-decoration:none}
+  .logo-main{display:flex;align-items:baseline;gap:1px;font-size:23px}
+  .logo-sub{font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
   .logo .d{color:var(--blue)}
   .nav-links{display:flex;gap:30px;align-items:center}
   .nav-links a{font-size:13.5px;color:var(--ink-2);transition:color .2s}
@@ -235,7 +237,7 @@
 
   footer{border-top:1px solid var(--line);padding:56px 0 44px;background:var(--bg-2)}
   .foot{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
-  .foot .logo{font-size:25px}
+  .foot .logo-main{font-size:27px}
   .foot p{color:var(--ink-2);font-size:13.5px;max-width:32ch;margin-top:14px}
   .foot .meta{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink-3);line-height:2.1;letter-spacing:.04em}
   .foot .meta a:hover{color:var(--blue-2)}
@@ -273,6 +275,15 @@
     .rv,.hero-h .line span,.hero-eyebrow,.hero-sub,.hero-cta,.hero-photo{opacity:1!important;transform:none!important}
   }
   :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  .card .brandtag,.ph .brandtag{display:none!important}
+  .pm-brand{display:none!important}
+  .pager{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin:34px 0 4px}
+  .pager button{min-width:38px;height:38px;padding:0 10px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);border-radius:var(--r);font-family:'IBM Plex Mono';font-size:13px;cursor:pointer;transition:all .15s}
+  .pager button:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+  .pager button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .pager button:disabled{opacity:.4;cursor:default}
+  .pager .pg-dots{color:var(--ink-3);padding:0 2px}
+  .pager .pg-info{margin-left:10px;color:var(--ink-3);font-family:'IBM Plex Mono';font-size:12px}
 </style>
 </head>
 <body>
@@ -280,9 +291,8 @@
 
 <header id="hdr">
   <div class="wrap nav">
-    <a href="#top" class="logo">CREAGYM<span class="d">.</span></a>
+    <a href="#top" class="logo"><span class="logo-main">CGM<span class="d">.</span></span><span class="logo-sub">Commercial Gym Machines</span></a>
     <nav class="nav-links">
-      <a href="#brands" data-i18n="nav_brands">Бренди</a>
       <a href="#catalog" data-i18n="nav_catalog">Каталог</a>
       <a href="planner.html" data-i18n="nav_planner">Планувальник</a>
       <a href="#process" data-i18n="nav_process">Під ключ</a>
@@ -300,16 +310,17 @@
   <div class="hero-bg"><div class="grid"></div><div class="g1" data-par="0.18"></div><div class="g2" data-par="-0.1"></div></div>
   <div class="wrap hero-in">
     <div>
-      <div class="hero-eyebrow eyebrow" data-i18n="hero_eyebrow">SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ</div>
+      <div class="hero-eyebrow eyebrow" data-i18n="hero_eyebrow">КОМЕРЦІЙНЕ ОБЛАДНАННЯ · ОФІЦІЙНИЙ ІМПОРТ</div>
       <h1 class="hero-h">
         <span class="line"><span data-i18n="hero_l1">Профі-</span></span>
         <span class="line"><span data-i18n="hero_l2">обладнання</span></span>
         <span class="line"><span data-i18n="hero_l3" data-i18n-html>для <span class="b">залів</span></span></span>
       </h1>
-      <p class="hero-sub" data-i18n="hero_sub" data-i18n-html>Постачаємо комерційні тренажери двох заводів — <b>SHUA</b> (постачальник 7 Олімпіад) та <b>YR&nbsp;Fitness</b> (28 років, CE/TÜV/ISO). Прямий імпорт, проєкт розстановки, монтаж і сервіс під ключ.</p>
+      <p class="hero-sub" data-i18n="hero_sub" data-i18n-html>Постачаємо професійні комерційні тренажери з прямим імпортом: кардіо, силові, мультистанції та вільні ваги. Проєкт розстановки, монтаж і сервіс під ключ.</p>
       <div class="hero-cta">
+        <a href="planner.html" class="btn btn-b"><span>Зібрати свій зал</span> <span class="ar">↗</span></a>
         <a href="#catalog" class="btn btn-o" data-i18n="hero_cta1">Дивитись каталог</a>
-        <a href="#cta" class="btn btn-b"><span data-i18n="hero_cta2">Отримати розрахунок</span> <span class="ar">↗</span></a>
+        <a href="#cta" class="btn btn-o"><span data-i18n="hero_cta2">Отримати розрахунок</span></a>
       </div>
     </div>
     <div class="hero-photo" data-par="0.06">
@@ -319,7 +330,7 @@
         <svg class="bp" viewBox="0 0 320 360"><line stroke x1="40" y1="330" x2="280" y2="330"/><rect stroke x="60" y="40" width="34" height="290"/><rect stroke x="226" y="40" width="34" height="290"/><rect stroke x="60" y="40" width="200" height="18"/><circle stroke cx="77" cy="86" r="9"/><circle stroke cx="243" cy="86" r="9"/><circle stroke cx="160" cy="49" r="6"/><rect stroke x="66" y="120" width="22" height="170"/><line stroke x1="66" y1="150" x2="88" y2="150"/><line stroke x1="66" y1="175" x2="88" y2="175"/><line stroke x1="66" y1="200" x2="88" y2="200"/><line stroke x1="66" y1="225" x2="88" y2="225"/><line stroke x1="66" y1="250" x2="88" y2="250"/><rect stroke x="232" y="120" width="22" height="170"/><line stroke x1="232" y1="150" x2="254" y2="150"/><line stroke x1="232" y1="175" x2="254" y2="175"/><line stroke x1="232" y1="200" x2="254" y2="200"/><line stroke x1="232" y1="225" x2="254" y2="225"/><line stroke x1="232" y1="250" x2="254" y2="250"/><path stroke d="M77 95 Q110 110 140 150"/><path stroke d="M243 95 Q210 110 180 150"/><line class="dim" stroke x1="60" y1="348" x2="260" y2="348" stroke-dasharray="2 4"/></svg>
       </div>
       <span class="tag t1">FLAGSHIP</span>
-      <span class="tag t2">SHUA × YR</span>
+      <span class="tag t2">ПІД КЛЮЧ</span>
       <div class="hero-stats">
         <div class="hs"><div class="n">02</div><div class="l" data-i18n="hero_s1">заводи</div></div>
         <div class="hs"><div class="n">110+</div><div class="l" data-i18n="hero_s2">країн</div></div>
@@ -334,37 +345,13 @@
 <!-- STATS -->
 <section class="sec wrap" style="padding-bottom:0">
   <div class="stats">
-    <div class="st rv"><div class="n"><span data-count="28">0</span><span class="u">+</span></div><div class="l" data-i18n="st1">років виробництва YR</div></div>
-    <div class="st rv"><div class="n"><span data-count="7">0</span></div><div class="l" data-i18n="st2">Олімпіад · SHUA</div></div>
+    <div class="st rv"><div class="n"><span data-count="28">0</span><span class="u">+</span></div><div class="l" data-i18n="st1">років на ринку</div></div>
+    <div class="st rv"><div class="n"><span data-count="7">0</span></div><div class="l" data-i18n="st2">олімпійський рівень</div></div>
     <div class="st rv"><div class="n"><span data-count="6000">0</span><span class="u">+</span></div><div class="l" data-i18n="st3">залів у світі</div></div>
     <div class="st rv"><div class="n"><span data-count="110">0</span><span class="u">+</span></div><div class="l" data-i18n="st4">країн постачання</div></div>
   </div>
 </section>
 
-<!-- BRANDS -->
-<section class="sec wrap" id="brands">
-  <div class="sec-head">
-    <div><div class="eyebrow" style="margin-bottom:18px" data-i18n="brands_eyebrow">Наші бренди</div>
-      <h2 data-i18n="brands_h" data-i18n-html>Два заводи —<br>один постачальник</h2></div>
-    <div class="r"><p class="sub" data-i18n="brands_sub">Лінійки, що доповнюють одна одну: інженерія та кардіо SHUA + силові серії YR за ціною нижче преміум-брендів.</p></div>
-  </div>
-  <div class="brands">
-    <div class="brandcard rv">
-      <div class="glow"></div>
-      <div class="name"><span class="en">SHUA</span></div>
-      <div class="role" data-i18n="shua_role">Кардіо · Smart Strength · Олімпійський рівень</div>
-      <p data-i18n="shua_p">Завод з 1996 року, лістинг A-share, ACSM. Офіційний постачальник 7 Олімпійських ігор. Розумні консолі, адаптивна амортизація, серія 98 Smart Strength.</p>
-      <div class="chips" data-i18n-chips="shua_chips"><span class="chip">Доріжки</span><span class="chip">Еліпси</span><span class="chip">Сайкли</span><span class="chip">Веслування</span><span class="chip">98 Series</span></div>
-    </div>
-    <div class="brandcard yr rv d1">
-      <div class="glow"></div>
-      <div class="name"><span class="en">YR Fitness</span></div>
-      <div class="role" data-i18n="yr_role">Силові серії · Plate / Pin loaded · 28 років</div>
-      <p data-i18n="yr_p">Порівнюють з Technogym і Matrix за збиранням, але дешевше. Професійні кути руху, сталь Q235, ~80% перед-збирання. CE / TÜV / ISO, 110+ країн.</p>
-      <div class="chips" data-i18n-chips="yr_chips"><span class="chip">C4 Revival</span><span class="chip">61A Racing</span><span class="chip">73 Tough</span><span class="chip">Multi Jungle</span><span class="chip">Bench &amp; Rack</span></div>
-    </div>
-  </div>
-</section>
 
 <!-- SHOWCASE -->
 <section class="sec wrap" id="showcase">
@@ -376,13 +363,13 @@
     <div class="tile rv">
       <div class="ph" style="position:absolute;inset:0"><img src="img/look-1.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
         <svg class="bp" viewBox="0 0 100 100"><rect stroke x="20" y="22" width="60" height="56"/><line stroke x1="20" y1="40" x2="80" y2="40"/><line stroke x1="35" y1="40" x2="35" y2="78"/><line stroke x1="65" y1="40" x2="65" y2="78"/></svg></div>
-      <div class="cap"><div class="k" data-i18n="look1_k">01 / Силова зона</div><h3 data-i18n="look1_h">Грузоблочні станки YR</h3></div>
+      <div class="cap"><div class="k" data-i18n="look1_k">01 / Силова зона</div><h3 data-i18n="look1_h">Грузоблочні станції</h3></div>
     </div>
     <div class="stack">
       <div class="tile rv d1">
         <div class="ph" style="position:absolute;inset:0"><img src="img/look-2.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
           <svg class="bp" viewBox="0 0 100 100"><path stroke d="M22 70 L66 70 L74 42 L62 42"/><rect stroke x="56" y="26" width="20" height="14"/><circle stroke cx="26" cy="74" r="3"/><circle stroke cx="62" cy="74" r="3"/></svg></div>
-        <div class="cap"><div class="k" data-i18n="look2_k">02 / Кардіо</div><h3 data-i18n="look2_h">Доріжки SHUA</h3></div>
+        <div class="cap"><div class="k" data-i18n="look2_k">02 / Кардіо</div><h3 data-i18n="look2_h">Бігові доріжки</h3></div>
       </div>
       <div class="tile rv d2">
         <div class="ph" style="position:absolute;inset:0"><img src="img/look-3.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
@@ -442,35 +429,35 @@
     <article class="card rv d1" data-cat="cardio">
       <div class="ph"><img src="img/sh-t9100t.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-T9100T</span><div class="floor"></div>
         <svg class="bp" viewBox="0 0 100 100"><path stroke d="M18 72 L70 72 L78 40 L66 40"/><rect stroke x="58" y="22" width="24" height="16"/><line stroke x1="18" y1="72" x2="18" y2="58"/><path stroke d="M18 58 L30 58"/><circle stroke cx="22" cy="76" r="4"/><circle stroke cx="66" cy="76" r="4"/></svg></div>
-      <div class="body"><div class="cat" data-i18n="c5_cat">Кардіо · Treadmill</div><h3>SHUA SH-T9100T</h3>
+      <div class="body"><div class="cat" data-i18n="c5_cat">Кардіо · Treadmill</div><h3>SH-T9100T</h3>
         <div class="specs"><div class="sp"><span data-i18n="c5_k1">Консоль</span><b>32" Touch</b></div><div class="sp"><span data-i18n="c5_k2">Швидкість</span><b data-i18n="c5_v2">до 22 км/год</b></div><div class="sp"><span data-i18n="c5_k3">Клас</span><b>Commercial</b></div></div></div>
     </article>
 
     <article class="card rv d2" data-cat="cardio">
       <div class="ph"><img src="img/sh-t901z.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-T901Z</span><div class="floor"></div>
         <svg class="bp" viewBox="0 0 100 100"><path stroke d="M20 74 Q50 50 80 74"/><line stroke x1="20" y1="74" x2="20" y2="60"/><path stroke d="M20 60 L34 60"/><line stroke x1="80" y1="74" x2="80" y2="40"/><rect stroke x="72" y="26" width="16" height="14"/><circle stroke cx="24" cy="78" r="4"/><circle stroke cx="76" cy="78" r="4"/></svg></div>
-      <div class="body"><div class="cat" data-i18n="c6_cat">Кардіо · Curved</div><h3>SHUA SH-T901Z</h3>
+      <div class="body"><div class="cat" data-i18n="c6_cat">Кардіо · Curved</div><h3>SH-T901Z</h3>
         <div class="specs"><div class="sp"><span data-i18n="c6_k1">Тип</span><b data-i18n="c6_v1">Вигнута</b></div><div class="sp"><span data-i18n="c6_k2">Привід</span><b>Self-powered</b></div><div class="sp"><span data-i18n="c6_k3">Зона</span><b>HIIT</b></div></div></div>
     </article>
 
     <article class="card rv" data-cat="cardio">
       <div class="ph"><img src="img/sh-b599.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-B599</span><div class="floor"></div>
         <svg class="bp" viewBox="0 0 100 100"><path stroke d="M22 76 L42 42 L62 42 L80 76"/><circle stroke cx="50" cy="34" r="6"/><line stroke x1="42" y1="42" x2="62" y2="42"/><path stroke d="M60 42 L74 28"/><circle stroke cx="78" cy="24" r="3"/><line stroke x1="22" y1="76" x2="80" y2="76"/></svg></div>
-      <div class="body"><div class="cat" data-i18n="c7_cat">Кардіо · Spin</div><h3>SHUA SH-B599 Spin</h3>
+      <div class="body"><div class="cat" data-i18n="c7_cat">Кардіо · Spin</div><h3>SH-B599 Spin</h3>
         <div class="specs"><div class="sp"><span data-i18n="c7_k1">Маховик</span><b data-i18n="c7_v1">Магнітний</b></div><div class="sp"><span data-i18n="c7_k2">Привід</span><b data-i18n="c7_v2">Ремінь, тихий</b></div><div class="sp"><span data-i18n="c7_k3">Зона</span><b data-i18n="c7_v3">Сайкл-студії</b></div></div></div>
     </article>
 
     <article class="card rv d1" data-cat="strength">
       <div class="ph"><img src="img/sh-98.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-98</span><div class="floor"></div>
         <svg class="bp" viewBox="0 0 100 100"><rect stroke x="40" y="38" width="20" height="34"/><line stroke x1="50" y1="16" x2="50" y2="38"/><path stroke d="M34 20 L50 16 L66 20"/><circle stroke cx="50" cy="55" r="5"/><path stroke d="M40 72 L40 84 L60 84 L60 72"/></svg></div>
-      <div class="body"><div class="cat" data-i18n="c8_cat">Силові · Smart</div><h3>SHUA 98 Series</h3>
+      <div class="body"><div class="cat" data-i18n="c8_cat">Силові · Smart</div><h3>98 Series</h3>
         <div class="specs"><div class="sp"><span data-i18n="c8_k1">Покоління</span><b>Smart Strength</b></div><div class="sp"><span data-i18n="c8_k2">Функції</span><b data-i18n="c8_v2">Контроль навантаження</b></div><div class="sp"><span data-i18n="c8_k3">Дані</span><b data-i18n="c8_v3">Реал-тайм</b></div></div></div>
     </article>
 
     <article class="card rv d2" data-cat="multi">
       <div class="ph"><img src="img/sh-g699.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="brandtag">SHUA</span><span class="no">NO. SH-G699</span><div class="floor"></div>
         <svg class="bp" viewBox="0 0 100 100"><rect stroke x="18" y="20" width="9" height="60"/><rect stroke x="73" y="20" width="9" height="60"/><line stroke x1="18" y1="24" x2="82" y2="24"/><circle stroke cx="27" cy="32" r="4"/><circle stroke cx="73" cy="32" r="4"/><path stroke d="M27 36 L40 56 M73 36 L60 56"/></svg></div>
-      <div class="body"><div class="cat" data-i18n="c9_cat">Кросовер · Wall-mounted</div><h3>SHUA SH-G699</h3>
+      <div class="body"><div class="cat" data-i18n="c9_cat">Кросовер · Wall-mounted</div><h3>SH-G699</h3>
         <div class="specs"><div class="sp"><span data-i18n="c9_k1">Тип</span><b data-i18n="c9_v1">Настінний</b></div><div class="sp"><span data-i18n="c9_k2">Регулювання</span><b data-i18n="c9_v2">За передачами</b></div><div class="sp"><span data-i18n="c9_k3">Дзеркало</span><b data-i18n="c9_v3">У комплекті</b></div></div></div>
     </article>
 
@@ -490,8 +477,8 @@
     <div class="r"><p class="sub" data-i18n="proc_sub">Від порожнього приміщення до запуску. Один підрядник на весь проєкт.</p></div>
   </div>
   <div class="proc">
-    <div class="step rv"><div class="num">01</div><div><h3 data-i18n="step1_h">Підбір</h3><p data-i18n="step1_p">Комплект SHUA / YR під формат залу, площу та бюджет.</p></div><div class="tag" data-i18n="step1_t">Бюджет · Формат</div></div>
-    <div class="step rv"><div class="num">02</div><div><h3 data-i18n="step2_h">Проєкт і розстановка</h3><p data-i18n="step2_p">2D/3D-план зонування з ергономікою потоків і безпечними інтервалами.</p></div><div class="tag" data-i18n="step2_t">2D / 3D</div></div>
+    <div class="step rv"><div class="num">01</div><div><h3 data-i18n="step1_h">Підбір</h3><p data-i18n="step1_p">Комплект під формат залу, площу та бюджет.</p></div><div class="tag" data-i18n="step1_t">Бюджет · Формат</div></div>
+    <div class="step rv"><div class="num">02</div><div><h3 data-i18n="step2_h">Планування залу</h3><p data-i18n="step2_p">Допоможемо спланувати розстановку обладнання під площу та формат вашого залу.</p></div><div class="tag" data-i18n="step2_t">ПЛАН</div></div>
     <div class="step rv"><div class="num">03</div><div><h3 data-i18n="step3_h">Постачання</h3><p data-i18n="step3_p">Прямий імпорт із заводів, логістика і розмитнення під нашим контролем.</p></div><div class="tag" data-i18n="step3_t">Імпорт · Логістика</div></div>
     <div class="step rv"><div class="num">04</div><div><h3 data-i18n="step4_h">Монтаж і запуск</h3><p data-i18n="step4_p">Збирання, налаштування, калібрування, інструктаж персоналу, здача під ключ.</p></div><div class="tag" data-i18n="step4_t">Збирання · Запуск</div></div>
     <div class="step rv"><div class="num">05</div><div><h3 data-i18n="step5_h">Сервіс</h3><p data-i18n="step5_p">Гарантія заводу, ЗІП і планове ТО — зал працює без простоїв.</p></div><div class="tag" data-i18n="step5_t">Гарантія · ТО</div></div>
@@ -505,12 +492,7 @@
       <div class="cta-l">
         <div class="eyebrow" style="margin-bottom:18px" data-i18n="cta_eyebrow">Заявка</div>
         <h2 data-i18n="cta_h" data-i18n-html>Отримати прайс <span class="b">і розрахунок</span></h2>
-        <p data-i18n="cta_p">Залиште контакти — надішлемо актуальні каталоги SHUA і YR Fitness, підберемо комплект і підготуємо кошторис. Безкоштовно.</p>
-        <div class="cta-contacts">
-          <a href="tel:+380000000000"><span class="ic">☎</span> +380 (00) 000-00-00</a>
-          <a href="https://t.me/" target="_blank" rel="noopener"><span class="ic">✦</span> Telegram · @creagym</a>
-          <a href="mailto:hello@creagym.com"><span class="ic">✉</span> hello@creagym.com</a>
-        </div>
+        <p data-i18n="cta_p">Залиште контакти — надішлемо актуальні каталоги, підберемо комплект і підготуємо кошторис. Безкоштовно.</p>
       </div>
       <form id="leadForm" novalidate>
         <div id="ff" style="display:grid;gap:16px">
@@ -518,7 +500,7 @@
           <div class="field"><label for="name" data-i18n="fl_name">Ім'я</label><input id="name" type="text" maxlength="80" data-i18n-ph="ph_name" placeholder="Як до вас звертатися" required></div>
           <div class="frow">
             <div class="field"><label for="phone" data-i18n="fl_phone">Телефон</label><input id="phone" type="tel" maxlength="30" placeholder="+380…" required></div>
-            <div class="field"><label for="brand" data-i18n="fl_brand">Цікавить</label><select id="brand" data-i18n-opts="opts_brand"><option>SHUA + YR (підбір)</option><option>SHUA · кардіо</option><option>YR · силові</option><option>Зал під ключ</option></select></div>
+            <div class="field"><label for="brand" data-i18n="fl_brand">Цікавить</label><select id="brand" data-i18n-opts="opts_brand"><option>Підбір обладнання</option><option>Кардіо</option><option>Силові</option><option>Зал під ключ</option></select></div>
           </div>
           <div class="frow">
             <div class="field"><label for="area" data-i18n="fl_area">Площа, м²</label><input id="area" type="text" maxlength="10" data-i18n-ph="ph_area" placeholder="напр. 250"></div>
@@ -541,11 +523,10 @@
 <footer>
   <div class="wrap foot">
     <div><div class="logo">CREAGYM<span class="d" style="color:var(--blue)">.</span></div>
-      <p data-i18n="foot_p">Імпорт комерційного обладнання SHUA і YR Fitness. Постачання, проєкт, монтаж, сервіс.</p></div>
-    <div class="meta" data-i18n="foot_addr" data-i18n-html>Житомир, Україна<br>Пн–Сб · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00</div>
-    <div class="meta"><a href="#brands" data-i18n="nav_brands">Бренди</a><br><a href="#catalog" data-i18n="nav_catalog">Каталог</a><br><a href="#process" data-i18n="nav_process">Під ключ</a><br><a href="#cta" data-i18n="nav_cta">Запросити прайс</a></div>
+      <p data-i18n="foot_p">Імпорт комерційного фітнес-обладнання. Постачання, проєкт, монтаж, сервіс.</p></div>
+    <div class="meta"><a href="#catalog" data-i18n="nav_catalog">Каталог</a><br><a href="#process" data-i18n="nav_process">Під ключ</a><br><a href="#cta" data-i18n="nav_cta">Запросити прайс</a></div>
   </div>
-  <div class="foot-b"><span>© 2026 CREAGYM Equipment</span><span data-i18n="foot_bottom">SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ</span></div>
+  <div class="foot-b"><span>© 2026 CREAGYM Equipment</span><span data-i18n="foot_bottom">КОМЕРЦІЙНЕ ОБЛАДНАННЯ · ОФІЦІЙНИЙ ІМПОРТ</span></div>
 </footer>
 
 <!-- PRODUCT MODAL -->
@@ -572,13 +553,13 @@
 const I18N = {
   ua:{
     nav_brands:"Бренди",nav_catalog:"Каталог",nav_process:"Під ключ",nav_showcase:"Зали",nav_planner:"Планувальник",planner_cta:"Спланувати свій зал →",planner_hint:"Розставте тренажери на плані та надішліть на прорахунок",nav_cta:"Запросити прайс",
-    hero_eyebrow:"SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ",hero_l1:"Профі-",hero_l2:"обладнання",hero_l3:"для <span class='b'>залів</span>",
-    hero_sub:"Постачаємо комерційні тренажери двох заводів — <b>SHUA</b> (постачальник 7 Олімпіад) та <b>YR&nbsp;Fitness</b> (28 років, CE/TÜV/ISO). Прямий імпорт, проєкт розстановки, монтаж і сервіс під ключ.",
+    hero_eyebrow:"КОМЕРЦІЙНЕ ОБЛАДНАННЯ · ОФІЦІЙНИЙ ІМПОРТ",hero_l1:"Профі-",hero_l2:"обладнання",hero_l3:"для <span class='b'>залів</span>",
+    hero_sub:"Постачаємо професійні комерційні тренажери з прямим імпортом: кардіо, силові, мультистанції та вільні ваги. Проєкт розстановки, монтаж і сервіс під ключ.",
     hero_cta1:"Дивитись каталог",hero_cta2:"Отримати розрахунок",hero_s1:"заводи",hero_s2:"країн",
-    marq:["SHUA","YR FITNESS","СИЛОВІ","КАРДІО","ВІЛЬНІ ВАГИ","МУЛЬТИСТАНЦІЇ","ПІД КЛЮЧ"],
-    st1:"років виробництва YR",st2:"Олімпіад · SHUA",st3:"залів у світі",st4:"країн постачання",
+    marq:["ПРЯМИЙ ІМПОРТ","КОМЕРЦІЙНІ ТРЕНАЖЕРИ","СИЛОВІ","КАРДІО","ВІЛЬНІ ВАГИ","МУЛЬТИСТАНЦІЇ","ПІД КЛЮЧ"],
+    st1:"років на ринку",st2:"олімпійський рівень",st3:"залів у світі",st4:"країн постачання",
     brands_eyebrow:"Наші бренди",brands_h:"Два заводи —<br>один постачальник",
-    brands_sub:"Лінійки, що доповнюють одна одну: інженерія та кардіо SHUA + силові серії YR за ціною нижче преміум-брендів.",
+    brands_sub:"Лінійки, що доповнюють одна одну: інженерія, кардіо та силові серії за ціною нижче преміум-брендів.",
     shua_role:"Кардіо · Smart Strength · Олімпійський рівень",
     shua_p:"Завод з 1996 року, лістинг A-share, ACSM. Офіційний постачальник 7 Олімпійських ігор. Розумні консолі, адаптивна амортизація, серія 98 Smart Strength.",
     shua_chips:["Доріжки","Еліпси","Сайкли","Веслування","98 Series"],
@@ -586,7 +567,7 @@ const I18N = {
     yr_p:"Порівнюють з Technogym і Matrix за збиранням, але дешевше. Професійні кути руху, сталь Q235, ~80% перед-збирання. CE / TÜV / ISO, 110+ країн.",
     yr_chips:["C4 Revival","61A Racing","73 Tough","Multi Jungle","Bench & Rack"],
     showcase_eyebrow:"Зали під ключ",showcase_h:"Як це<br>виглядає в залі",
-    look1_k:"01 / Силова зона",look1_h:"Грузоблочні станки YR",look2_k:"02 / Кардіо",look2_h:"Доріжки SHUA",look3_k:"03 / Функціонал",look3_h:"Rig / Cross-зона",
+    look1_k:"01 / Силова зона",look1_h:"Грузоблочні станції",look2_k:"02 / Кардіо",look2_h:"Бігові доріжки",look3_k:"03 / Функціонал",look3_h:"Rig / Cross-зона",
     cat_eyebrow:"Каталог",cat_h:"Обладнання",cat_sub:"Професійні лінійки для комерційних залів, студій, готелів і корпоративних просторів.",
     f_all:"Всі",f_strength:"Силові",f_cardio:"Кардіо",f_multi:"Станції",f_rack:"Рами та стійки",
     c1_cat:"Силові · Pin-loaded",c1_k1:"Серія",c1_v1:"C4 · флагман",c1_k2:"Рама",c1_v2:"Сталь Q235",c1_k3:"Лінійка",c1_v3:"15+ станків",
@@ -600,33 +581,33 @@ const I18N = {
     c9_cat:"Кросовер · Wall-mounted",c9_k1:"Тип",c9_v1:"Настінний",c9_k2:"Регулювання",c9_v2:"За передачами",c9_k3:"Дзеркало",c9_v3:"У комплекті",
     note1:"Показано частину асортименту.",note2:"Під проєкт підберемо повний комплект",note3:"— силові, кардіо, вільні ваги, аксесуари, покриття та дзеркала.",
     proc_eyebrow:"Під ключ",proc_h:"Повний цикл<br>створення залу",proc_sub:"Від порожнього приміщення до запуску. Один підрядник на весь проєкт.",
-    step1_h:"Підбір",step1_p:"Комплект SHUA / YR під формат залу, площу та бюджет.",step1_t:"Бюджет · Формат",
-    step2_h:"Проєкт і розстановка",step2_p:"2D/3D-план зонування з ергономікою потоків і безпечними інтервалами.",step2_t:"2D / 3D",
+    step1_h:"Підбір",step1_p:"Комплект під формат залу, площу та бюджет.",step1_t:"Бюджет · Формат",
+    step2_h:"Планування залу",step2_p:"Допоможемо спланувати розстановку обладнання під площу та формат вашого залу.",step2_t:"ПЛАН",
     step3_h:"Постачання",step3_p:"Прямий імпорт із заводів, логістика і розмитнення під нашим контролем.",step3_t:"Імпорт · Логістика",
     step4_h:"Монтаж і запуск",step4_p:"Збирання, налаштування, калібрування, інструктаж персоналу, здача під ключ.",step4_t:"Збирання · Запуск",
     step5_h:"Сервіс",step5_p:"Гарантія заводу, ЗІП і планове ТО — зал працює без простоїв.",step5_t:"Гарантія · ТО",
     cta_eyebrow:"Заявка",cta_h:"Отримати прайс <span class='b'>і розрахунок</span>",
-    cta_p:"Залиште контакти — надішлемо актуальні каталоги SHUA і YR Fitness, підберемо комплект і підготуємо кошторис. Безкоштовно.",
+    cta_p:"Залиште контакти — надішлемо актуальні каталоги, підберемо комплект і підготуємо кошторис. Безкоштовно.",
     fl_name:"Ім'я",ph_name:"Як до вас звертатися",fl_phone:"Телефон",fl_brand:"Цікавить",
-    opts_brand:["SHUA + YR (підбір)","SHUA · кардіо","YR · силові","Зал під ключ"],
+    opts_brand:["Підбір обладнання","Кардіо","Силові","Зал під ключ"],
     fl_area:"Площа, м²",ph_area:"напр. 250",fl_budget:"Бюджет",
     opts_budget:["Не визначений","до $20 000","$20 000–50 000","$50 000–100 000","$100 000+"],
     fl_msg:"Коментар",ph_msg:"Терміни, побажання, поточне обладнання…",btn_send:"Відправити заявку",
     err:"Не вдалося відправити. Спробуйте ще раз або зателефонуйте.",fnote:"Натискаючи кнопку, ви погоджуєтесь на обробку даних.",
     ok_h:"Заявку прийнято",ok_p:"Зв'яжемося протягом робочого дня та надішлемо каталоги з розрахунком.",
-    foot_p:"Імпорт комерційного обладнання SHUA і YR Fitness. Постачання, проєкт, монтаж, сервіс.",
+    foot_p:"Імпорт комерційного фітнес-обладнання. Постачання, проєкт, монтаж, сервіс.",
     foot_addr:"Житомир, Україна<br>Пн–Сб · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00",
-    foot_bottom:"SHUA × YR FITNESS · ОФІЦІЙНИЙ ІМПОРТ"
+    foot_bottom:"КОМЕРЦІЙНЕ ОБЛАДНАННЯ · ОФІЦІЙНИЙ ІМПОРТ"
   },
   en:{
     nav_brands:"Brands",nav_catalog:"Catalogue",nav_process:"Turnkey",nav_showcase:"Gyms",nav_planner:"Planner",planner_cta:"Plan your own gym →",planner_hint:"Arrange equipment on the floor plan and send for a quote",nav_cta:"Request pricing",
-    hero_eyebrow:"SHUA × YR FITNESS · OFFICIAL IMPORT",hero_l1:"Pro-grade",hero_l2:"equipment",hero_l3:"for <span class='b'>gyms</span>",
-    hero_sub:"We supply commercial equipment from two factories — <b>SHUA</b> (supplier to 7 Olympic Games) and <b>YR&nbsp;Fitness</b> (28 years, CE/TÜV/ISO). Direct import, layout design, installation and turnkey service.",
+    hero_eyebrow:"COMMERCIAL EQUIPMENT · OFFICIAL IMPORT",hero_l1:"Pro-grade",hero_l2:"equipment",hero_l3:"for <span class='b'>gyms</span>",
+    hero_sub:"We supply professional commercial gym equipment with direct import: cardio, strength, multi-stations and free weights. Direct import, layout design, installation and turnkey service.",
     hero_cta1:"View catalogue",hero_cta2:"Get a quote",hero_s1:"factories",hero_s2:"countries",
-    marq:["SHUA","YR FITNESS","STRENGTH","CARDIO","FREE WEIGHTS","MULTI-STATIONS","TURNKEY"],
-    st1:"years YR manufacturing",st2:"Olympics · SHUA",st3:"gyms worldwide",st4:"countries supplied",
+    marq:["DIRECT IMPORT","COMMERCIAL MACHINES","STRENGTH","CARDIO","FREE WEIGHTS","MULTI-STATIONS","TURNKEY"],
+    st1:"years on the market",st2:"Olympic-level",st3:"gyms worldwide",st4:"countries supplied",
     brands_eyebrow:"Our brands",brands_h:"Two factories —<br>one supplier",
-    brands_sub:"Complementary lineups: SHUA engineering and cardio + YR strength series at below-premium prices.",
+    brands_sub:"Complementary lineups: engineering, cardio and strength series at below-premium prices.",
     shua_role:"Cardio · Smart Strength · Olympic-grade",
     shua_p:"Founded 1996, A-share listed, ACSM. Official supplier to 7 Olympic Games. Smart consoles, adaptive cushioning, 98 Smart Strength series.",
     shua_chips:["Treadmills","Ellipticals","Bikes","Rowing","98 Series"],
@@ -634,7 +615,7 @@ const I18N = {
     yr_p:"Compared to Technogym and Matrix on build, but cheaper. Pro movement angles, Q235 steel, ~80% pre-assembled. CE / TÜV / ISO, 110+ countries.",
     yr_chips:["C4 Revival","61A Racing","73 Tough","Multi Jungle","Bench & Rack"],
     showcase_eyebrow:"Turnkey gyms",showcase_h:"How it<br>looks in the gym",
-    look1_k:"01 / Strength zone",look1_h:"YR selectorized machines",look2_k:"02 / Cardio",look2_h:"SHUA treadmills",look3_k:"03 / Functional",look3_h:"Rig / Cross zone",
+    look1_k:"01 / Strength zone",look1_h:"Selectorized machines",look2_k:"02 / Cardio",look2_h:"Treadmills",look3_k:"03 / Functional",look3_h:"Rig / Cross zone",
     cat_eyebrow:"Catalogue",cat_h:"Equipment",cat_sub:"Professional lineups for commercial gyms, studios, hotels and corporate spaces.",
     f_all:"All",f_strength:"Strength",f_cardio:"Cardio",f_multi:"Stations",f_rack:"Racks",
     c1_cat:"Strength · Pin-loaded",c1_k1:"Series",c1_v1:"C4 · flagship",c1_k2:"Frame",c1_v2:"Q235 steel",c1_k3:"Range",c1_v3:"15+ machines",
@@ -648,23 +629,23 @@ const I18N = {
     c9_cat:"Crossover · Wall-mounted",c9_k1:"Type",c9_v1:"Wall-mounted",c9_k2:"Adjust",c9_v2:"Geared",c9_k3:"Mirror",c9_v3:"Included",
     note1:"Showing part of the range.",note2:"We'll select a full set for your project",note3:"— strength, cardio, free weights, accessories, flooring and mirrors.",
     proc_eyebrow:"Turnkey",proc_h:"Full cycle<br>of building a gym",proc_sub:"From an empty space to launch. One contractor for the whole project.",
-    step1_h:"Selection",step1_p:"SHUA / YR set for your gym format, area and budget.",step1_t:"Budget · Format",
-    step2_h:"Design & layout",step2_p:"2D/3D zoning plan with flow ergonomics and safe spacing.",step2_t:"2D / 3D",
+    step1_h:"Selection",step1_p:"A set for your gym format, area and budget.",step1_t:"Budget · Format",
+    step2_h:"Gym planning",step2_p:"We help plan equipment placement for your space and gym format.",step2_t:"PLAN",
     step3_h:"Supply",step3_p:"Direct import from factories; logistics and customs under our control.",step3_t:"Import · Logistics",
     step4_h:"Installation & launch",step4_p:"Assembly, setup, calibration, staff briefing, turnkey handover.",step4_t:"Assembly · Launch",
     step5_h:"Service",step5_p:"Factory warranty, spare parts and scheduled maintenance — zero downtime.",step5_t:"Warranty · Maintenance",
     cta_eyebrow:"Request",cta_h:"Get pricing <span class='b'>and a quote</span>",
-    cta_p:"Leave your contacts — we'll send the latest SHUA and YR Fitness catalogues, select a set and prepare an estimate. Free.",
+    cta_p:"Leave your contacts — we'll send the latest catalogues, select a set and prepare an estimate. Free.",
     fl_name:"Name",ph_name:"How to address you",fl_phone:"Phone",fl_brand:"Interested in",
-    opts_brand:["SHUA + YR (selection)","SHUA · cardio","YR · strength","Turnkey gym"],
+    opts_brand:["Equipment selection","Cardio","Strength","Turnkey gym"],
     fl_area:"Area, m²",ph_area:"e.g. 250",fl_budget:"Budget",
     opts_budget:["Not defined","up to $20,000","$20,000–50,000","$50,000–100,000","$100,000+"],
     fl_msg:"Comment",ph_msg:"Timeline, preferences, current equipment…",btn_send:"Send request",
     err:"Couldn't send. Please try again or call us.",fnote:"By clicking, you agree to data processing.",
     ok_h:"Request received",ok_p:"We'll get back within a business day and send catalogues with a quote.",
-    foot_p:"Import of SHUA and YR Fitness commercial equipment. Supply, design, installation, service.",
+    foot_p:"Import of commercial fitness equipment. Supply, design, installation, service.",
     foot_addr:"Zhytomyr, Ukraine<br>Mon–Sat · 09:00–19:00<br>hello@creagym.com<br>+380 (00) 000-00-00",
-    foot_bottom:"SHUA × YR FITNESS · OFFICIAL IMPORT"
+    foot_bottom:"COMMERCIAL EQUIPMENT · OFFICIAL IMPORT"
   }
 };
 
@@ -726,30 +707,51 @@ if(!matchMedia("(prefers-reduced-motion:reduce)").matches){
 /* ---------------- catalog (dynamic from API) ---------------- */
 const grid=document.getElementById("grid");
 const BRANDLBL={YR:"YR Fitness",SHUA:"SHUA"};
+const stripBrand=x=>String(x||"").replace(/^\s*(SHUA|YR\s*Fitness|Yanre|YR)\b[\s·.\-]*/i,"").trim();
 const PH_SVG=`<svg class="bp" viewBox="0 0 100 100"><line stroke x1="20" y1="50" x2="80" y2="50"/><rect stroke x="20" y="40" width="9" height="20"/><rect stroke x="12" y="44" width="7" height="12"/><rect stroke x="71" y="40" width="9" height="20"/><rect stroke x="81" y="44" width="7" height="12"/></svg>`;
 function imgSrc(s){ if(!s) return ""; return /^(https?:|img\/)/.test(s) ? s : "img/"+s; }
 function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 let CATALOG=[];
-async function renderCatalog(){
-  try{ CATALOG = await window.CREAGYM_API.productList(); }catch(e){ CATALOG=[]; }
-  if(!CATALOG || !CATALOG.length) CATALOG = window.CREAGYM_PRODUCTS_DEFAULT || [];
-  grid.innerHTML = CATALOG.map((p,i)=>{
-    const src=imgSrc(p.image);
-    const specs=(p.specs||[]).slice(0,3).map(s=>`<div class="sp"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join("");
-    return `<article class="card rv" data-cat="${esc(p.category||'')}" data-i="${i}">
+function cardHTML(p,i){
+  const src=imgSrc(p.image);
+  const specs=(p.specs||[]).slice(0,3).map(s=>`<div class="sp"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join("");
+  return `<article class="card rv" data-cat="${esc(p.category||'')}" data-i="${i}">
       <div class="ph${src?' hasimg':''}">${src?`<img src="${esc(src)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.closest('.ph').classList.remove('hasimg')">`:""}
         <span class="brandtag ${p.brand==='YR'?'yr':''}">${esc(BRANDLBL[p.brand]||p.brand||'')}</span>
         <span class="no">NO. ${esc(p.model||'')}</span><div class="floor"></div>${PH_SVG}</div>
-      <div class="body"><div class="cat">${esc(p.subtitle||'')}</div><h3>${esc(p.name||'')}</h3>
+      <div class="body"><div class="cat">${esc(p.subtitle||'')}</div><h3>${esc(stripBrand(p.name)||'')}</h3>
         <div class="specs">${specs}</div></div></article>`;
-  }).join("");
-  grid.querySelectorAll(".card").forEach(c=>{ io.observe(c); c.addEventListener("click",()=>openProduct(CATALOG[+c.dataset.i])); });
-  applyFilter();
 }
-let curFilter="all";
-function applyFilter(){ grid.querySelectorAll(".card").forEach(c=>c.classList.toggle("hide",!(curFilter==="all"||c.dataset.cat===curFilter))); }
+let curFilter="all", catPage=1; const PER_PAGE=12;
+function renderGrid(){
+  const fl=CATALOG.map((p,i)=>({p,i})).filter(x=>curFilter==="all"||(x.p.category||"")===curFilter);
+  const total=Math.max(1,Math.ceil(fl.length/PER_PAGE));
+  if(catPage>total)catPage=total; if(catPage<1)catPage=1;
+  const slice=fl.slice((catPage-1)*PER_PAGE, catPage*PER_PAGE);
+  grid.innerHTML=slice.map(x=>cardHTML(x.p,x.i)).join("");
+  grid.querySelectorAll(".card").forEach(c=>{ io.observe(c); c.addEventListener("click",()=>openProduct(CATALOG[+c.dataset.i])); });
+  let pager=document.getElementById("pager");
+  if(!pager){ pager=document.createElement("div"); pager.id="pager"; pager.className="pager"; grid.parentNode.insertBefore(pager, grid.nextSibling); }
+  if(total<=1){ pager.innerHTML=""; return; }
+  const win=[]; for(let p=1;p<=total;p++){ if(p===1||p===total||Math.abs(p-catPage)<=1) win.push(p); else if(win[win.length-1]!=="…") win.push("…"); }
+  let h='<button class="pg-nav" data-pg="prev"'+(catPage===1?' disabled':'')+'>←</button>';
+  win.forEach(p=>{ h+= p==="…" ? '<span class="pg-dots">…</span>' : `<button class="pg-num${p===catPage?' on':''}" data-pg="${p}">${p}</button>`; });
+  h+='<button class="pg-nav" data-pg="next"'+(catPage===total?' disabled':'')+'>→</button>';
+  h+=`<span class="pg-info">${fl.length} позицій</span>`;
+  pager.innerHTML=h;
+  pager.querySelectorAll("[data-pg]").forEach(b=>b.addEventListener("click",()=>{
+    const v=b.dataset.pg; if(v==="prev")catPage--; else if(v==="next")catPage++; else catPage=+v;
+    renderGrid();
+    document.getElementById("catalog")?.scrollIntoView({behavior:"smooth",block:"start"});
+  }));
+}
+async function renderCatalog(){
+  try{ CATALOG = await window.CREAGYM_API.productList(); }catch(e){ CATALOG=[]; }
+  if(!CATALOG || !CATALOG.length) CATALOG = window.CREAGYM_PRODUCTS_DEFAULT || [];
+  catPage=1; renderGrid();
+}
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".filter");if(!b)return;
-  document.querySelector("#filters .active")?.classList.remove("active");b.classList.add("active");curFilter=b.dataset.f;applyFilter();});
+  document.querySelector("#filters .active")?.classList.remove("active");b.classList.add("active");curFilter=b.dataset.f;catPage=1;renderGrid();});
 renderCatalog();
 
 /* ---- site photos from admin (hero + showcase) ---- */
@@ -783,9 +785,9 @@ function openProduct(p){
     pmodal.querySelector(".pm-thumbs .on")?.classList.remove("on"); b.classList.add("on");
     if(mainEl){ mainEl.style.display=""; mainEl.src=imgSrc(imgs[+b.dataset.pi]); mainEl.closest(".pm-main").classList.add("hasimg"); }
   }));
-  pmodal.querySelector(".pm-brand").textContent=BRANDLBL[p.brand]||p.brand||"";
+  pmodal.querySelector(".pm-brand").textContent="";
   pmodal.querySelector(".pm-sub").textContent=p.subtitle||"";
-  pmodal.querySelector(".pm-name").textContent=p.name||"";
+  pmodal.querySelector(".pm-name").textContent=stripBrand(p.name)||"";
   pmodal.querySelector(".pm-model").textContent=p.model?("NO. "+p.model):"";
   pmodal.querySelector(".pm-desc").textContent=p.description||"";
   pmodal.querySelector(".pm-specs").innerHTML=(p.specs||[]).map(s=>`<div class="sp"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join("");
