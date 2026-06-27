@@ -347,7 +347,7 @@
   const CATLBL = { strength:"Вантажоблочні", plate:"Навантажувані", cardio:"Кардіо", multi:"Станції", rack:"Рами та стійки" };
   const BRANDLBL = { YR:"YR Fitness", SHUA:"SHUA" };
   const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const imgSrc = s => !s ? "" : (/^(https?:|img\/)/.test(s) ? s : "img/"+s);
+  const imgSrc = s => !s ? "" : (/^(https?:|data:|blob:|\/|img\/)/.test(s) ? s : "img/"+s);
   let LEADS = [], PRODUCTS = [], QUOTES = [], curTab = "leads";
 
   /* ---- gate ---- */
