@@ -479,12 +479,28 @@
     alert("Готово. Знайдено на сайті: "+models.length+" моделей, оновлено: "+ok+", без збігу: "+fail+".\nОнови сторінку (Ctrl+Shift+R).");
     if(typeof loadProducts==="function"){ try{ await loadProducts(); }catch(e){} }
   }
+  async function fetchYRPage(page){
+    const target="https://www.yanrefitness.com/wp-json/wc/store/v1/products?per_page=100&page="+page;
+    const tries=[
+      target,
+      "https://api.allorigins.win/raw?url="+encodeURIComponent(target),
+      "https://corsproxy.io/?url="+encodeURIComponent(target),
+      "https://thingproxy.freeboard.io/fetch/"+target
+    ];
+    for(const u of tries){
+      try{
+        const r=await fetch(u,{headers:{Accept:"application/json"}});
+        if(!r.ok) continue;
+        const list=await r.json();
+        if(Array.isArray(list)) return list;
+      }catch(e){}
+    }
+    return null;
+  }
   async function fetchYRDirect(prog){
     const out={}; const per=100; let page=1;
     while(page<=12){
-      const r=await fetch("https://www.yanrefitness.com/wp-json/wc/store/v1/products?per_page="+per+"&page="+page,{headers:{Accept:"application/json"}});
-      if(!r.ok) break;
-      const list=await r.json();
+      const list=await fetchYRPage(page);
       if(!Array.isArray(list)||!list.length) break;
       for(const p of list){
         const sku=(p.sku||"").trim(); if(!sku) continue;
