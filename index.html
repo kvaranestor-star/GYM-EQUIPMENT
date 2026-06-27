@@ -710,7 +710,7 @@ const grid=document.getElementById("grid");
 const BRANDLBL={YR:"YR Fitness",SHUA:"SHUA"};
 const stripBrand=x=>String(x||"").replace(/^\s*(SHUA|YR\s*Fitness|Yanre|YR)\b[\s·.\-]*/i,"").trim();
 const PH_SVG=`<svg class="bp" viewBox="0 0 100 100"><line stroke x1="20" y1="50" x2="80" y2="50"/><rect stroke x="20" y="40" width="9" height="20"/><rect stroke x="12" y="44" width="7" height="12"/><rect stroke x="71" y="40" width="9" height="20"/><rect stroke x="81" y="44" width="7" height="12"/></svg>`;
-function imgSrc(s){ if(!s) return ""; return /^(https?:|img\/)/.test(s) ? s : "img/"+s; }
+function imgSrc(s){ if(!s) return ""; return /^(https?:|data:|blob:|\/|img\/)/.test(s) ? s : "img/"+s; }
 function esc(s){return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 let CATALOG=[];
 function cardHTML(p,i){
