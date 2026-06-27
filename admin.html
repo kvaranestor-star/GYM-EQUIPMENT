@@ -453,12 +453,17 @@
     if(!confirm("Підтягнути HD-фото з сайту yanrefitness.com за кодами моделей? Наявні фото буде замінено офіційними студійними."))return;
     if(!CFG.SUPABASE_URL||!CFG.SUPABASE_KEY){ alert("Supabase не налаштовано в config.js"); return; }
     btn.disabled=true; btn.textContent="Каталог YR…";
-    let photos;
-    try{
-      const r=await fetch("/api/yr-photos"); const j=await r.json();
-      photos=j.photos||{};
-      if(!Object.keys(photos).length) throw new Error("порожньо");
-    }catch(e){ alert("Не вдалося отримати фото з сайту YR. Перевір, що файл api/yr-photos.js задеплоєно на Vercel."); btn.disabled=false; btn.textContent="HD-фото з сайту YR"; return; }
+    let photos=null;
+    // 1) напряму з браузера (WooCommerce Store API зазвичай віддає CORS)
+    try{ photos=await fetchYRDirect(t=>btn.textContent=t); }catch(e){ photos=null; }
+    // 2) запасний шлях — серверна функція /api/yr-photos (якщо CORS заблокує)
+    if(!photos||!Object.keys(photos).length){
+      try{ const r=await fetch("/api/yr-photos"); const j=await r.json(); photos=j.photos||{}; }catch(e){ photos=null; }
+    }
+    if(!photos||!Object.keys(photos).length){
+      alert("Не вдалося отримати каталог з сайту YR (CORS/Cloudflare блокує прямий запит).\nРішення: задеплой файл api/yr-photos.js на Vercel і спробуй ще раз.");
+      btn.disabled=false; btn.textContent="HD-фото з сайту YR"; return;
+    }
     const H={apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"};
     const base=CFG.SUPABASE_URL.replace(/\/$/,"");
     const models=Object.keys(photos); let done=0, ok=0, fail=0;
@@ -471,8 +476,28 @@
     const CONC=6;
     for(let i=0;i<models.length;i+=CONC){ await Promise.all(models.slice(i,i+CONC).map(one)); }
     btn.disabled=false; btn.textContent="HD-фото з сайту YR";
-    alert("Готово. Зіставлено моделей: "+models.length+", оновлено: "+ok+", без збігу/помилок: "+fail+".\nОнови сторінку (Ctrl+Shift+R).");
+    alert("Готово. Знайдено на сайті: "+models.length+" моделей, оновлено: "+ok+", без збігу: "+fail+".\nОнови сторінку (Ctrl+Shift+R).");
     if(typeof loadProducts==="function"){ try{ await loadProducts(); }catch(e){} }
+  }
+  async function fetchYRDirect(prog){
+    const out={}; const per=100; let page=1;
+    while(page<=12){
+      const r=await fetch("https://www.yanrefitness.com/wp-json/wc/store/v1/products?per_page="+per+"&page="+page,{headers:{Accept:"application/json"}});
+      if(!r.ok) break;
+      const list=await r.json();
+      if(!Array.isArray(list)||!list.length) break;
+      for(const p of list){
+        const sku=(p.sku||"").trim(); if(!sku) continue;
+        const img=p.images&&p.images[0]; if(!img) continue;
+        let src=img.src||"";
+        if(img.srcset){ let bw=0,b=""; for(const part of String(img.srcset).split(",")){ const m=part.trim().match(/(\S+)\s+(\d+)w/); if(m&&+m[2]>bw){bw=+m[2];b=m[1];} } if(b)src=b; }
+        if(src){ if(src.startsWith("//"))src="https:"+src; else if(src.startsWith("/"))src="https://www.yanrefitness.com"+src; out[sku]=src; }
+      }
+      prog&&prog("Каталог YR… стор."+page+" ("+Object.keys(out).length+")");
+      if(list.length<per) break;
+      page++;
+    }
+    return out;
   }
   async function importHiresPhotos(){
     const btn=$("#hiresBtn");
