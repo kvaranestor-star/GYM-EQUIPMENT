@@ -263,6 +263,7 @@
           <button class="ibtn" id="seedBtn">Стандартні товари</button>
           <button class="ibtn blue" id="addBtn">+ Додати товар</button>
           <button class="ibtn" id="hiresBtn">Фото з прайсу (HD)</button>
+          <button class="ibtn" id="yrBtn">HD-фото з сайту YR</button>
         </div>
       </div>
       <div class="pfilters">
@@ -446,6 +447,33 @@
   $("#addRow").addEventListener("click",()=>$("#specRows").appendChild(specRow("","")));
   $("#addBtn").addEventListener("click",()=>openForm(null));
   $("#hiresBtn").addEventListener("click", importHiresPhotos);
+  $("#yrBtn").addEventListener("click", importYRPhotos);
+  async function importYRPhotos(){
+    const btn=$("#yrBtn");
+    if(!confirm("Підтягнути HD-фото з сайту yanrefitness.com за кодами моделей? Наявні фото буде замінено офіційними студійними."))return;
+    if(!CFG.SUPABASE_URL||!CFG.SUPABASE_KEY){ alert("Supabase не налаштовано в config.js"); return; }
+    btn.disabled=true; btn.textContent="Каталог YR…";
+    let photos;
+    try{
+      const r=await fetch("/api/yr-photos"); const j=await r.json();
+      photos=j.photos||{};
+      if(!Object.keys(photos).length) throw new Error("порожньо");
+    }catch(e){ alert("Не вдалося отримати фото з сайту YR. Перевір, що файл api/yr-photos.js задеплоєно на Vercel."); btn.disabled=false; btn.textContent="HD-фото з сайту YR"; return; }
+    const H={apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"};
+    const base=CFG.SUPABASE_URL.replace(/\/$/,"");
+    const models=Object.keys(photos); let done=0, ok=0, fail=0;
+    async function one(m){
+      const url=base+"/rest/v1/products?model=eq."+encodeURIComponent(m)+"&brand=eq.YR";
+      try{ const res=await fetch(url,{method:"PATCH",headers:H,body:JSON.stringify({image:photos[m],images:[photos[m]]})}); res.ok?ok++:fail++; }
+      catch(e){ fail++; }
+      done++; btn.textContent="HD-фото… "+done+"/"+models.length;
+    }
+    const CONC=6;
+    for(let i=0;i<models.length;i+=CONC){ await Promise.all(models.slice(i,i+CONC).map(one)); }
+    btn.disabled=false; btn.textContent="HD-фото з сайту YR";
+    alert("Готово. Зіставлено моделей: "+models.length+", оновлено: "+ok+", без збігу/помилок: "+fail+".\nОнови сторінку (Ctrl+Shift+R).");
+    if(typeof loadProducts==="function"){ try{ await loadProducts(); }catch(e){} }
+  }
   async function importHiresPhotos(){
     const btn=$("#hiresBtn");
     if(!confirm("Імпортувати HD-фото з прайсу для всіх моделей? Наявні фото буде перезаписано. Це може зайняти 1–2 хв."))return;
